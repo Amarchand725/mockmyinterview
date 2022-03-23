@@ -1,0 +1,148 @@
+<?php
+
+namespace App\Http\Controllers\admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Team;
+use Illuminate\Http\Request;
+use Auth;
+
+class TeamController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $models = Team::orderby('id', 'desc')->get();
+        return View('admin.team.index', compact("models"));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return View('admin.team.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $validator = $request->validate([
+            'first_name' => 'required|max:255',
+            'designation' => 'required|max:255',
+            'description' => 'required|max:255',
+            'image' => 'mimes:jpeg,jpg,png,gif|required|max:10000' // max 10000kb
+        ]);
+
+        $model = new Team();
+
+        if (isset($request->image)) {
+            $photo = $request->file('image')->getClientOriginalName();
+            $request->image->move(public_path('/admin/assets/images/team'), $photo);
+            $model->image = $photo;
+        }
+
+        $model->created_by = Auth::user()->id;
+        $model->first_name = $request->first_name;
+        $model->last_name = $request->last_name;
+        $model->slug = \Str::slug($request->first_name);
+        $model->designation = $request->designation;
+        $model->twitter_link = $request->twitter_link;
+        $model->facebook_link = $request->facebook_link;
+        $model->instagram_link = $request->instagram_link;
+        $model->linkedin_link = $request->linkedin_link;
+        $model->description = $request->description;
+        $model->save();
+
+        return redirect()->route('team.index')->with('status', 'Team Member Added Successfully !');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Team  $team
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Team $team)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Team  $team
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($slug)
+    {
+        $model = Team::where('slug', $slug)->first();
+        return View('admin.team.edit', compact("model"));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Team  $team
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $slug)
+    {
+        $validator = $request->validate([
+            'first_name' => 'required|max:255',
+            'designation' => 'required|max:255',
+            'description' => 'required|max:255',
+        ]);
+
+        $update = Team::where('slug', $slug)->first();
+
+        if (isset($request->image)) {
+            $photo = $request->file('image')->getClientOriginalName();
+            $request->image->move(public_path('/admin/assets/images/team'), $photo);
+            $update->image = $photo;
+        }
+
+        $update->first_name = $request->first_name;
+        $update->last_name = $request->last_name;
+        $update->slug = \Str::slug($request->first_name);
+        $update->designation = $request->designation;
+        $update->twitter_link = $request->twitter_link;
+        $update->facebook_link = $request->facebook_link;
+        $update->instagram_link = $request->instagram_link;
+        $update->linkedin_link = $request->linkedin_link;
+        $update->description = $request->description;
+        $update->status = $request->status;
+        $update->update();
+
+        return redirect()->route('team.index')->with('status', 'Team Member Updated Successfully !');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Team  $team
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($slug)
+    {
+        $team = Team::where('slug', $slug)->first();
+        if ($team) {
+            $team->delete();
+            return true;
+        } else {
+            return response()->json(['message' => 'Failed '], 404);
+        }
+    }
+}
