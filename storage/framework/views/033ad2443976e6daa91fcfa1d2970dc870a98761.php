@@ -59,4 +59,5 @@
     <script src="assets/js/main.js"></script>
     <?php echo $__env->yieldPushContent('js'); ?>
 </body>
-</html><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/layouts/auth/app.blade.php ENDPATH**/ ?>
+</html>
+<?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/layouts/auth/app.blade.php ENDPATH**/ ?>

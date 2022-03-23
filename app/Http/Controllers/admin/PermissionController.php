@@ -15,12 +15,19 @@ class PermissionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware('permission:permission-list|permission-create|permission-edit|permission-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:permission-create', ['only' => ['create','store']]);
+        $this->middleware('permission:permission-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:permission-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         $permissions = Permission::orderby('id','DESC')->paginate(10);
         return view('admin.permission.index', compact('permissions'));
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -32,7 +39,7 @@ class PermissionController extends Controller
         $page_title = 'Add Permission';
         return view('admin.permission.create',compact('permission', 'page_title'));
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -51,7 +58,7 @@ class PermissionController extends Controller
                 $ifnotfound = Permission::where('name', Str::lower($request->name).'-'.$permission)->first();
                 if(empty($ifnotfound)){
                     Permission::create([
-                        'name' => Str::lower($request->name).'-'.$permission, 
+                        'name' => Str::lower($request->name).'-'.$permission,
                         'guard_name' => 'web'
                     ]);
                 }else{
@@ -61,18 +68,18 @@ class PermissionController extends Controller
         }else{
             $bool = false;
             Permission::create([
-                'name' => str_replace('-', ' ', Str::lower($request->name)), 
+                'name' => str_replace('-', ' ', Str::lower($request->name)),
                 'guard_name' => 'web'
             ]);
         }
 
         if($bool){
             return redirect()->route('permission.index')
-            ->with('success','You have already available these permission.');
+            ->with('message','You have already available these permission.');
         }
-    
+
         return redirect()->route('permission.index')
-                        ->with('success','Permission created successfully');
+                        ->with('message','Permission created successfully');
     }
     /**
      * Display the specified resource.
@@ -86,10 +93,10 @@ class PermissionController extends Controller
         $rolePermissions = Permission::join("role_has_permissions","role_has_permissions.permission_id","=","permissions.id")
             ->where("role_has_permissions.role_id",$id)
             ->get();
-    
+
         return view('roles.show',compact('role','rolePermissions'));
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -100,10 +107,10 @@ class PermissionController extends Controller
     {
         $permission = Permission::find($id);
         $page_title = 'Edit Permission';
-    
+
         return view('admin.permission.edit',compact('permission', 'page_title'));
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -117,14 +124,14 @@ class PermissionController extends Controller
             'name' => 'required',
             'guard_name' => 'required',
         ]);
-    
+
         $permission = Permission::find($permission_id);
         $permission->name = $request->name;
         $permission->guard_name = $request->guard_name;
         $permission->save();
-    
+
         return redirect()->route('permission.index')
-                        ->with('success','Permission updated successfully');
+                        ->with('message','Permission updated successfully');
     }
     /**
      * Remove the specified resource from storage.

@@ -2,7 +2,7 @@
     <section class="sidebar">
         <ul class="sidebar-menu">
             <li class="treeview">
-                <a href="{{ route('dashboard') }}" class="{{ request()->is('admin/dashboard') || request()->is('admin/profile/*') ? 'active' : '' }}">
+                <a href="{{ route('dashboard') }}" class="{{ request()->is('dashboard') || request()->is('profile/*') ? 'active' : '' }}">
                     <i class="fa fa-laptop"></i> <span>Dashboard</span>
                 </a>
             </li>

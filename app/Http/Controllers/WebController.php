@@ -19,6 +19,8 @@ class WebController extends Controller
 {
     public function index()
     {
+
+
         $sliders = Slider::orderby('id', 'desc')->where('status', 1)->get();
         $testimonials = Testimonial::orderby('id', 'desc')->where('status', 1)->get();
         $mock_advantages = AdvantageMock::orderby('id', 'desc')->where('status', 1)->get();
@@ -27,14 +29,8 @@ class WebController extends Controller
         $packages = Package::orderby('id', 'asc')->where('status', 1)->get();
         $teams = Team::orderby('id', 'asc')->where('status', 1)->get();
         $helps = HelpHire::orderby('id', 'asc')->where('status', 1)->get();
-        
-        $page_settings = PageSetting::get(['parent_slug', 'key', 'value']);
-        $home_page_data = [];
-        foreach ($page_settings as $key => $page_setting) {
-            $home_page_data[$page_setting->key] = $page_setting->value;
-        }
-        
-        return view('index', compact('sliders', 'testimonials', 'mock_advantages', 'services', 'work_processes', 'packages', 'teams', 'helps', 'home_page_data'));
+
+        return view('index', compact('sliders', 'testimonials', 'mock_advantages', 'services', 'work_processes', 'packages', 'teams', 'helps'));
     }
 
     public function login()

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Providers;
+use View;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -23,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $home_page_data = globalData();
+        View::share('home_page_data', $home_page_data);
     }
 }

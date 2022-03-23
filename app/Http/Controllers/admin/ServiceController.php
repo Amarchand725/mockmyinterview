@@ -14,6 +14,13 @@ class ServiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware('permission:service-list|service-create|service-edit|service-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:service-create', ['only' => ['create','store']]);
+        $this->middleware('permission:service-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:service-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         $services = Service::orderby('id', 'desc')->get();
@@ -49,7 +56,7 @@ class ServiceController extends Controller
         $service->description = $request->description;
         $service->save();
 
-        return redirect()->route('service.index')->with('status', 'Service Added Successfully !');
+        return redirect()->route('service.index')->with('message', 'Service Added Successfully !');
     }
 
     /**
@@ -60,7 +67,7 @@ class ServiceController extends Controller
      */
     public function show($slug)
     {
-        $service = Service::where('slug', $slug)->first(); 
+        $service = Service::where('slug', $slug)->first();
         return View('admin.service.show', compact('service'));
     }
 
@@ -96,7 +103,7 @@ class ServiceController extends Controller
         $service->status = $request->status;
         $service->update();
 
-        return redirect()->route('service.index')->with('status', 'Service Updated Successfully !');
+        return redirect()->route('service.index')->with('message', 'Service Updated Successfully !');
     }
 
     /**
@@ -108,7 +115,7 @@ class ServiceController extends Controller
     public function destroy($slug)
     {
         $service = Service::where('slug', $slug)->first();
-        
+
         if ($service) {
             $service->delete();
             return true;

@@ -1,41 +1,39 @@
 
-
 <?php $__env->startSection('content'); ?>
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Add Hire Help</h1>
+		<h1>Add Service</h1>
 	</div>
 	<div class="content-header-right">
-		<a href="<?php echo e(route('help.index')); ?>" class="btn btn-primary btn-sm">View All</a>
+		<a href="<?php echo e(route('service.index')); ?>" class="btn btn-primary btn-sm">View All</a>
 	</div>
 </section>
 
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			<form action="<?php echo e(route('help.store')); ?>" id="regform" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+			<form action="<?php echo e(route('service.store')); ?>" id="regform" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
 				<?php echo csrf_field(); ?>
 				<div class="box box-info">
 					<div class="box-body">
 						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Title <span style="color: red">*</span></label>
+							<label for="" class="col-sm-2 control-label">Name <span style='color:red'>*</span></label>
 							<div class="col-sm-9">
-								<input type="text" autocomplete="off" class="form-control" name="title" value="<?php echo e(old('title')); ?>" placeholder="Enter title">
-								<span style="color: red"><?php echo e($errors->first('title')); ?></span>
+								<input type="text" autocomplete="off" class="form-control" name="name" value="" placeholder="Enter service name">
+								<span style="color: red"><?php echo e($errors->first('name')); ?></span>
 							</div>
 						</div>
-						
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Description </label>
 							<div class="col-sm-9">
-								<textarea class="form-control texteditor" name="description" style="height:200px;" placeholder="Enter description"></textarea>
+								<textarea class="form-control texteditor" name="description" style="height:140px;" placeholder="Enter description"></textarea>
 								<span style="color: red"><?php echo e($errors->first('description')); ?></span>
 							</div>
 						</div>
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label"></label>
-							<div class="col-sm-9">
-								<button type="submit" class="btn btn-success pull-left" name="form1">Submit</button>
+							<div class="col-sm-6">
+								<button type="submit" class="btn btn-success pull-left">Submit</button>
 							</div>
 						</div>
 					</div>
@@ -45,7 +43,6 @@
 	</div>
 </section>
 <?php $__env->stopSection(); ?>
-
 <?php $__env->startPush('js'); ?>
 <script>
 	$(document).ready(function() {
@@ -63,14 +60,14 @@
 
 			});
 		}
-
+	
 		$("#regform").validate({
 			rules: {
-				title: "required",
-				description: "required",
+				image: "required",
+				name: "required"
 			}
 		});
 	});
 </script>
 <?php $__env->stopPush(); ?>
-<?php echo $__env->make('layouts.admin.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/admin/help/create.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.admin.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/admin/service/create.blade.php ENDPATH**/ ?>

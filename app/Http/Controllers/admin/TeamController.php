@@ -14,6 +14,13 @@ class TeamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware('permission:team-list|team-create|team-edit|team-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:team-create', ['only' => ['create','store']]);
+        $this->middleware('permission:team-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:team-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         $models = Team::orderby('id', 'desc')->get();
@@ -65,7 +72,7 @@ class TeamController extends Controller
         $model->description = $request->description;
         $model->save();
 
-        return redirect()->route('team.index')->with('status', 'Team Member Added Successfully !');
+        return redirect()->route('team.index')->with('message', 'Team Member Added Successfully !');
     }
 
     /**
@@ -126,7 +133,7 @@ class TeamController extends Controller
         $update->status = $request->status;
         $update->update();
 
-        return redirect()->route('team.index')->with('status', 'Team Member Updated Successfully !');
+        return redirect()->route('team.index')->with('message', 'Team Member Updated Successfully !');
     }
 
     /**

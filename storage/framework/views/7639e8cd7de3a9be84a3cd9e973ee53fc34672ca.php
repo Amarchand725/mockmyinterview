@@ -2,7 +2,7 @@
     <section class="sidebar">
         <ul class="sidebar-menu">
             <li class="treeview">
-                <a href="<?php echo e(route('dashboard')); ?>" class="<?php echo e(request()->is('admin/dashboard') || request()->is('admin/profile/*') ? 'active' : ''); ?>">
+                <a href="<?php echo e(route('dashboard')); ?>" class="<?php echo e(request()->is('dashboard') || request()->is('profile/*') ? 'active' : ''); ?>">
                     <i class="fa fa-laptop"></i> <span>Dashboard</span>
                 </a>
             </li>
@@ -121,4 +121,5 @@
             <?php endif; ?>
         </ul>
     </section>
-</aside><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/layouts/admin/sidebar.blade.php ENDPATH**/ ?>
+</aside>
+<?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/layouts/admin/sidebar.blade.php ENDPATH**/ ?>

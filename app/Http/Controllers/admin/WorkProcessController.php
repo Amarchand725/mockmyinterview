@@ -14,6 +14,14 @@ class WorkProcessController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    function __construct()
+    {
+        $this->middleware('permission:work-process-list|work-process-create|work-process-edit|work-process-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:work-process-create', ['only' => ['create','store']]);
+        $this->middleware('permission:work-process-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:work-process-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         $models = WorkProcess::orderby('id', 'desc')->get();
@@ -50,7 +58,7 @@ class WorkProcessController extends Controller
         $model->description = $request->description;
         $model->save();
 
-        return redirect()->route('work-process.index')->with('status', 'Work Process Added Successfully !');
+        return redirect()->route('work-process.index')->with('message', 'Work Process Added Successfully !');
     }
 
     /**
@@ -97,7 +105,7 @@ class WorkProcessController extends Controller
         $update->status = $request->status;
         $update->update();
 
-        return redirect()->route('work-process.index')->with('status', 'Work Process Updated Successfully !');
+        return redirect()->route('work-process.index')->with('message', 'Work Process Updated Successfully !');
     }
 
     /**

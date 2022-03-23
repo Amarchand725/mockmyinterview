@@ -9,6 +9,13 @@ use File;
 
 class TestimonialController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:testimonial-list|testimonial-create|testimonial-edit|testimonial-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:testimonial-create', ['only' => ['create','store']]);
+        $this->middleware('permission:testimonial-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:testimonial-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         $testimonials = Testimonial::orderby('id', 'desc')->get();
@@ -42,7 +49,7 @@ class TestimonialController extends Controller
         $testimonail->comment = $request->comment;
         $testimonail->save();
 
-        return redirect()->route('testimonial.index')->with('status', 'Testimonial Added Successfully !');
+        return redirect()->route('testimonial.index')->with('message', 'Testimonial Added Successfully !');
     }
 
     public function edit($slug)
@@ -72,7 +79,7 @@ class TestimonialController extends Controller
         $update->status = $request->status;
         $update->update();
 
-        return redirect()->route('testimonial.index')->with('status', 'Testimonial Updated Successfully !');
+        return redirect()->route('testimonial.index')->with('message', 'Testimonial Updated Successfully !');
     }
 
     public function destroy($slug)

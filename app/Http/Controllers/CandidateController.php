@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 class CandidateController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:schedule interview-list|report-list|test setup-list|notifications-list', ['only' => ['scheduleInterview','report', 'testSetup', 'notifications']]);
+    }
     public function scheduleInterview()
     {
         $page_title = 'Interview Scheduler';

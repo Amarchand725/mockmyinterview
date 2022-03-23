@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Mock Interview</title>
+    <title>Mock My Interview</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -28,6 +28,7 @@
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('public/web/assets/css/style.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{asset('public/admin/assets/css/toastr.min.css')}}">
     @stack('css')
     <!-- ======================================================================================== -->
 </head>
@@ -120,6 +121,44 @@
 
     <!--  Main JS File -->
     <script src="{{ asset('public/web/assets/js/main.js') }}"></script>
+    <script src="{{asset('public/admin/assets/js/toastr.min.js')}}"></script>
+    <script>
+		@if(Session::has('message'))
+		toastr.options =
+		{
+			"closeButton" : true,
+			"progressBar" : true
+		}
+				toastr.success("{{ session('message') }}");
+		@endif
+
+		@if(Session::has('error'))
+		toastr.options =
+		{
+			"closeButton" : true,
+			"progressBar" : true
+		}
+				toastr.error("{{ session('error') }}");
+		@endif
+
+		@if(Session::has('info'))
+		toastr.options =
+		{
+			"closeButton" : true,
+			"progressBar" : true
+		}
+				toastr.info("{{ session('info') }}");
+		@endif
+
+		@if(Session::has('warning'))
+		toastr.options =
+		{
+			"closeButton" : true,
+			"progressBar" : true
+		}
+				toastr.warning("{{ session('warning') }}");
+		@endif
+	</script>
     @stack('js')
 </body>
 

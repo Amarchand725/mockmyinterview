@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Mock Interview</title>
+    <title>Mock My Interview</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>" />
@@ -28,6 +28,7 @@
 
     <!-- Template Main CSS File -->
     <link href="<?php echo e(asset('public/web/assets/css/style.css')); ?>" rel="stylesheet">
+    <link rel="stylesheet" href="<?php echo e(asset('public/admin/assets/css/toastr.min.css')); ?>">
     <?php echo $__env->yieldPushContent('css'); ?>
     <!-- ======================================================================================== -->
 </head>
@@ -120,6 +121,44 @@
 
     <!--  Main JS File -->
     <script src="<?php echo e(asset('public/web/assets/js/main.js')); ?>"></script>
+    <script src="<?php echo e(asset('public/admin/assets/js/toastr.min.js')); ?>"></script>
+    <script>
+		<?php if(Session::has('message')): ?>
+		toastr.options =
+		{
+			"closeButton" : true,
+			"progressBar" : true
+		}
+				toastr.success("<?php echo e(session('message')); ?>");
+		<?php endif; ?>
+
+		<?php if(Session::has('error')): ?>
+		toastr.options =
+		{
+			"closeButton" : true,
+			"progressBar" : true
+		}
+				toastr.error("<?php echo e(session('error')); ?>");
+		<?php endif; ?>
+
+		<?php if(Session::has('info')): ?>
+		toastr.options =
+		{
+			"closeButton" : true,
+			"progressBar" : true
+		}
+				toastr.info("<?php echo e(session('info')); ?>");
+		<?php endif; ?>
+
+		<?php if(Session::has('warning')): ?>
+		toastr.options =
+		{
+			"closeButton" : true,
+			"progressBar" : true
+		}
+				toastr.warning("<?php echo e(session('warning')); ?>");
+		<?php endif; ?>
+	</script>
     <?php echo $__env->yieldPushContent('js'); ?>
 </body>
 

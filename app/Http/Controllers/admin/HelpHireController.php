@@ -14,6 +14,13 @@ class HelpHireController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware('permission:help-list|help-create|help-edit|help-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:help-create', ['only' => ['create','store']]);
+        $this->middleware('permission:help-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:help-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         $models = HelpHire::orderby('id', 'desc')->get();
@@ -50,7 +57,7 @@ class HelpHireController extends Controller
         $model->description = $request->description;
         $model->save();
 
-        return redirect()->route('help.index')->with('status', 'Hire Help Added Successfully !');
+        return redirect()->route('help.index')->with('message', 'Hire Help Added Successfully !');
     }
 
     /**
@@ -97,7 +104,7 @@ class HelpHireController extends Controller
         $update->status = $request->status;
         $update->update();
 
-        return redirect()->route('help.index')->with('status', 'Hire Help Updated Successfully !');
+        return redirect()->route('help.index')->with('message', 'Hire Help Updated Successfully !');
     }
 
     /**

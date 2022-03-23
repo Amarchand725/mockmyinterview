@@ -9,6 +9,13 @@ use File;
 
 class WhychooseController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:why_choose-list|why_choose-create|why_choose-edit|why_choose-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:why_choose-create', ['only' => ['create','store']]);
+        $this->middleware('permission:why_choose-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:why_choose-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         $whychooses = Whychoose::all();
@@ -40,13 +47,13 @@ class WhychooseController extends Controller
             $icon = $request->file('icon')->getClientOriginalName();
             $request->icon->move(public_path('/admin/assets/images/why_choose'), $icon);
             $whychoose->icon = $icon;
-        } 
+        }
 
         $whychoose->name = $request->name;
         $whychoose->content = $request->content;
         $whychoose->save();
 
-        return redirect()->route('why_choose.index')->with('status', 'Why Choose Us Added Successfully !');
+        return redirect()->route('why_choose.index')->with('message', 'Why Choose Us Added Successfully !');
     }
 
     public function edit($id)
@@ -81,13 +88,13 @@ class WhychooseController extends Controller
         $update->status = $request->status;
         $update->update();
 
-        return redirect()->route('why_choose.index')->with('status', 'Why Choose Us Updated Successfully!');
+        return redirect()->route('why_choose.index')->with('message', 'Why Choose Us Updated Successfully!');
     }
 
     public function destroy($id)
     {
         $Whychoose = Whychoose::find($id);
-        
+
         if ($Whychoose) {
             $Whychoose->delete();
             return true;

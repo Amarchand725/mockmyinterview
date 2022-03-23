@@ -38,6 +38,7 @@ class ComposerStaticInit7b4eaadea75595c361efd5dd677ab0a7
         'ed962a97bd972bc82007176b647d4e36' => __DIR__ . '/..' . '/facade/ignition/src/helpers.php',
         'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
         '377b22b161c09ed6e5152de788ca020a' => __DIR__ . '/..' . '/spatie/laravel-permission/src/helpers.php',
+        'ef157334f1067da991ff8953983afdb3' => __DIR__ . '/../..' . '/app/Helpers/helper.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -546,12 +547,16 @@ class ComposerStaticInit7b4eaadea75595c361efd5dd677ab0a7
         'App\\Http\\Controllers\\Auth\\RegisterController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisterController.php',
         'App\\Http\\Controllers\\Auth\\ResetPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ResetPasswordController.php',
         'App\\Http\\Controllers\\Auth\\VerificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerificationController.php',
+        'App\\Http\\Controllers\\CandidateController' => __DIR__ . '/../..' . '/app/Http/Controllers/CandidateController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\InterviewerController' => __DIR__ . '/../..' . '/app/Http/Controllers/InterviewerController.php',
         'App\\Http\\Controllers\\WebController' => __DIR__ . '/../..' . '/app/Http/Controllers/WebController.php',
+        'App\\Http\\Controllers\\admin\\AdminController' => __DIR__ . '/../..' . '/app/Http/Controllers/admin/AdminController.php',
         'App\\Http\\Controllers\\admin\\AdvantageMockController' => __DIR__ . '/../..' . '/app/Http/Controllers/admin/AdvantageMockController.php',
         'App\\Http\\Controllers\\admin\\BlogController' => __DIR__ . '/../..' . '/app/Http/Controllers/admin/BlogController.php',
         'App\\Http\\Controllers\\admin\\CategoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/admin/CategoryController.php',
         'App\\Http\\Controllers\\admin\\DashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/admin/DashboardController.php',
+        'App\\Http\\Controllers\\admin\\HelpHireController' => __DIR__ . '/../..' . '/app/Http/Controllers/admin/HelpHireController.php',
         'App\\Http\\Controllers\\admin\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/admin/HomeController.php',
         'App\\Http\\Controllers\\admin\\PackageController' => __DIR__ . '/../..' . '/app/Http/Controllers/admin/PackageController.php',
         'App\\Http\\Controllers\\admin\\PageController' => __DIR__ . '/../..' . '/app/Http/Controllers/admin/PageController.php',

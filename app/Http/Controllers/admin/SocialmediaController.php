@@ -8,6 +8,13 @@ use App\Models\Socialmedia;
 
 class SocialmediaController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:social media-list-list|social media-list-create|social media-list-edit|social media-list-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:social media-list-create', ['only' => ['create','store']]);
+        $this->middleware('permission:social media-list-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:social media-list-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         $social = Socialmedia::first();
@@ -35,6 +42,6 @@ class SocialmediaController extends Controller
         $update->digg = $request->input('digg');
         $update->update();
 
-        return redirect()->route('social_media.index')->with('status', 'Social Media Updated Successfully !');
+        return redirect()->route('social_media.index')->with('message', 'Social Media Updated Successfully !');
     }
 }

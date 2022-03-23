@@ -14,6 +14,13 @@ class PackageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware('permission:package-list|package-create|package-edit|package-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:package-create', ['only' => ['create','store']]);
+        $this->middleware('permission:package-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:package-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         $models = Package::orderby('id', 'desc')->get();
@@ -51,7 +58,7 @@ class PackageController extends Controller
         $model->description = $request->description;
         $model->save();
 
-        return redirect()->route('package.index')->with('status', 'Package Added Successfully !');
+        return redirect()->route('package.index')->with('message', 'Package Added Successfully !');
     }
 
     /**
@@ -99,7 +106,7 @@ class PackageController extends Controller
         $update->status = $request->status;
         $update->update();
 
-        return redirect()->route('package.index')->with('status', 'Package Updated Successfully !');
+        return redirect()->route('package.index')->with('message', 'Package Updated Successfully !');
     }
 
     /**

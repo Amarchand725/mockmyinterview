@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 class InterviewerController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:booked interviews-list|resources-list|buy & credits-list|refer & earn-list', ['only' => ['bookedInterviews','resources','buyCredits','referAndEarn']]);
+    }
     public function bookedInterviews()
     {
         $page_title = 'Booked Interviews';

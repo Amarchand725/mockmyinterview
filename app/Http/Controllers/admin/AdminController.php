@@ -37,7 +37,7 @@ class AdminController extends Controller
 
         $user->update();
         return redirect()->back()
-        ->with('success','Profile updated successfully');
+        ->with('message','Profile updated successfully');
     }
     public function logOut()
     {

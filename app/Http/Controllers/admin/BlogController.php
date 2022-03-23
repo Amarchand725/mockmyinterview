@@ -15,6 +15,13 @@ class BlogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware('permission:blog-list|blog-create|blog-edit|blog-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:blog-create', ['only' => ['create','store']]);
+        $this->middleware('permission:blog-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:blog-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         $models = Blog::all();
@@ -28,7 +35,7 @@ class BlogController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('status', 1)->get();
+        $categories = Category::where('message', 1)->get();
         return View('admin.blog.create', compact('categories'));
     }
 
@@ -60,7 +67,7 @@ class BlogController extends Controller
         $model->description = $request->description;
         $model->save();
 
-        return redirect()->route('blog.index')->with('status', 'blog Added Successfully !');
+        return redirect()->route('blog.index')->with('message', 'blog Added Successfully !');
     }
 
     /**
@@ -83,7 +90,7 @@ class BlogController extends Controller
     public function edit($slug)
     {
         $model = Blog::where('slug', $slug)->first();
-        $categories = Category::where('status', 1)->get();
+        $categories = Category::where('message', 1)->get();
         return View('admin.blog.edit', compact("model", "categories"));
     }
 
@@ -115,7 +122,7 @@ class BlogController extends Controller
         $model->description = $request->description;
         $model->save();
 
-        return redirect()->route('blog.index')->with('status', 'blog updated Successfully !');
+        return redirect()->route('blog.index')->with('message', 'blog updated Successfully !');
     }
 
     /**

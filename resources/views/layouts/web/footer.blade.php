@@ -27,11 +27,11 @@
                             </form>
                         </div>
                         <div class="social-links">
-                            <a href="{!! $home_page_data['footer_twitter'] !!}" class="twitter"><i class="bx bxl-twitter"></i></a>
-                            <a href="{!! $home_page_data['footer_facebook'] !!}" class="facebook"><i class="bx bxl-facebook"></i></a>
-                            <a href="{!! $home_page_data['footer_instagram'] !!}" class="instagram"><i class="bx bxl-instagram"></i></a>
-                            <a href="{!! $home_page_data['footer_skype'] !!}" class="google-plus"><i class="bx bxl-skype"></i></a>
-                            <a href="{!! $home_page_data['footer_linkedin'] !!}" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+                            <a href="{!! $home_page_data['footer_twitter'] !!}" target="_blank" class="twitter"><i class="bx bxl-twitter"></i></a>
+                            <a href="{!! $home_page_data['footer_facebook'] !!}" target="_blank" class="facebook"><i class="bx bxl-facebook"></i></a>
+                            <a href="{!! $home_page_data['footer_instagram'] !!}" target="_blank" class="instagram"><i class="bx bxl-instagram"></i></a>
+                            <a href="{!! $home_page_data['footer_skype'] !!}" target="_blank" class="google-plus"><i class="bx bxl-skype"></i></a>
+                            <a href="{!! $home_page_data['footer_linkedin'] !!}" target="_blank" class="linkedin"><i class="bx bxl-linkedin"></i></a>
                         </div>
                     </div>
                 </div>

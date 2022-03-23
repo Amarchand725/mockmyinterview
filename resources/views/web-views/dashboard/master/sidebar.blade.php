@@ -7,10 +7,10 @@
                 </a>
             </li>
             @can('schedule interview-list')
-            <li> 
+            <li>
                 <a href="{{ route('schedule-interview') }}" class="{{ request()->is('schedule-interview') ? 'active' : '' }}">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
-                <span class="nav-label">Schedule Interview</span></a> 
+                <span class="nav-label">Schedule Interview</span></a>
             </li>
             @endcan
             @can('report-list')
@@ -21,14 +21,14 @@
             </li>
             @endcan
             @can('test setup-list')
-            <li> 
+            <li>
                 <a href="{{ route('test_setup') }}" class="{{ request()->is('test_setup') ? 'active' : '' }}">
                     <i class="fa fa-laptop"></i> <span class="nav-label">Test My setup</span>
-                </a> 
+                </a>
             </li>
             @endcan
             @can('notifications-list')
-            <li> 
+            <li>
                 <a href="{{ route('notifications') }}" class="{{ request()->is('notifications') ? 'active' : '' }}">
                     <i class="fa fa-bell" aria-hidden="true"></i>
                     <span class="nav-label">Notifications</span>
@@ -38,7 +38,7 @@
             @can('booked interviews-list')
             <li> <a href="{{ route('booked-interviews') }}" class="{{ request()->is('booked-interviews') ? 'active' : '' }}">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
-                <span class="nav-label">Booked Interviews </span></a> 
+                <span class="nav-label">Booked Interviews </span></a>
             </li>
             @endcan
             @can('resources-list')
@@ -56,14 +56,14 @@
             </li>
             @endcan
             @can('refer & earn-list')
-            <li> 
+            <li>
                 <a href="{{ route('refer_and_earn') }}" class="{{ request()->is('refer_and_earn') ? 'active' : '' }}">
                     <i class="fa fa-bell" aria-hidden="true"></i>
                     <span class="nav-label">Refer and Earn</span>
                 </a>
             </li>
             @endcan
-            <li> 
+            <li>
                 <a href="{{ route('my_profile') }}" class="{{ request()->is('my_profile') ? 'active' : '' }}">
                     <i class="fa fa-user"></i>
                     </i> <span class="nav-label">My Profile</span>

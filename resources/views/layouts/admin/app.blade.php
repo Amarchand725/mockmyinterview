@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>Admin Panel</title>
+		<title>Mock My Interview Admin Panel</title>
 
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 		<meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -21,6 +21,7 @@
 		<link rel="stylesheet" href="{{asset('public/admin/assets/css/summernote.css')}}">
 		<link rel="stylesheet" href="{{asset('public/admin/assets/css/magnific-popup.css')}}">
 		<link rel="stylesheet" href="{{asset('public/admin/assets/css/style.css')}}">
+		<link rel="stylesheet" href="{{asset('public/admin/assets/css/toastr.min.css')}}">
 
 		<style>
 			.skin-blue .wrapper,
@@ -112,7 +113,45 @@
 	<script src="{{asset('public/admin/assets/js/jquery.magnific-popup.min.js')}}"></script>
 	<script src="{{asset('public/admin/assets/js/demo.js')}}"></script>
 	<script src="{{asset('public/admin/assets/js/tinymce/tinymce.min.js')}}"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+	<script src="{{asset('public/admin/assets/js/jquery.validate.min.js')}}"></script>
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="{{asset('public/admin/assets/js/toastr.min.js')}}"></script>
+	<script>
+		@if(Session::has('message'))
+		toastr.options =
+		{
+			"closeButton" : true,
+			"progressBar" : true
+		}
+				toastr.success("{{ session('message') }}");
+		@endif
+
+		@if(Session::has('error'))
+		toastr.options =
+		{
+			"closeButton" : true,
+			"progressBar" : true
+		}
+				toastr.error("{{ session('error') }}");
+		@endif
+
+		@if(Session::has('info'))
+		toastr.options =
+		{
+			"closeButton" : true,
+			"progressBar" : true
+		}
+				toastr.info("{{ session('info') }}");
+		@endif
+
+		@if(Session::has('warning'))
+		toastr.options =
+		{
+			"closeButton" : true,
+			"progressBar" : true
+		}
+				toastr.warning("{{ session('warning') }}");
+		@endif
+	</script>
 	@stack('js')
 </html>

@@ -14,6 +14,13 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware('permission:category-list|category-create|category-edit|category-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:category-create', ['only' => ['create','store']]);
+        $this->middleware('permission:category-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:category-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         $models = Category::all();
@@ -48,7 +55,7 @@ class CategoryController extends Controller
         $model->description = $request->description;
         $model->save();
 
-        return redirect()->route('category.index')->with('status', 'Category Added Successfully !');
+        return redirect()->route('category.index')->with('message', 'Category Added Successfully !');
     }
 
     /**
@@ -93,7 +100,7 @@ class CategoryController extends Controller
         $update->status = $request->status;
         $update->update();
 
-        return redirect()->route('category.index')->with('status', 'Category Updated Successfully !');
+        return redirect()->route('category.index')->with('message', 'Category Updated Successfully !');
     }
 
     /**

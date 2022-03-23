@@ -14,6 +14,14 @@ class AdvantageMockController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    function __construct()
+    {
+        $this->middleware('permission:advantage-list|advantage-create|advantage-edit|advantage-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:advantage-create', ['only' => ['create','store']]);
+        $this->middleware('permission:advantage-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:advantage-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
         $models = AdvantageMock::orderby('id', 'desc')->get();
@@ -58,7 +66,7 @@ class AdvantageMockController extends Controller
         $model->description = $request->description;
         $model->save();
 
-        return redirect()->route('advantage.index')->with('status', 'Mock Advantage Added Successfully !');
+        return redirect()->route('advantage.index')->with('message', 'Mock Advantage Added Successfully !');
     }
 
     /**
@@ -111,7 +119,7 @@ class AdvantageMockController extends Controller
         $update->status = $request->status;
         $update->update();
 
-        return redirect()->route('advantage.index')->with('status', 'Mock Advantage Updated Successfully !');
+        return redirect()->route('advantage.index')->with('message', 'Mock Advantage Updated Successfully !');
     }
 
     /**

@@ -10,14 +10,27 @@ use File;
 
 class SliderController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:slider-list|slider-create|slider-edit|slider-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:slider-create', ['only' => ['create','store']]);
+        $this->middleware('permission:slider-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:slider-delete', ['only' => ['destroy']]);
+    }
     public function index()
     {
+        if(!auth()->user()->can('slider-list')){
+            return view('admin.404.404');
+        }
         $sliders = Slider::all();
         return View('admin.slider.index', compact("sliders"));
     }
 
     public function create()
     {
+        if(!auth()->user()->can('slider-create')){
+            return view('admin.404.404');
+        }
         return View('admin.slider.create');
     }
 
@@ -48,7 +61,7 @@ class SliderController extends Controller
         $slider->status = 1;
         $slider->save();
 
-        return redirect()->route('slider.index')->with('status', 'Slider added successfully!');
+        return redirect()->route('slider.index')->with('message', 'Slider added successfully!');
     }
 
     public function edit($id)
@@ -79,12 +92,12 @@ class SliderController extends Controller
         $slider->status = $request->status;;
         $slider->update();
 
-        return redirect()->route('slider.index')->with('status', 'Slider Updated Successfully !');
+        return redirect()->route('slider.index')->with('message', 'Slider Updated Successfully !');
     }
 
     public function show($slider_id)
     {
-        $slider = Slider::find($slider_id); 
+        $slider = Slider::find($slider_id);
         return View('admin.slider.show', compact('slider'));
     }
 
