@@ -17,6 +17,7 @@
 	<link rel="stylesheet" href="{{ asset('public/admin/assets/css/AdminLTE.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('public/admin/assets/css/_all-skins.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('public/admin/assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{asset('public/admin/assets/css/toastr.min.css')}}">
 	<style>
 		.login-page {
 			background: #333;
@@ -38,6 +39,7 @@
         <form method="POST" action="{{ route('admin.login') }}">
             @csrf
 
+            <input type="hidden" name="user_type" value="Admin">
             <div class="form-group has-feedback">
                 <label for="email" class="col-md-6 col-form-label">{{ __('Email Address') }}</label>
 				<input class="form-control" placeholder="Email address" name="email" type="email" autocomplete="off" autofocus>
@@ -102,6 +104,43 @@
 <script src="{{ asset('public/admin/assets/js/jquery.slimscroll.min.js') }}"></script>
 <script src="{{ asset('public/admin/assets/js/app.min.js') }}"></script>
 <script src="{{ asset('public/admin/assets/js/demo.js') }}"></script>
+<script src="{{asset('public/admin/assets/js/toastr.min.js')}}"></script>
+<script>
+    @if(Session::has('message'))
+    toastr.options =
+    {
+        "closeButton" : true,
+        "progressBar" : true
+    }
+            toastr.success("{{ session('message') }}");
+    @endif
 
+    @if(Session::has('error'))
+    toastr.options =
+    {
+        "closeButton" : true,
+        "progressBar" : true
+    }
+            toastr.error("{{ session('error') }}");
+    @endif
+
+    @if(Session::has('info'))
+    toastr.options =
+    {
+        "closeButton" : true,
+        "progressBar" : true
+    }
+            toastr.info("{{ session('info') }}");
+    @endif
+
+    @if(Session::has('warning'))
+    toastr.options =
+    {
+        "closeButton" : true,
+        "progressBar" : true
+    }
+            toastr.warning("{{ session('warning') }}");
+    @endif
+</script>
 </body>
 </html>

@@ -25,6 +25,7 @@
     <link href="{{ asset('public/web/assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
+    <link rel="stylesheet" href="{{asset('public/admin/assets/css/toastr.min.css')}}">
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('public/web/assets/css/dashboard.css') }}" rel="stylesheet">
@@ -63,9 +64,46 @@
     <script src="{{ asset('public/web/assets/js/main.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script src="{{asset('public/admin/assets/js/toastr.min.js')}}"></script>
 
     @stack('js')
-    
+    <script>
+		@if(Session::has('message'))
+		toastr.options =
+		{
+			"closeButton" : true,
+			"progressBar" : true
+		}
+				toastr.success("{{ session('message') }}");
+		@endif
+
+		@if(Session::has('error'))
+		toastr.options =
+		{
+			"closeButton" : true,
+			"progressBar" : true
+		}
+				toastr.error("{{ session('error') }}");
+		@endif
+
+		@if(Session::has('info'))
+		toastr.options =
+		{
+			"closeButton" : true,
+			"progressBar" : true
+		}
+				toastr.info("{{ session('info') }}");
+		@endif
+
+		@if(Session::has('warning'))
+		toastr.options =
+		{
+			"closeButton" : true,
+			"progressBar" : true
+		}
+				toastr.warning("{{ session('warning') }}");
+		@endif
+	</script>
     <script>
         $(document).ready(function() {
             $('.button-left').click(function() {

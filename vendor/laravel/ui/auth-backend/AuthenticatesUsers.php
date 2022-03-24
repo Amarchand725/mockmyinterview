@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 trait AuthenticatesUsers
 {
@@ -82,9 +83,14 @@ trait AuthenticatesUsers
      */
     protected function attemptLogin(Request $request)
     {
-        return $this->guard()->attempt(
-            $this->credentials($request), $request->filled('remember')
-        );
+        $user = User::where('email', $request->email)->first();
+        if(!empty($user) && $user->hasRole($request->user_type)){
+            return $this->guard()->attempt(
+                $this->credentials($request), $request->filled('remember')
+            );    
+        }else{
+            return redirect()->back()->with('error', 'Something went wrong!');
+        }
     }
 
     /**

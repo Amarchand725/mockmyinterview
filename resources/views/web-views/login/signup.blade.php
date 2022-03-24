@@ -11,8 +11,7 @@
             <div class="container ">
                 <div class="row align-items-center justify-content-center">
                     <div class="col-lg-5 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
-                        <h1 class="text-center">Sign up
-                        </h1>
+                        <h1 class="text-center">Sign up</h1>
                         <div class="card signup_v4 mb-30 ">
                             <div class="card-body ">
                                 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -24,7 +23,7 @@
                                 <div class="tab-content" id="myTabContent">
                                     <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="condidate-tab">
                                         <h4 class="text-center mt-4 mb-4" style="text-transform: uppercase;"></h4>
-                                        <form id="condidate" method="POST" action="{{ route('register') }}">
+                                        <form id="condidate" method="POST" action="{{ route('register.store') }}">
                                             @csrf
                                             <input type="hidden" name="role" value="{{ $roles[1]['name'] }}">
                                             <div class="form-row">
@@ -47,11 +46,11 @@
                                                     <span style="color:red">{{ $errors->first('password') }}</span>
                                                 </div>
                                                 <div class="form-group col-md-12 mt-3">
-                                                    <input type="password" class="form-control" name="password_confirmation" id="confirm-password" placeholder=" confirm password">
-                                                    <span style="color:red">{{ $errors->first('password_confirmation') }}</span>
+                                                    <input type="password" class="form-control" name="confirm-password" id="confirm-password" placeholder=" confirm password">
+                                                    <span style="color:red">{{ $errors->first('confirm-password') }}</span>
                                                 </div>
                                                 <div class="form-group col-md-12 mt-3">
-                                                    <input type="password" class="form-control" name="promo_code" id="inputPassword4" placeholder=" Refral/Promo code">
+                                                    <input type="text" class="form-control" name="promo_code" id="inputPassword4" placeholder=" Refral/Promo code">
                                                 </div>
                                                 <div class="form-group col-md-12">
                                                     <div class="d-flex flex-wrap justify-content-between align-items-center spantxt">
@@ -75,16 +74,10 @@
 
                                     <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="interviewer-tab">
                                         <h4 class="text-center mt-4 mb-4" style="text-transform: uppercase;"></h4>
-                                        <form id="interviewer" method="POST" action="{{ route('register') }}">
+                                        <form id="interviewer" method="POST" action="{{ route('register.store') }}">
                                             @csrf
                                             <input type="hidden" name="role" value="{{ $roles[0]['name'] }}">
                                             <div class="form-row">
-                                                <div class="mt-2 mb-3 linkedin_clr">
-                                                    <button class="btn" type="submit">
-                                                        <i class="fa fa-linkedin pull-left" aria-hidden="true"></i>
-                                                        <span> Connect with Linkedin</span>
-                                                    </button>
-                                                </div>
                                                 <div class="form-group col-md-12">
                                                     <input type="text" class="form-control" name="name" id="name" placeholder="First Name">
                                                     <span style="color:red">{{ $errors->first('name') }}</span>
@@ -108,7 +101,7 @@
                                                     <span style="color:red">{{ $errors->first('password_confirmation') }}</span>
                                                 </div>
                                                 <div class="form-group col-md-12 mt-3">
-                                                    <input type="password" class="form-control" name="promo_code" id="inputPassword4" placeholder=" Refral/Promo code">
+                                                    <input type="text" class="form-control" name="promo_code" id="inputPassword4" placeholder=" Refral/Promo code">
                                                 </div>
                                                 <div class="form-group col-md-12">
                                                     <div class="d-flex flex-wrap justify-content-between align-items-center spantxt">

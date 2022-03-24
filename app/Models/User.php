@@ -26,6 +26,8 @@ class User extends Authenticatable
         'promo_code',
         'email',
         'password',
+        'status',
+        'verify_token',
     ];
 
     /**

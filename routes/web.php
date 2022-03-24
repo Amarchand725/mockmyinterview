@@ -17,9 +17,17 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', 'WebController@index');
-Route::get('login', 'WebController@login')->name('login');
-Route::get('signup', 'WebController@signUp')->name('signup');
 Route::get('my_profile', 'WebController@myProfile')->name('my_profile');
+Route::get('login', 'WebController@login')->name('login');
+Route::post('user-authenticate', 'WebController@authenticate')->name('user-authenticate');
+Route::get('signup', 'WebController@signUp')->name('signup');
+Route::post('register/store', 'WebController@store')->name('register.store');
+Route::get('email-verification/{token}', 'WebController@verifyEmail')->name('email-verification');
+
+//forgot password
+Route::get('forgot-password', 'WebController@forgotPassword')->name('forgot-password');
+Route::post('verified-account', 'WebController@verifyAccount')->name('verified-account');
+Route::post('change-password', 'WebController@changePassword')->name('change-password');
 
 //Admin Panel
 Route::get('/dashboard', 'admin\HomeController@index')->name('dashboard');
