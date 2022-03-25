@@ -44,7 +44,7 @@
                                             <div class="mt-2 mb-3"> <button class="btn btn-primary full-width" type="submit">Login</button> </div>
                                             <span>Don't have an account? <a ui-sref="access.signup" href="{{ route('signup') }}">Sign up here</a></span>
                                         </form>
-                                        <div class="social-area">
+                                        {{-- <div class="social-area">
                                             <h3 class="title">Or</h3>
                                             <p class="text">Sign In with social media</p>
                                             <ul class="social-links">
@@ -55,7 +55,7 @@
                                                     <a href="#"> <i class="fa fa-twitter"></i> </a>
                                                 </li>
                                             </ul>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <div class="tab-pane fade" id="interviewer-login" role="tabpanel" aria-labelledby="interviewer-login-tab">
                                         <h4 class="text-center mt-4 mb-4" style="text-transform: uppercase;"></h4>
@@ -64,12 +64,12 @@
 
                                             <input type="hidden" name="user_type" value="Interviewer">
                                             <div class="form-row">
-                                                <div class="mt-2 mb-3 linkedin_clr">
+                                                {{-- <div class="mt-2 mb-3 linkedin_clr">
                                                     <button class="btn" type="submit">
                                                         <i class="fa fa-linkedin pull-left" aria-hidden="true"></i>
                                                         <span> Connect with Linkedin</span>
                                                     </button>
-                                                </div>
+                                                </div> --}}
 
                                                 <div class="form-group col-md-12">
                                                     <input type="text" class="form-control" name="email" id="inputEmail4" placeholder="Email" required="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAmJJREFUWAntV7uKIkEUvbYGM4KID3wEIgjKRLLpKGLgFwiCfslGhkb7IbLgAzE1GhMxWxRRBEEwmEgDERWfW6fXuttq60a2wU6B1qlzb9U5fatsKROJVigUArvd7oeAyePx6Af3qGYymT7F2h8Wi+V7Pp+fmE7iv4Sw81GieusKIzNh4puCJzdaHIagCW1F4KSeQ4O4pPLoPb/3INBGBZ7avgz8fxWIxWIUCoX43Blegbe3NwoGg88zwMoncFUB8Yokj8dDdrv9MpfHVquV/H4/iVcpc1qgKAp5vV6y2WxaWhefreB0OimXy6kGkD0YDKhSqdB2u+XJqVSK4vE4QWS5XKrx0WjEcZ/PR9lslhwOh8p1Oh2q1Wp0OBw4RwvOKpBOp1kcSdivZPLvmxrjRCKhiiOOSmQyGXp5ecFQbRhLcRDRaJTe39//BHW+2cDr6ysFAoGrlEgkwpwWS1I7z+VykdvtliHuw+Ew40vABvb7Pf6hLuMk/rGY02ImBZC8dqv04lpOYjaw2WzUPZcB2WMPZet2u1cmZ7MZTSYTNWU+n9N4PJbp3GvXYPIE2ADG9Xqder2e+kTr9ZqazSa1222eA6FqtUoQwqHCuFgscgWQWC6XaTgcEiqKQ9poNOiegbNfwWq1olKppB6yW6cWVcDHbDarIuzuBBaLhWrqVvwy/6wCMnhLXMbR4wnvtX/F5VxdAzJoRH+2BUYItlotmk6nLGW4gX6/z+IAT9+CLwPPr8DprnZ2MIwaQBsV+DBKUEfnQ8EtFRdFneBDKWhCW8EVGbdUQfxESR6qKhaHBrSgCe3fbLTpPlS70M0AAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;">

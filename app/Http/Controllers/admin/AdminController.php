@@ -46,12 +46,12 @@ class AdminController extends Controller
     }
 
     //Password reset
-    public function resetPassword()
+    public function forgotPassword()
     {
-        $page_title = 'Reset Password';
-        return view('auth.passwords.reset-password', compact('page_title'));
+        $page_title = 'Forgot Password';
+        return view('auth.passwords.forgot-password', compact('page_title'));
     }
-    public function verifyAccount(Request $request)
+    public function passwordResetLink(Request $request)
     {
         $this->validate($request, [
             'email' => 'required',
@@ -67,10 +67,24 @@ class AdminController extends Controller
             $user->verify_token = $verify_token;
             $user->update();
 
-            return view('auth.passwords.change-password', compact('page_title', 'verify_token'));
+            $details = [
+                'from' => 'admin-password-reset',
+                'title' => "Hello! ". $user->name,
+                'body' => "You are receiving this email because we recieved a password reset request for your account.",
+                'verify_token' => $user->verify_token,
+            ];
+           
+            \Mail::to($user->email)->send(new \App\Mail\Email($details));
+    
+            return redirect()->route('admin.login')->with('message', 'We have emailed your password reset link!');
         }else{
             return redirect()->back()->with('error', 'Your account not found.');
         }
+    }
+    public function resetPassword($verify_token)
+    {
+        $page_title = 'Reset Password';
+        return view('web-views.login.change-password', compact('page_title', 'verify_token'));
     }
     public function changePassword(Request $request)
     {

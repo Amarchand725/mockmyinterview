@@ -30,6 +30,10 @@ class Email extends Mailable
     {
         if($this->details['from']=='verify'){
             return $this->subject('Verification Account')->view('emails.verify-email');
+        }elseif($this->details['from']=='password-reset'){
+            return $this->subject('Reset Password Notification')->view('emails.password-reset');
+        }elseif($this->details['from']=='admin-password-reset'){
+            return $this->subject('Reset Password Notification')->view('emails.password-reset');
         }
     }
 }

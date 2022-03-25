@@ -63,10 +63,11 @@ unset($__errorArgs, $__bag); ?>
 
                         </button>
 
-                        <a class="btn btn-link" href="<?php echo e(route('admin.reset_password')); ?>">
+                        <a class="btn btn-link" href="<?php echo e(route('admin.forgot_password')); ?>">
                             <?php echo e(__('Forgot Your Password?')); ?>
 
                         </a>
+                        
                     </div>
                 </div>
             </form>

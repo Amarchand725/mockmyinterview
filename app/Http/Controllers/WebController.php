@@ -120,7 +120,7 @@ class WebController extends Controller
         $page_title = 'Forgot Password';
         return view('web-views.login.forgot-password', compact('page_title'));
     }
-    public function verifyAccount(Request $request)
+    public function passwordResetLink(Request $request)
     {
         $this->validate($request, [
             'email' => 'required',
@@ -135,10 +135,25 @@ class WebController extends Controller
 
             $user->verify_token = $verify_token;
             $user->update();
-            return view('web-views.login.change-password', compact('page_title', 'verify_token'));
+
+            $details = [
+                'from' => 'password-reset',
+                'title' => "Hello!",
+                'body' => "You are receiving this email because we recieved a password reset request for your account.",
+                'verify_token' => $user->verify_token,
+            ];
+           
+            \Mail::to($user->email)->send(new \App\Mail\Email($details));
+    
+            return redirect()->route('login')->with('message', 'We have emailed your password reset link!');
         }else{
             return redirect()->back()->with('error', 'Your email address is not matched.');
         }
+    }
+    public function resetPassword($verify_token)
+    {
+        $page_title = 'Reset Password';
+        return view('web-views.login.change-password', compact('page_title', 'verify_token'));
     }
     public function changePassword(Request $request)
     {

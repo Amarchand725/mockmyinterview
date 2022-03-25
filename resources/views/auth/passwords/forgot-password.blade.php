@@ -7,11 +7,11 @@
 
 @section('content')
     <div class="login-box">
-        <div class="login-logo">
-            <b>Verify Account</b>
+        <div class="login-logo" style="width: 370px">
+            <b>Send Password Reset Link</b>
         </div>
         <div class="card-body login-box-body">
-            <form method="GET" action="{{ route('admin.verify_account') }}">
+            <form method="GET" action="{{ route('admin.send-password-reset-link') }}">
                 @csrf
 
                 <div class="form-group has-feedback">
@@ -27,7 +27,7 @@
                 <div class="row mb-0">
                     <div class="col-md-8 offset-md-4">
                         <button type="submit" class="btn btn-primary">
-                            {{ __('Verify Account') }}
+                            {{ __('Send Password Reset Link') }}
                         </button>
                     </div>
                 </div>
