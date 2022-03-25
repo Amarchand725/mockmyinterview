@@ -6,13 +6,6 @@
                     <i class="fa fa-laptop"></i> <span>Dashboard</span>
                 </a>
             </li>
-            {{-- @can('setting-list')
-            <li class="treeview">
-                <a href="{{ route('setting.index') }}" class="{{ request()->is('setting') || request()->is('setting/*') ? 'active' : '' }}">
-                    <i class="fa fa-cog"></i> <span>Settings</span>
-                </a>
-            </li>
-            @endcan --}}
             @can('page-list')
             <li class="treeview">
                 <a href="{{ route('page.index') }}" class="{{ request()->is('page') || request()->is('page/*') || request()->is('page_setting/*') ? 'active' : '' }}">
@@ -38,6 +31,27 @@
             <li class="treeview">
                 <a href="{{ route('permission.index') }}" class="{{ request()->is('permission') || request()->is('permission/create') || request()->is('permission/*/edit') ? 'active' : '' }}">
                     <i class="fa fa-picture-o"></i> <span>Permissions</span>
+                </a>
+            </li>
+            @endcan
+            @can('language-list')
+            <li class="treeview">
+                <a href="{{ route('language.index') }}" class="{{ request()->is('language') || request()->is('language/create') || request()->is('language/*/edit') ? 'active' : '' }}">
+                    <i class="fa fa-picture-o"></i> <span>Languages</span>
+                </a>
+            </li>
+            @endcan
+            @can('degree-list')
+            <li class="treeview">
+                <a href="{{ route('degree.index') }}" class="{{ request()->is('degree') || request()->is('degree/create') || request()->is('degree/*/edit') ? 'active' : '' }}">
+                    <i class="fa fa-picture-o"></i> <span>Degrees</span>
+                </a>
+            </li>
+            @endcan
+            @can('course-list')
+            <li class="treeview">
+                <a href="{{ route('course.index') }}" class="{{ request()->is('course') || request()->is('course/create') || request()->is('course/*/edit') ? 'active' : '' }}">
+                    <i class="fa fa-picture-o"></i> <span>Courses</span>
                 </a>
             </li>
             @endcan

@@ -55,14 +55,12 @@
                                 </div>
                                 <div class="form-group float-label-control">
                                     <label for="">Date of Birth</label>
-                                    <input type="date" class="form-control" placeholder="Date of Birth">
+                                    <input type="text" class="form-control my_profile" placeholder="Date of Birth">
                                 </div>
                                 <div class="form-group float-label-control">
                                     <label for="">Gender</label>
                                     <input type="name" class="form-control" placeholder="Gender">
                                 </div>
-
-
                             </form>
                         </div>
                         <div class="col-md-6 language">
@@ -71,82 +69,67 @@
                                 <textarea class="form-control" placeholder="Address" rows="1"></textarea>
                             </div>
                             <label for="country">Languages Known (Hold shift/ctrl to select more than one language)</label>
-                            <select class="form-select" aria-label="Default select example">
-                                <option selected></option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                                </select>
+                            <select class="form-select select2" aria-label="Default select example">
+                                <option selected>Select Language</option>
+                                @foreach ($languages as $language)
+                                    <option value="{{ $language->slug }}">{{ $language->title }}</option>
+                                @endforeach    
+                            </select>
                             <div class="form-group float-label-control">
                                 <label for="">Skype ID</label>
                                 <input type="name" class="form-control" placeholder="Skype ID">
                             </div>
-
-
                         </div>
-
                     </div>
-
                 </div>
 
                 <!-- end of tab 1 -->
                 <div id="tab02" class="tab-contents">
-
                     <div id="edu ">
                         <div id="edu1">
                             <div class="row ">
                                 <div class="col-md-3">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <label for="college">College</label>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <input type="text" name="edu1_college" id="edu1_college" class="form-control ng-pristine ng-untouched ng-valid" ng-model="input.edu[1].college" aria-invalid="false" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAfBJREFUWAntVk1OwkAUZkoDKza4Utm61iP0AqyIDXahN2BjwiHYGU+gizap4QDuegWN7lyCbMSlCQjU7yO0TOlAi6GwgJc0fT/fzPfmzet0crmD7HsFBAvQbrcrw+Gw5fu+AfOYvgylJ4TwCoVCs1ardYTruqfj8fgV5OUMSVVT93VdP9dAzpVvm5wJHZFbg2LQ2pEYOlZ/oiDvwNcsFoseY4PBwMCrhaeCJyKWZU37KOJcYdi27QdhcuuBIb073BvTNL8ln4NeeR6NRi/wxZKQcGurQs5oNhqLshzVTMBewW/LMU3TTNlO0ieTiStjYhUIyi6DAp0xbEdgTt+LE0aCKQw24U4llsCs4ZRJrYopB6RwqnpA1YQ5NGFZ1YQ41Z5S8IQQdP5laEBRJcD4Vj5DEsW2gE6s6g3d/YP/g+BDnT7GNi2qCjTwGd6riBzHaaCEd3Js01vwCPIbmWBRx1nwAN/1ov+/drgFWIlfKpVukyYihtgkXNp4mABK+1GtVr+SBhJDbBIubVw+Cd/TDgKO2DPiN3YUo6y/nDCNEIsqTKH1en2tcwA9FKEItyDi3aIh8Gl1sRrVnSDzNFDJT1bAy5xpOYGn5fP5JuL95ZjMIn1ya7j5dPGfv0A5eAnpZUY3n5jXcoec5J67D9q+VuAPM47D3XaSeL4AAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;">
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="college">College</label>
+                                        <input type="text" name="edu1_college" id="edu1_college" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <label for="degree">Degree</label>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <select name="edu1_degree" class="form-control ng-pristine ng-valid ng-touched" ng-model="input.edu[1].degree" id="edu1_degree" ng-change="getCourse(input.edu[1].degree,1)" aria-invalid="false"><option value="? undefined:undefined ?"></option>
-                                            </select>
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="degree">Degree</label>
+                                        <select name="degree" class="form-control select2 degree" id="">
+                                            <option value="" selected>Select degree</option>
+                                            @foreach ($degrees as $degree)
+                                                <option value="{{ $degree->slug }}">{{ $degree->title }}</option>
+                                            @endforeach
+                                        </select>   
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="course">Course</label>
-                                        <select name="edu1_course" id="edu1_course" class="form-control ng-pristine ng-valid ng-touched" ng-model="input.edu[1].course" aria-invalid="false"><option value="hsc"></option>
+                                        <select name="course" id="courses" class="form-control selecte2">
                                         </select>
                                         <input type="text" name="edu1_course" class="form-control ng-pristine ng-untouched ng-valid" ng-model="input.edu[1].course" id="eduT1_course" aria-invalid="false" style="display: none;">
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <label for="yearOfPassing">Year of Passing</label>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <input type="text" class="form-control ng-pristine ng-valid ng-valid-maxlength ng-touched" aria-invalid="false">
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="yearOfPassing">Year of Passing</label>
+                                        <input type="text" class="form-control" name="passing_year">
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="tool-tip">
                                         <div class="title">
-
                                             <button id="addEducationinterviewerProfile" class="blue-btn-small">
-                                                        Add
-                                                    </button>
+                                                <i class="fa fa-plus"></i>
+                                            </button>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-
+                            <span id="added-more"></span>
                         </div>
                     </div>
 
@@ -164,9 +147,6 @@
                     </div>
                 </div>
 
-
-
-
                 <div id="tab03" class="tab-contents">
                     <div class="row">
                         <div class="col-md-6">
@@ -176,7 +156,6 @@
                             <div class="col-md-12">
                                 <input type="text" class="form-control ng-pristine ng-valid ng-valid-maxlength ng-touched" aria-invalid="false">
                             </div>
-
                         </div>
                         <div class="col-md-6">
                             <div class="col-md-12">
@@ -333,6 +312,21 @@
 @endsection
 @push('js')
     <script>
+        $(document).on('change', '.degree', function(){
+            var degree_slug = $(this).val();
+            $.ajax({
+                type:'GET',
+                url:'{{ url("get_courses") }}/'+degree_slug,
+                success: function( response ) {
+                    var html = '';
+                    jQuery.each(response, function(index, val) {
+                        html += '<option value="'+val.slug+'">'+val.title+'</option>';
+                    });
+                    $('#courses').html(html);
+                }
+            });
+        })
+
         $(document).ready(function() {
             $('.button-left').click(function() {
                 $('.sidebar').toggleClass('fliph');
@@ -340,9 +334,9 @@
 
         });
 
-        $(function() {
+        /* $(function() {
             $('.selectpicker').selectpicker();
-        });
+        }); */
 
         $(function() {
             var $tabButtonItem = $('#tab-button li'),

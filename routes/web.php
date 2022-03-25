@@ -41,6 +41,8 @@ Route::get('/dashboard', 'admin\HomeController@index')->name('dashboard');
 Route::get('/admin/profile/edit', 'admin\AdminController@editProfile')->name('admin.profile.edit');
 Route::post('/admin/profile/update', 'admin\AdminController@updateProfile')->name('admin.profile.update');
 Route::post('admin/logout', 'admin\AdminController@logOut')->name('admin.logout');
+
+Route::get('get_courses/{slug}', 'admin\CourseController@getCourses')->name('get_courses');
 //Admin Panel
 
 //Candidate
@@ -108,3 +110,12 @@ Route::resource('team', 'admin\TeamController');
 
 //Help & Hire
 Route::resource('help', 'admin\HelpHireController');
+
+//language
+Route::resource('language', 'admin\LanguageController');
+
+//degree
+Route::resource('degree', 'admin\DegreeController');
+
+//course
+Route::resource('course', 'admin\CourseController');

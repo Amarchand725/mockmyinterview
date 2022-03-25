@@ -23,15 +23,14 @@
     <link href="{{ asset('public/web/assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
     <link href="{{ asset('public/web/assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
     <link href="{{ asset('public/web/assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
+    <link rel="stylesheet" href="{{ asset('public/web/assets/css/jquery-ui.css') }}">
     <link rel="stylesheet" href="{{asset('public/admin/assets/css/toastr.min.css')}}">
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('public/web/assets/css/dashboard.css') }}" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="{{ asset('public/web/assets/js/jquery-3.2.1.slim.min.js') }}"></script>
+    <script src="{{ asset('public/web/assets/js/popper.min.js') }}"></script>
+    <script src="{{ asset('public/web/assets/js/bootstrap.min.js') }}"></script>
 
     @stack('css')
 </head>
@@ -62,9 +61,9 @@
 
     <!--  Main JS File -->
     <script src="{{ asset('public/web/assets/js/main.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
-    <script src="{{asset('public/admin/assets/js/toastr.min.js')}}"></script>
+    <script src="{{ asset('public/web/assets/js/jquery-3.6.0.js') }}"></script>
+    <script src="{{ asset('public/web/assets/js/jquery-ui.js') }}"></script>
+    <script src="{{ asset('public/admin/assets/js/toastr.min.js') }}"></script>
 
     @stack('js')
     <script>
