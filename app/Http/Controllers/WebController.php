@@ -15,6 +15,8 @@ use App\Models\HelpHire;
 use App\Models\Role;
 use Auth;
 use App\Models\User;
+use App\Models\Language;
+use App\Models\Degree;
 use Hash;
 
 class WebController extends Controller
@@ -35,8 +37,10 @@ class WebController extends Controller
     public function myProfile()
     {
         $page_title = 'My Profile';
+        $languages = Language::where('status', 1)->get();
+        $degrees = Degree::where('status', 1)->get();
         if(Auth::check() && Auth::user()->hasRole('Candidate')){
-            return view('web-views.candidate.my_profile', compact('page_title'));
+            return view('web-views.candidate.my_profile', compact('page_title', 'languages', 'degrees'));
         }elseif(Auth::check() && Auth::user()->hasRole('Interviewer')){
             return view('web-views.interviewer.my_profile', compact('page_title'));
         }
