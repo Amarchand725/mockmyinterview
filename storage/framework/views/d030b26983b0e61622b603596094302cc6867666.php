@@ -11,13 +11,13 @@
             <div class="container ">
                 <div class="row align-items-center justify-content-center">
                     <div class="col-lg-5 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
-                        <h1 class="text-center">FORGOT PASSWORD</h1>
+                        <h1 class="text-center">RESET PASSWORD</h1>
                         <div class="card signup_v4 mb-30 ">
                             <div class="card-body ">
                                 <div class="tab-content" id="myTabContent">
                                     <div class="tab-pane fade show active" id="candidate-login" role="tabpanel" aria-labelledby="candidate-login-tab">
                                         <h4 class="text-center mt-4 mb-4" style="text-transform: uppercase;"></h4>
-                                        <form method="POST" action="<?php echo e(route('verified-account')); ?>">
+                                        <form method="GET" action="<?php echo e(route('verified-account')); ?>">
                                             <?php echo csrf_field(); ?>
                                             <div class="form-row">
                                                 <div class="form-group col-md-12">

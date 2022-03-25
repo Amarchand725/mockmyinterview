@@ -26,8 +26,13 @@ Route::get('email-verification/{token}', 'WebController@verifyEmail')->name('ema
 
 //forgot password
 Route::get('forgot-password', 'WebController@forgotPassword')->name('forgot-password');
-Route::post('verified-account', 'WebController@verifyAccount')->name('verified-account');
+Route::get('verified-account', 'WebController@verifyAccount')->name('verified-account');
 Route::post('change-password', 'WebController@changePassword')->name('change-password');
+
+//admin reset password
+Route::get('admin/reset_password', 'admin\AdminController@resetPassword')->name('admin.reset_password');
+Route::get('admin/verify_account', 'admin\AdminController@verifyAccount')->name('admin.verify_account');
+Route::post('admin/change_password', 'admin\AdminController@changePassword')->name('admin.change_password');
 
 //Admin Panel
 Route::get('/dashboard', 'admin\HomeController@index')->name('dashboard');

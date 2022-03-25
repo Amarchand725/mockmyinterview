@@ -113,6 +113,8 @@ class WebController extends Controller
             return redirect()->back()->with('error', 'Your token is expired');
         }
     }
+
+    //Reset password
     public function forgotPassword()
     {
         $page_title = 'Forgot Password';
@@ -127,25 +129,26 @@ class WebController extends Controller
         $user = User::where('email', $request->email)->where('status', 1)->first();
         if(!empty($user)){
             $page_title = 'Change Password';
-            $email = $request->email;
-            return view('web-views.login.change-password', compact('page_title', 'email'));
+            do{
+                $verify_token = uniqid();
+            }while(User::where('verify_token', $verify_token)->first());
+
+            $user->verify_token = $verify_token;
+            $user->update();
+            return view('web-views.login.change-password', compact('page_title', 'verify_token'));
         }else{
             return redirect()->back()->with('error', 'Your email address is not matched.');
         }
     }
     public function changePassword(Request $request)
     {
-        return $request;
-        /* if(!empty($request->password) && !empty($request->confirm_password)){
-            if($request->password != $request->confirm_password){
-                $page_title = 'Change Password';
-                $email = $request->email;
-                return view('web-views.login.change-password', compact('page_title', 'email'))->with('error', 'Confirm password not matched.');
-            }
-        } */
+        $this->validate($request, [
+            'password' => 'required|same:confirm-password',
+        ]);
 
-        $user = User::where('email', $request->email)->where('status', 1)->first();
+        $user = User::where('verify_token', $request->verify_token)->where('status', 1)->first();
         $user->password = Hash::make($request->password);
+        $user->verify_token = null;
         $user->update();
 
         if($user){

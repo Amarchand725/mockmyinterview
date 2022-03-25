@@ -44,4 +44,49 @@ class AdminController extends Controller
         Auth::logout();
         return redirect()->route('admin.login');
     }
+
+    //Password reset
+    public function resetPassword()
+    {
+        $page_title = 'Reset Password';
+        return view('auth.passwords.reset-password', compact('page_title'));
+    }
+    public function verifyAccount(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'required',
+        ]);
+
+        $user = User::where('email', $request->email)->where('status', 1)->first();
+        if(!empty($user)){
+            $page_title = 'Change Password';
+            do{
+                $verify_token = uniqid();
+            }while(User::where('verify_token', $verify_token)->first());
+
+            $user->verify_token = $verify_token;
+            $user->update();
+
+            return view('auth.passwords.change-password', compact('page_title', 'verify_token'));
+        }else{
+            return redirect()->back()->with('error', 'Your account not found.');
+        }
+    }
+    public function changePassword(Request $request)
+    {
+        $this->validate($request, [
+            'password' => 'required|same:confirm-password',
+        ]);
+
+        $user = User::where('verify_token', $request->verify_token)->first();
+        $user->password = Hash::make($request->password);
+        $user->verify_token = null;
+        $user->update();
+
+        if($user){
+            return redirect()->route('admin.login')->with('message', 'You have updated password. You can login again.');
+        }else{
+            return redirect()->back()->with('error', 'Something went wrong try again');
+        }
+    }
 }

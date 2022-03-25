@@ -19,14 +19,14 @@
                                         <h4 class="text-center mt-4 mb-4" style="text-transform: uppercase;"></h4>
                                         <form method="POST" action="{{ route('change-password') }}">
                                             @csrf
-                                            <input type="hidden" name="email" value="{{ $email }}">
+                                            <input type="hidden" name="verify_token" value="{{ $verify_token }}">
                                             <div class="form-row">
                                                 <div class="form-group col-md-12 mt-3">
                                                     <input type="password" class="form-control" name="password" id="password" placeholder=" Enter new password">
                                                     <span style="color:red">{{ $errors->first('password') }}</span>
                                                 </div>
                                                 <div class="form-group col-md-12 mt-3">
-                                                    <input type="password" class="form-control" name="confirm_password" id="confirm-password" placeholder=" confirm password">
+                                                    <input type="password" class="form-control" name="confirm-password" id="confirm-password" placeholder=" confirm password">
                                                     <span style="color:red">{{ $errors->first('confirm-password') }}</span>
                                                 </div>
                                             </div>
