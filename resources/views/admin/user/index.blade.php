@@ -1,4 +1,5 @@
 @extends('layouts.admin.app')
+@section('title', $page_title)
 @section('content')
 <section class="content-header">
     <div class="content-header-left">
@@ -22,24 +23,49 @@
 
             <div class="box box-info">
                 <div class="box-body">
-                    <table id="example1" class="table table-bordered table-striped">
+                    <div class="row">
+                        <div class="col-sm-1">Search:</div>
+                        <div class="d-flex col-sm-6">
+                            <input type="text" id="search" class="form-control" placeholder="Search">
+                        </div>
+                        <div class="d-flex col-sm-5">
+                            <select name="" id="status" class="form-control status" style="margin-bottom:5px">
+                                <option value="All" selected>Search by status</option>
+                                <option value="1">Active</option>
+                                <option value="2">In-Active</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table id="" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>SL</th>
-                                <th>Name</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Phone</th>
                                 <th>E-mail</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach($users as $user)
+                        <tbody id="body">
+                            @foreach($users as $key=>$user)
                                 @if($user->hasRole('Admin'))
                                     @continue;
                                 @endif
                                 <tr id="id-{{ $user->id }}">
-                                    <td>{{$user->id}}</td>
+                                    <td>{{  $users->firstItem()+$key }}.</td>
                                     <td>{{$user->name}}</td>
+                                    <td>{{$user->last_name??'N/A'}}</td>
+                                    <td>{{$user->phone??'N/A'}}</td>
                                     <td>{{$user->email}}</td>
+                                    <td>
+										@if($user->status)
+											<span class="badge badge-success">Active</span>
+										@else
+											<span class="badge badge-danger">In-Active</span>
+										@endif
+									</td>
                                     <td>
                                         @can('user-edit')
                                             <a href="{{ route('user.edit', $user->id)}}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
@@ -50,6 +76,14 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            <tr>
+                                <td colspan="7">
+                                    Displying {{$users->count()}} of {{$users->total()}} records
+                                    <div class="d-flex justify-content-center">
+                                        {!! $users->links('pagination::bootstrap-4') !!}
+                                    </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -59,8 +93,39 @@
 @endsection
 
 @push('js')
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        $(document).on('change','#status',function(e) {
+            $select = $(this);
+            $selectedOption = $select.find( "option[value=" + $select.val() + "]" );
+            status =  $selectedOption.val();
+            var search = $('#search').val();
+            var page = 1;
+            fetchAll(page, search, status);
+        });
+        $('#search').keyup((function(e) {
+            var search = $(this).val();
+            var status = $('#status').val();
+            var page = 1;
+            fetchAll(page, search, status);
+        }));
+
+        $(document).on('click', '.pagination a', function(event){
+            event.preventDefault();
+            var search = $('#search').val();
+            var status = $('#status').val();
+            var page = $(this).attr('href').split('page=')[1];
+            fetchAll(page, search, status);
+        });
+
+        function fetchAll(page, search, status){
+            $.ajax({
+                url:'{{ route("user.index") }}?page='+page+'&search='+search+'&status='+status,
+                type: 'get',
+                success: function(response){
+                    $('#body').html(response);
+                }
+            });
+        }
         $('.delete-btn').on('click', function(){
             var user_id = $(this).attr('data-user-id');
             Swal.fire({
@@ -86,13 +151,13 @@
                                     'Deleted!',
                                     'User has been deleted.',
                                     'success'
-                                ) 
+                                )
                             }else{
                                 Swal.fire(
                                     'Not Deleted!',
                                     'Sorry! Something went wrong.',
                                     'danger'
-                                ) 
+                                )
                             }
                         }
                     });

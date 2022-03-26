@@ -67,7 +67,7 @@
 			.nav-tabs-custom>.nav-tabs>li {
 				border-top-width: 1px !important;
 			}
-		
+
 			label.error {
 				color: #dc3545;
 				font-size: 14px;

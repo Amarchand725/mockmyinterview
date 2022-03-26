@@ -18,13 +18,15 @@ class TestimonialController extends Controller
     }
     public function index()
     {
+        $page_title = 'All Testimonials';
         $testimonials = Testimonial::orderby('id', 'desc')->get();
-        return View('admin.testimonial.index', compact("testimonials"));
+        return View('admin.testimonial.index', compact("testimonials", "page_title"));
     }
 
     public function create()
     {
-        return View('admin.testimonial.create');
+        $page_title = 'Add Testionial';
+        return View('admin.testimonial.create', compact('page_title'));
     }
 
     public function store(Request $request)
@@ -54,8 +56,9 @@ class TestimonialController extends Controller
 
     public function edit($slug)
     {
+        $page_title = 'Edit Testimonial';
         $testimonial = Testimonial::where('slug', $slug)->first();
-        return View('admin.testimonial.edit', compact("testimonial"));
+        return View('admin.testimonial.edit', compact("testimonial", "page_title"));
     }
 
     public function update(Request $request, $slug)

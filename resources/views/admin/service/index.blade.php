@@ -1,4 +1,5 @@
 @extends('layouts.admin.app')
+@section('title', $page_title)
 @section('content')
 <section class="content-header">
 	<div class="content-header-left">
@@ -43,7 +44,7 @@
 									<td>
 										@if($service->status)
 											<span class="badge badge-success">Active</span>
-										@else 
+										@else
 											<span class="badge badge-danger">In-Active</span>
 										@endif
 									</td>
@@ -94,13 +95,13 @@
                                     'Deleted!',
                                     'service has been deleted.',
                                     'success'
-                                ) 
+                                )
                             }else{
                                 Swal.fire(
                                     'Not Deleted!',
                                     'Sorry! Something went wrong.',
                                     'danger'
-                                ) 
+                                )
                             }
                         }
                     });

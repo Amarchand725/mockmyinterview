@@ -99,8 +99,8 @@ Route::resource('page_setting', 'admin\PageSettingController');
 //advantage
 Route::resource('advantage', 'admin\AdvantageMockController');
 
-//work process
-Route::resource('work-process', 'admin\WorkProcessController');
+//how_work
+Route::resource('how_work', 'admin\HowWorkController');
 
 //package
 Route::resource('package', 'admin\PackageController');

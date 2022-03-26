@@ -23,8 +23,9 @@ class ServiceController extends Controller
     }
     public function index()
     {
+        $page_title = 'All Services';
         $services = Service::orderby('id', 'desc')->get();
-        return view('admin.service.index', compact('services'));
+        return view('admin.service.index', compact('services', 'page_title'));
     }
 
     /**
@@ -34,7 +35,8 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        return view('admin.service.create');
+        $page_title = 'Add Service';
+        return view('admin.service.create', 'page_title');
     }
 
     /**
@@ -79,8 +81,9 @@ class ServiceController extends Controller
      */
     public function edit($slug)
     {
+        $page_title = 'Edit Service';
         $service = Service::where('slug', $slug)->first();
-        return View('admin.service.edit', compact('service'));
+        return View('admin.service.edit', compact('service', 'page_title'));
     }
 
     /**

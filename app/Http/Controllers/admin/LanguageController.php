@@ -23,10 +23,25 @@ class LanguageController extends Controller
          $this->middleware('permission:language-delete', ['only' => ['destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $query = Language::orderby('id', 'desc')->where('id', '>', 0);
+            if($request['search'] != ""){
+                $query->where('title', 'like', '%'. $request['search'] .'%')
+                    ->orWhere('code', 'like', '%'. $request['search'].'%');
+            }
+            if($request['status']!="All"){
+                if($request['status']==2){
+                    $request['status'] = 0;
+                }
+                $query->where('status', $request['status']);
+            }
+            $languages = $query->paginate(5);
+            return (string) view('admin.language.search', compact('languages'));
+        }
         $page_title = 'All Languages';
-        $languages = Language::orderBy('id','DESC')->paginate(10);
+        $languages = Language::orderBy('id','DESC')->paginate(5);
         return view('admin.language.index',compact('page_title', 'languages'));
     }
 
@@ -54,15 +69,15 @@ class LanguageController extends Controller
             'description' => 'max:255',
             'code' => 'max:5',
         ]);
-    
+
         Language::create([
-            'created_by' => Auth::user()->id, 
-            'title' => $request->title, 
-            'code' => $request->code, 
-            'slug' => \Str::slug($request->title), 
+            'created_by' => Auth::user()->id,
+            'title' => $request->title,
+            'code' => $request->code,
+            'slug' => \Str::slug($request->title),
             'description'=>$request->description
         ]);
-    
+
         return redirect()->route('language.index')
                         ->with('message','Language created successfully');
     }
@@ -106,14 +121,14 @@ class LanguageController extends Controller
             'description' => 'max:255',
             'code' => 'max:5',
         ]);
-    
+
         $language = Language::where('slug', $slug)->first();
         $language->title = $request->title;
         $language->slug = \Str::slug($request->title);
         $language->code = $request->code;
         $language->description = $request->description;
         $language->save();
-    
+
         return redirect()->route('language.index')
                         ->with('message','Language updated successfully');
     }

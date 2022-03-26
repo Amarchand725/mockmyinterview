@@ -1,9 +1,9 @@
 @extends('layouts.admin.app')
-
+@section('title', $page_title)
 @section('content')
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>All Why Choose us</h1>
+		<h1>{{ $page_title }}</h1>
 	</div>
 	@can('why_choose-create')
 	<div class="content-header-right">
@@ -48,14 +48,14 @@
 								<td>
 									@if($whychoose->image)
 										<img src="{{ asset('public/admin/assets/images/why_choose/'.$whychoose->image) }}" alt="" style="width:60px; height:40px">
-									@else 
+									@else
 										<img src="{{ asset('public/admin/assets/images/why_choose/no-photo1.jpg') }}" alt="" style="width:60px;">
 									@endif
 								</td>
 								<td>
 									@if($whychoose->icon)
 										<img src="{{ asset('public/admin/assets/images/why_choose/'.$whychoose->icon) }}" alt="" style="width:60px; height:40px">
-									@else 
+									@else
 										<img src="{{ asset('public/admin/assets/images/why_choose/no-photo1.jpg') }}" alt="" style="width:60px;">
 									@endif
 								</td>
@@ -64,7 +64,7 @@
 								<td>
 									@if($whychoose->status)
 										<span class="badge badge-success">Active</span>
-									@else 
+									@else
 										<span class="badge badge-danger">In-Active</span>
 									@endif
 								</td>
@@ -116,13 +116,13 @@
                                     'Deleted!',
                                     'Whychoose us has been deleted successfully.',
                                     'success'
-                                ) 
+                                )
                             }else{
                                 Swal.fire(
                                     'Not Deleted!',
                                     'Sorry! Something went wrong.',
                                     'danger'
-                                ) 
+                                )
                             }
                         }
                     });

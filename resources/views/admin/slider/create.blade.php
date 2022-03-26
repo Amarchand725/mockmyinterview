@@ -1,4 +1,5 @@
 @extends('layouts.admin.app')
+@section('title', $page_title)
 @section('content')
 
 <section class="content-header">
@@ -12,7 +13,7 @@
 
 <section class="content">
 	<div class="row">
-		<div class="col-md-12"> 
+		<div class="col-md-12">
 			<form action="{{ route('slider.store') }}" id="regform" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
 				@csrf
 				<div class="box box-info">

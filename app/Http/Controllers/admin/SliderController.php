@@ -19,19 +19,15 @@ class SliderController extends Controller
     }
     public function index()
     {
-        if(!auth()->user()->can('slider-list')){
-            return view('admin.404.404');
-        }
+        $page_title = 'All Sliders';
         $sliders = Slider::all();
-        return View('admin.slider.index', compact("sliders"));
+        return View('admin.slider.index', compact("sliders", "page_title"));
     }
 
     public function create()
     {
-        if(!auth()->user()->can('slider-create')){
-            return view('admin.404.404');
-        }
-        return View('admin.slider.create');
+        $page_title = 'Add Slider';
+        return View('admin.slider.create', compact('page_title'));
     }
 
     public function store(Request $request)
@@ -66,8 +62,9 @@ class SliderController extends Controller
 
     public function edit($id)
     {
+        $page_title = 'Edit Slider';
         $slider = Slider::find($id);
-        return View('admin.slider.edit', compact('slider'));
+        return View('admin.slider.edit', compact('slider','page_title'));
     }
 
     public function update(Request $request, $id)
@@ -97,8 +94,9 @@ class SliderController extends Controller
 
     public function show($slider_id)
     {
+        $page_title = 'Show Slider';
         $slider = Slider::find($slider_id);
-        return View('admin.slider.show', compact('slider'));
+        return View('admin.slider.show', compact('slider', 'page_title'));
     }
 
     public function destroy($id)

@@ -1,9 +1,9 @@
 @extends('layouts.admin.app')
-
+@section('title', $page_title)
 @section('content')
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Add Hire Help</h1>
+		<h1>{{ $page_title }}</h1>
 	</div>
 	<div class="content-header-right">
 		<a href="{{ route('help.index') }}" class="btn btn-primary btn-sm">View All</a>
@@ -24,7 +24,7 @@
 								<span style="color: red">{{ $errors->first('title') }}</span>
 							</div>
 						</div>
-						
+
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Description </label>
 							<div class="col-sm-9">

@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
+@section('title', $page_title)
 @section('content')
-
 <section class="content-header">
 	<div class="content-header-left">
 		<h1>Edit Page</h1>
@@ -30,7 +30,7 @@
 								<span style="color: red">{{ $errors->first('title') }}</span>
 							</div>
 						</div>
-						
+
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Meta Title </label>
 							<div class="col-sm-9">

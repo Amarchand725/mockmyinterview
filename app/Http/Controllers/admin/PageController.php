@@ -9,15 +9,34 @@ use Auth;
 
 class PageController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $models = Page::orderby('id', 'desc')->get();
-        return View('admin.page.index', compact("models"));
+        if($request->ajax()){
+            $query = Page::orderby('id', 'desc')->where('id', '>', 0);
+            if($request['search'] != ""){
+                $query->where('title', 'like', '%'. $request['search'] .'%')
+                    ->orWhere('meta_title', 'like', '%'. $request['search'].'%')
+                    ->orWhere('meta_keyword', 'like', '%'. $request['search'].'%')
+                    ->orWhere('status', 'like', '%'. $request['search'].'%');
+            }
+            if($request['status']!="All"){
+                if($request['status']==2){
+                    $request['status'] = 0;
+                }
+                $query->where('status', $request['status']);
+            }
+            $models = $query->paginate(5);
+            return (string) view('admin.page.search', compact('models'));
+        }
+        $page_title = 'Settings';
+        $models = Page::orderby('id', 'desc')->paginate(5);
+        return View('admin.page.index', compact("models", "page_title"));
     }
 
     public function create()
     {
-        return View('admin.page.create');
+        $page_title = 'Create Page';
+        return View('admin.page.create', compact('page_title'));
     }
 
     public function store(Request $request)
@@ -42,8 +61,9 @@ class PageController extends Controller
 
     public function edit($slug)
     {
+        $page_title = 'Edit Page';
         $model = Page::where('slug', $slug)->first();
-        return View('admin.page.edit', compact("model"));
+        return View('admin.page.edit', compact("model", "page_title"));
     }
 
     public function update(Request $request, $slug)

@@ -1,4 +1,5 @@
 @extends('layouts.admin.app')
+@section('title', $page_title)
 @section('content')
 
 <section class="content-header">
@@ -101,7 +102,7 @@
 								</div>
 							</div>
 						</fieldset>
-						
+
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label"></label>
 							<div class="col-sm-6">

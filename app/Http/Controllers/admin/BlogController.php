@@ -24,8 +24,9 @@ class BlogController extends Controller
     }
     public function index()
     {
+        $page_title = 'All Blogs';
         $models = Blog::all();
-        return View('admin.blog.index', compact("models"));
+        return View('admin.blog.index', compact("models", "page_title"));
     }
 
     /**
@@ -35,8 +36,9 @@ class BlogController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('message', 1)->get();
-        return View('admin.blog.create', compact('categories'));
+        $page_title = 'Add Blog';
+        $categories = Category::where('status', 1)->get();
+        return View('admin.blog.create', compact('categories', 'page_title'));
     }
 
     /**
@@ -89,9 +91,10 @@ class BlogController extends Controller
      */
     public function edit($slug)
     {
+        $page_title = 'Edit Blog';
         $model = Blog::where('slug', $slug)->first();
-        $categories = Category::where('message', 1)->get();
-        return View('admin.blog.edit', compact("model", "categories"));
+        $categories = Category::where('status', 1)->get();
+        return View('admin.blog.edit', compact("model", "categories", "page_title"));
     }
 
     /**

@@ -22,7 +22,7 @@
             @endcan
             @can('user-list')
             <li class="treeview">
-                <a href="{{ route('user.index') }}" class="{{ request()->is('user') || request()->is('user/create') || request()->is('user/edit/*') ? 'active' : '' }}">
+                <a href="{{ route('user.index') }}" class="{{ request()->is('user') || request()->is('user/create') || request()->is('user/*/edit') ? 'active' : '' }}">
                     <i class="fa fa-picture-o"></i> <span>Users</span>
                 </a>
             </li>
@@ -97,10 +97,10 @@
                 </a>
             </li>
             @endcan
-            @can('work-process-list')
+            @can('how_work-list')
             <li class="treeview">
-                <a href="{{ route('work-process.index') }}" class="{{ request()->is('work-process') || request()->is('work-process/create') || request()->is('work-process/*/edit') ? 'active' : '' }}">
-                    <i class="fa fa-user-plus"></i> <span>Work Process</span>
+                <a href="{{ route('how_work.index') }}" class="{{ request()->is('how_work') || request()->is('how_work/create') || request()->is('how_work/*/edit') ? 'active' : '' }}">
+                    <i class="fa fa-user-plus"></i> <span>How Works</span>
                 </a>
             </li>
             @endcan

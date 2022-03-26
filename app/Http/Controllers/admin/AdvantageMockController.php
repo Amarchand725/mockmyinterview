@@ -24,8 +24,9 @@ class AdvantageMockController extends Controller
     }
     public function index()
     {
+        $page_title = 'All Mock Advantages';
         $models = AdvantageMock::orderby('id', 'desc')->get();
-        return View('admin.advantage.index', compact("models"));
+        return View('admin.advantage.index', compact("models","page_title"));
     }
 
     /**
@@ -35,7 +36,8 @@ class AdvantageMockController extends Controller
      */
     public function create()
     {
-        return View('admin.advantage.create');
+        $page_title = 'Add Mock Advantage';
+        return View('admin.advantage.create', compact('page_title'));
     }
 
     /**
@@ -88,8 +90,9 @@ class AdvantageMockController extends Controller
      */
     public function edit($slug)
     {
+        $page_title = 'Edit Mock Advantage';
         $model = AdvantageMock::where('slug', $slug)->first();
-        return View('admin.advantage.edit', compact("model"));
+        return View('admin.advantage.edit', compact("model","page_title"));
     }
 
     /**

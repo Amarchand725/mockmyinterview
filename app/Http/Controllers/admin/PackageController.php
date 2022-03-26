@@ -23,8 +23,9 @@ class PackageController extends Controller
     }
     public function index()
     {
+        $page_title = 'All Packages';
         $models = Package::orderby('id', 'desc')->get();
-        return View('admin.package.index', compact("models"));
+        return View('admin.package.index', compact("models", "page_title"));
     }
 
     /**
@@ -34,7 +35,8 @@ class PackageController extends Controller
      */
     public function create()
     {
-        return View('admin.package.create');
+        $page_title = 'Add Package';
+        return View('admin.package.create', compact('page_title'));
     }
 
     /**
@@ -80,8 +82,9 @@ class PackageController extends Controller
      */
     public function edit($slug)
     {
+        $page_title = 'Edit Package';
         $model = Package::where('slug', $slug)->first();
-        return View('admin.package.edit', compact("model"));
+        return View('admin.package.edit', compact("model","page_title"));
     }
 
     /**

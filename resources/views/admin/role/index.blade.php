@@ -1,4 +1,5 @@
 @extends('layouts.admin.app')
+@section('title', $page_title)
 @section('content')
     <section class="content-header">
         <div class="content-header-left">
@@ -22,7 +23,13 @@
 
                 <div class="box box-info">
                     <div class="box-body">
-                        <table id="example1" class="table table-bordered table-striped">
+                        <div class="row">
+                            <div class="col-sm-1">Search:</div>
+                            <div class="d-flex col-sm-11">
+                                <input type="text" id="search" class="form-control" placeholder="Search" style="margin-bottom:5px">
+                            </div>
+                        </div>
+                        <table id="" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>SL</th>
@@ -31,11 +38,10 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @php $counter = 1; @endphp 
-                                @foreach($roles as $role)
+                            <tbody id="body">
+                                @foreach($roles as $key=>$role)
                                     <tr id="id-{{ $role->id }}">
-                                        <td>{{ $counter++ }}.</td>
+                                        <td>{{  $roles->firstItem()+$key }}.</td>
                                         <td>{{ $role->name }}</td>
                                         <td>{!! $role->description !!}</td>
                                         <td>
@@ -48,6 +54,14 @@
                                         </td>
                                     </tr>
                                 @endforeach
+                                <tr>
+                                    <td colspan="4">
+                                        Displying {{$roles->count()}} of {{$roles->total()}} records
+                                        <div class="d-flex justify-content-center">
+                                            {!! $roles->links('pagination::bootstrap-4') !!}
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -57,8 +71,30 @@
 @endsection
 
 @push('js')
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        $('#search').keyup((function(e) {
+            var search = $(this).val();
+            var page = 1;
+            fetchAll(page, search);
+        }));
+
+        $(document).on('click', '.pagination a', function(event){
+            event.preventDefault();
+            var search = $('#search').val();
+            var page = $(this).attr('href').split('page=')[1];
+            fetchAll(page, search);
+        });
+
+        function fetchAll(page, search){
+            $.ajax({
+                url:'{{ route("role.index") }}?page='+page+'&search='+search,
+                type: 'get',
+                success: function(response){
+                    $('#body').html(response);
+                }
+            });
+        }
+
         $('.delete').on('click', function(){
             var role_id = $(this).attr('data-role-id');
             Swal.fire({
@@ -84,13 +120,13 @@
                                     'Deleted!',
                                     'Your file has been deleted.',
                                     'success'
-                                ) 
+                                )
                             }else{
                                 Swal.fire(
                                     'Not Deleted!',
                                     'Sorry! Something went wrong.',
                                     'danger'
-                                ) 
+                                )
                             }
                         }
                     });

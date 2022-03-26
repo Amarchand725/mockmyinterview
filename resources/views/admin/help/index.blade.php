@@ -1,9 +1,9 @@
 @extends('layouts.admin.app')
-
+@section('title', $page_title)
 @section('content')
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>All Hiring Helps</h1>
+		<h1>{{ $page_title }}</h1>
 	</div>
 	@can('help-create')
 	<div class="content-header-right">
@@ -29,7 +29,6 @@
 								<th width="30">SL</th>
 								<th>Title</th>
 								<th>Description</th>
-								<th>Created by</th>
 								<th>Status</th>
 								<th>Action</th>
 							</tr>
@@ -40,11 +39,10 @@
 									<td>{{$model->id}}.</td>
 									<td>{{ $model->title }}</td>
 									<td>{!! \Illuminate\Support\Str::limit($model->description,60) !!}</td>
-									<td>{{isset($model->hasCreatedBy)?$model->hasCreatedBy->name:'N/A'}}</td>
 									<td>
 										@if($model->status)
 											<span class="badge badge-success">Active</span>
-										@else 
+										@else
 											<span class="badge badge-danger">In-Active</span>
 										@endif
 									</td>
@@ -96,13 +94,13 @@
                                     'Deleted!',
                                     'model has been deleted.',
                                     'success'
-                                ) 
+                                )
                             }else{
                                 Swal.fire(
                                     'Not Deleted!',
                                     'Sorry! Something went wrong.',
                                     'danger'
-                                ) 
+                                )
                             }
                         }
                     });

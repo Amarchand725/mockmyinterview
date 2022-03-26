@@ -1,4 +1,5 @@
 @extends('layouts.admin.app')
+@section('title', $page_title)
 @section('content')
 
 <section class="content-header">
@@ -22,7 +23,7 @@
 							<td>
 								@if($slider->left_sec_image)
 									<img src="{{ asset('public/admin/assets/images/slider') }}/{{ $slider->left_sec_image }}" alt="Slider Image" height="400px" width="500px">
-								@else 
+								@else
 									<img src="{{ asset('public/admin/assets/images/slider/no-photo1.jpg') }}" alt="Slider Image" height="400px" width="500px">
 								@endif
 							</td>
@@ -71,7 +72,7 @@
 						<td>
 							@if($slider->status)
 								<span class="badge badge-success">Active</span>
-							@else 
+							@else
 								<span class="badge badge-danger">In-Active</span>
 							@endif
 						</td>

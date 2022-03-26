@@ -1,4 +1,5 @@
 @extends('layouts.admin.app')
+@section('title', $page_title)
 @section('content')
 <section class="content-header">
 	<div class="content-header-left">
@@ -41,7 +42,7 @@
 									<td style="width:150px;">
 										@if($slider->left_sec_image)
 											<img src="{{ asset('public/admin/assets/images/slider/'.$slider->left_sec_image) }}" style="width:60px;">
-										@else 
+										@else
 											<img src="{{ asset('public/admin/assets/images/slider/no-photo1.jpg') }}" style="width:60px;">
 										@endif
 									</td>
@@ -51,7 +52,7 @@
 									<td>
 										@if($slider->status)
 											<span class="badge badge-success">Active</span>
-										@else 
+										@else
 											<span class="badge badge-danger">In-Active</span>
 										@endif
 									</td>
@@ -103,13 +104,13 @@
                                     'Deleted!',
                                     'Slider has been deleted.',
                                     'success'
-                                ) 
+                                )
                             }else{
                                 Swal.fire(
                                     'Not Deleted!',
                                     'Sorry! Something went wrong.',
                                     'danger'
-                                ) 
+                                )
                             }
                         }
                     });

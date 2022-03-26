@@ -1,4 +1,6 @@
 @extends('layouts.admin.app')
+
+@section('title', $page_title)
 @push('css')
   <style>
     .info-box-text{

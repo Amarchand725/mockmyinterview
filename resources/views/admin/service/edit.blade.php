@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
+@section('title', $page_title)
 @section('content')
-
 <section class="content-header">
 	<div class="content-header-left">
 		<h1>Edit Service</h1>
@@ -40,7 +40,7 @@
 								</select>
 							</div>
 						</div>
-						
+
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label"></label>
 							<div class="col-sm-6">
@@ -72,7 +72,7 @@
 
 			});
 		}
-	
+
 		$("#regform").validate({
 			rules: {
 				name: "required"

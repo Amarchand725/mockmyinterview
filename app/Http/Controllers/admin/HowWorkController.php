@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\WorkProcess;
+use App\Models\HowWork;
 use Illuminate\Http\Request;
 use Auth;
 
-class WorkProcessController extends Controller
+class HowWorkController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,15 +17,16 @@ class WorkProcessController extends Controller
 
     function __construct()
     {
-        $this->middleware('permission:work-process-list|work-process-create|work-process-edit|work-process-delete', ['only' => ['index','store']]);
-        $this->middleware('permission:work-process-create', ['only' => ['create','store']]);
-        $this->middleware('permission:work-process-edit', ['only' => ['edit','update']]);
-        $this->middleware('permission:work-process-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:how_work-list|how_work-create|how_work-edit|how_work-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:how_work-create', ['only' => ['create','store']]);
+        $this->middleware('permission:how_work-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:how_work-delete', ['only' => ['destroy']]);
     }
     public function index()
     {
-        $models = WorkProcess::orderby('id', 'desc')->get();
-        return View('admin.work_process.index', compact("models"));
+        $page_title = 'All How Works';
+        $models = HowWork::orderby('id', 'desc')->get();
+        return View('admin.how_work.index', compact("models", "page_title"));
     }
 
     /**
@@ -35,7 +36,8 @@ class WorkProcessController extends Controller
      */
     public function create()
     {
-        return View('admin.work_process.create');
+        $page_title = 'Add How Work';
+        return View('admin.how_work.create', compact('page_title'));
     }
 
     /**
@@ -58,7 +60,7 @@ class WorkProcessController extends Controller
         $model->description = $request->description;
         $model->save();
 
-        return redirect()->route('work-process.index')->with('message', 'Work Process Added Successfully !');
+        return redirect()->route('how_work.index')->with('message', 'Work Process Added Successfully !');
     }
 
     /**
@@ -80,8 +82,9 @@ class WorkProcessController extends Controller
      */
     public function edit($slug)
     {
-        $model = WorkProcess::where('slug', $slug)->first();
-        return View('admin.work_process.edit', compact("model"));
+        $page_title = 'Edit How Work';
+        $model = HowWork::where('slug', $slug)->first();
+        return View('admin.how_work.edit', compact("model", "page_title"));
     }
 
     /**
@@ -93,7 +96,7 @@ class WorkProcessController extends Controller
      */
     public function update(Request $request, $slug)
     {
-        $update = WorkProcess::where('slug', $slug)->first();
+        $update = HowWork::where('slug', $slug)->first();
         $validator = $request->validate([
             'title' => 'required|max:255',
             'description' => 'required',
@@ -105,7 +108,7 @@ class WorkProcessController extends Controller
         $update->status = $request->status;
         $update->update();
 
-        return redirect()->route('work-process.index')->with('message', 'Work Process Updated Successfully !');
+        return redirect()->route('how_work.index')->with('message', 'Work Process Updated Successfully !');
     }
 
     /**
@@ -116,9 +119,9 @@ class WorkProcessController extends Controller
      */
     public function destroy($slug)
     {
-        $WorkProcess = WorkProcess::where('slug', $slug)->first();
-        if ($WorkProcess) {
-            $WorkProcess->delete();
+        $how_work = HowWork::where('slug', $slug)->first();
+        if ($how_work) {
+            $how_work->delete();
             return true;
         } else {
             return response()->json(['message' => 'Failed '], 404);

@@ -1,4 +1,5 @@
 @extends('layouts.admin.app')
+@section('title', $page_title)
 @section('content')
 <section class="content-header">
 	<div class="content-header-left">
@@ -60,7 +61,7 @@
 
 			});
 		}
-	
+
 		$("#regform").validate({
 			rules: {
 				image: "required",

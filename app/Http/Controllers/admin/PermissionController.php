@@ -22,10 +22,19 @@ class PermissionController extends Controller
         $this->middleware('permission:permission-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:permission-delete', ['only' => ['destroy']]);
     }
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $query = Permission::orderby('id', 'desc')->where('id', '>', 0);
+            if($request['search'] != ""){
+                $query->where('name', 'like', '%'. $request['search'] .'%');
+            }
+            $permissions = $query->paginate(10);
+            return (string) view('admin.permission.search', compact('permissions'));
+        }
+        $page_title = 'All Permissions';
         $permissions = Permission::orderby('id','DESC')->paginate(10);
-        return view('admin.permission.index', compact('permissions'));
+        return view('admin.permission.index', compact('permissions', 'page_title'));
     }
 
     /**

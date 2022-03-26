@@ -1,4 +1,5 @@
 @extends('layouts.admin.app')
+@section('title', $page_title)
 @section('content')
 <section class="content-header">
     <div class="content-header-left">
@@ -12,7 +13,6 @@
 </section>
 
 <section class="content">
-
     <div class="row">
         <div class="col-md-12">
             @if (session('success'))
@@ -23,7 +23,13 @@
 
             <div class="box box-info">
                 <div class="box-body">
-                    <table id="example1" class="table table-bordered table-striped">
+                    <div class="row">
+                        <div class="col-sm-1">Search:</div>
+                        <div class="d-flex col-sm-11">
+                            <input type="text" id="search" class="form-control" placeholder="Search" style="margin-bottom:5px">
+                        </div>
+                    </div>
+                    <table id="" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>SL</th>
@@ -32,22 +38,30 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach($permissions as $permission)
+                        <tbody id="body">
+                            @foreach($permissions as $key=>$permission)
                                 <tr id="id-{{ $permission->id }}">
-                                    <td>{{$permission->id}}.</td>
+                                    <td>{{  $permissions->firstItem()+$key }}.</td>
                                     <td>{{$permission->name}}</td>
                                     <td>{{$permission->guard_name}}</td>
                                     <td>
                                         @can('permission-edit')
-                                            <a href="{{ route('permission.edit', $permission->id) }}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>   
+                                            <a href="{{ route('permission.edit', $permission->id) }}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
                                         @endcan
-                                        @can('permission-delete') 
+                                        @can('permission-delete')
                                             <a class="btn btn-danger btn-xs delete-btn" data-permission-id="{{ $permission->id }}"><i class="fa fa-trash"></i> Delete</a>
                                         @endcan
                                     </td>
                                 </tr>
                             @endforeach
+                            <tr>
+                                <td colspan="4">
+                                    Displying {{$permissions->count()}} of {{$permissions->total()}} records
+                                    <div class="d-flex justify-content-center">
+                                        {!! $permissions->links('pagination::bootstrap-4') !!}
+                                    </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -58,8 +72,30 @@
 @endsection
 
 @push('js')
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        $('#search').keyup((function(e) {
+            var search = $(this).val();
+            var page = 1;
+            fetchAll(page, search);
+        }));
+
+        $(document).on('click', '.pagination a', function(event){
+            event.preventDefault();
+            var search = $('#search').val();
+            var page = $(this).attr('href').split('page=')[1];
+            fetchAll(page, search);
+        });
+
+        function fetchAll(page, search){
+            $.ajax({
+                url:'{{ route("permission.index") }}?page='+page+'&search='+search,
+                type: 'get',
+                success: function(response){
+                    $('#body').html(response);
+                }
+            });
+        }
+
         $('.delete-btn').on('click', function(){
             var permission_id = $(this).attr('data-permission-id');
             Swal.fire({
@@ -85,13 +121,13 @@
                                     'Deleted!',
                                     'Permission has been deleted.',
                                     'success'
-                                ) 
+                                )
                             }else{
                                 Swal.fire(
                                     'Not Deleted!',
                                     'Sorry! Something went wrong.',
                                     'danger'
-                                ) 
+                                )
                             }
                         }
                     });

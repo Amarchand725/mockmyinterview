@@ -1,9 +1,9 @@
 @extends('layouts.admin.app')
-
+@section('title', $page_title)
 @section('content')
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Edit Package</h1>
+		<h1>{{ $page_title }}</h1>
 	</div>
 	<div class="content-header-right">
 		<a href="{{ route('package.index') }}" class="btn btn-primary btn-sm">View All</a>

@@ -1,4 +1,5 @@
 @extends('layouts.admin.app')
+@section('title', $page_title)
 @section('content')
 	<section class="content-header">
 		<div class="content-header-left">
@@ -25,7 +26,7 @@
 								<span style="color: red">{{ $errors->first('name') }}</span>
 							</div>
 						</div>
-						
+
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Short Description </label>
 							<div class="col-sm-9">

@@ -18,13 +18,15 @@ class WhychooseController extends Controller
     }
     public function index()
     {
+        $page_title = 'All Why Choose Us';
         $whychooses = Whychoose::all();
-        return View('admin.why_choose.index', compact("whychooses"));
+        return View('admin.why_choose.index', compact("whychooses","page_title"));
     }
 
     public function create()
     {
-        return View('admin.why_choose.create');
+        $page_title = 'Add Why Choose Us';
+        return View('admin.why_choose.create', compact('page_title'));
     }
 
     public function store(Request $request)
@@ -58,8 +60,9 @@ class WhychooseController extends Controller
 
     public function edit($id)
     {
+        $page_title = 'Edit Why Choose Us';
         $whychoose = Whychoose::find($id);
-        return View('admin.why_choose.edit', compact("whychoose"));
+        return View('admin.why_choose.edit', compact("whychoose", "page_title"));
     }
 
     public function update(Request $request, $id)

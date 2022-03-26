@@ -27,8 +27,26 @@ class UserController extends Controller
     }
     public function index(Request $request)
     {
+        if($request->ajax()){
+            $query = User::orderby('id', 'desc')->where('id', '>', 0);
+            if($request['search'] != ""){
+                $query->where('name', 'like', '%'. $request['search'] .'%')
+                    ->orWhere('last_name', 'like', '%'. $request['search'].'%')
+                    ->orWhere('phone', 'like', '%'. $request['search'].'%')
+                    ->orWhere('email', 'like', '%'. $request['search'].'%');
+            }
+            if($request['status']!="All"){
+                if($request['status']==2){
+                    $request['status'] = 0;
+                }
+                $query->where('status', $request['status']);
+            }
+            $users = $query->paginate(5);
+            return (string) view('admin.user.search', compact('users'));
+        }
+        $page_title = 'All Users';
         $users = User::orderBy('id','DESC')->paginate(5);
-        return view('admin.user.index', compact('users'));
+        return view('admin.user.index', compact('users','page_title'));
     }
 
     /**
@@ -38,8 +56,9 @@ class UserController extends Controller
      */
     public function create()
     {
+        $page_title = 'Add User';
         $roles = Role::orderby('id', 'desc')->get(['name', 'id']);
-        return view('admin.user.create',compact('roles'));
+        return view('admin.user.create',compact('roles','page_title'));
     }
 
     /**
@@ -87,11 +106,11 @@ class UserController extends Controller
      */
     public function edit($id)
     {
+        $page_title = 'Edit User';
         $user = User::with('roles')->find($id);
         $roles = Role::orderby('id', 'desc')->get(['name', 'id']);
         $userRole = $user->roles->pluck('name','name')->all();
-
-        return view('admin.user.edit',compact('user','roles','userRole'));
+        return view('admin.user.edit',compact('user','roles','userRole', 'page_title'));
     }
 
     /**

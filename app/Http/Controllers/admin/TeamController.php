@@ -23,8 +23,9 @@ class TeamController extends Controller
     }
     public function index()
     {
+        $page_title = 'All Team Members';
         $models = Team::orderby('id', 'desc')->get();
-        return View('admin.team.index', compact("models"));
+        return View('admin.team.index', compact("models", "page_title"));
     }
 
     /**
@@ -34,7 +35,8 @@ class TeamController extends Controller
      */
     public function create()
     {
-        return View('admin.team.create');
+        $page_title = 'Add Team Member';
+        return View('admin.team.create', compact('page_title'));
     }
 
     /**
@@ -94,8 +96,9 @@ class TeamController extends Controller
      */
     public function edit($slug)
     {
+        $page_title = 'Edit Team Member';
         $model = Team::where('slug', $slug)->first();
-        return View('admin.team.edit', compact("model"));
+        return View('admin.team.edit', compact("model", "page_title"));
     }
 
     /**

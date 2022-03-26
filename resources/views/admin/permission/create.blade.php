@@ -1,4 +1,5 @@
 @extends('layouts.admin.app')
+@section('title', $page_title)
 @section('content')
 
 <section class="content-header">
@@ -9,12 +10,9 @@
 		<a href="{{ route('permission.index') }}" class="btn btn-primary btn-sm">View All</a>
 	</div>
 </section>
-
-
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-
 			<form action="{{ route('permission.store')}}" id="regform" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
 				@csrf
 				<div class="box box-info">
@@ -40,7 +38,7 @@
 									<input class="form-check-input" name="permissions[]" type="checkbox" value="list" id="list" checked/>
 									<label class="form-check-label" for="list"> <strong>List</strong></label>
 								</div>
-								
+
 								<!-- Checked checkbox -->
 								<div class="form-check">
 									<input class="form-check-input" name="permissions[]" type="checkbox" value="create" id="create"/>

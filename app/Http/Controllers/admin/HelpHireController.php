@@ -23,8 +23,9 @@ class HelpHireController extends Controller
     }
     public function index()
     {
+        $page_title = 'All Hiring Helps';
         $models = HelpHire::orderby('id', 'desc')->get();
-        return View('admin.help.index', compact("models"));
+        return View('admin.help.index', compact("models", "page_title"));
     }
 
     /**
@@ -34,7 +35,8 @@ class HelpHireController extends Controller
      */
     public function create()
     {
-        return View('admin.help.create');
+        $page_title = 'Add Hiring Help';
+        return View('admin.help.create', compact('page_title'));
     }
 
     /**
@@ -79,8 +81,9 @@ class HelpHireController extends Controller
      */
     public function edit($slug)
     {
+        $page_title = 'Edit Hiring Help';
         $model = HelpHire::where('slug', $slug)->first();
-        return View('admin.help.edit', compact("model"));
+        return View('admin.help.edit', compact("model", "page_title"));
     }
 
     /**

@@ -23,8 +23,9 @@ class CategoryController extends Controller
     }
     public function index()
     {
+        $page_title = 'All Categories';
         $models = Category::all();
-        return View('admin.category.index', compact("models"));
+        return View('admin.category.index', compact("models","page_title"));
     }
 
     /**
@@ -34,7 +35,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return View('admin.category.create');
+        $page_title = 'Add Category';
+        return View('admin.category.create', compact('page_title'));
     }
 
     /**
@@ -77,8 +79,9 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
+        $page_title = 'Edit Category';
         $model = Category::find($id);
-        return View('admin.category.edit', compact("model"));
+        return View('admin.category.edit', compact("model", "page_title"));
     }
 
     /**

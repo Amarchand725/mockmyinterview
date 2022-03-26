@@ -1,25 +1,25 @@
-@extends('layouts.admin.app')
-
-@section('content')
+<?php $__env->startSection('title', $page_title); ?>
+<?php $__env->startSection('content'); ?>
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>All Work Process</h1>
+		<h1><?php echo e($page_title); ?></h1>
 	</div>
-	@can('work-process-create')
+	<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('help-create')): ?>
 	<div class="content-header-right">
-		<a href="{{ route('work-process.create') }}" class="btn btn-primary btn-sm">Add Work Process</a>
+		<a href="<?php echo e(route('help.create')); ?>" class="btn btn-primary btn-sm">Add Hire Help</a>
 	</div>
-	@endcan
+	<?php endif; ?>
 </section>
 
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			@if (session('status'))
+			<?php if(session('status')): ?>
 				<div class="callout callout-success">
-					{{ session('status') }}
+					<?php echo e(session('status')); ?>
+
 				</div>
-			@endif
+			<?php endif; ?>
 
 			<div class="box box-info">
 				<div class="box-body">
@@ -29,35 +29,33 @@
 								<th width="30">SL</th>
 								<th>Title</th>
 								<th>Description</th>
-								<th>Created by</th>
 								<th>Status</th>
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
-							@foreach($models as $model)
-								<tr id="id-{{ $model->slug }}">
-									<td>{{$model->id}}.</td>
-									<td>{!! \Illuminate\Support\Str::limit($model->title,40) !!}</td>
-									<td>{!! \Illuminate\Support\Str::limit($model->description,60) !!}</td>
-									<td>{{isset($model->hasCreatedBy)?$model->hasCreatedBy->name:'N/A'}}</td>
+							<?php $__currentLoopData = $models; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $model): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+								<tr id="id-<?php echo e($model->slug); ?>">
+									<td><?php echo e($model->id); ?>.</td>
+									<td><?php echo e($model->title); ?></td>
+									<td><?php echo \Illuminate\Support\Str::limit($model->description,60); ?></td>
 									<td>
-										@if($model->status)
+										<?php if($model->status): ?>
 											<span class="badge badge-success">Active</span>
-										@else 
+										<?php else: ?>
 											<span class="badge badge-danger">In-Active</span>
-										@endif
+										<?php endif; ?>
 									</td>
 									<td>
-										@can('work-process-edit')
-											<a href="{{route('work-process.edit', $model->slug)}}" data-toggle="tooltip" data-placement="top" title="Edit model" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
-										@endcan
-										@can('work-process-delete')
-											<a class="btn btn-danger btn-xs delete-btn" data-toggle="tooltip" data-placement="top" title="Delete model" data-model-slug="{{ $model->slug }}"><i class="fa fa-trash"></i> Delete</a>
-										@endcan
+										<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('help-edit')): ?>
+											<a href="<?php echo e(route('help.edit', $model->slug)); ?>" data-toggle="tooltip" data-placement="top" title="Edit model" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
+										<?php endif; ?>
+										<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('help-delete')): ?>
+											<a class="btn btn-danger btn-xs delete-btn" data-toggle="tooltip" data-placement="top" title="Delete model" data-model-slug="<?php echo e($model->slug); ?>"><i class="fa fa-trash"></i> Delete</a>
+										<?php endif; ?>
 									</td>
 								</tr>
-							@endforeach
+							<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 						</tbody>
 					</table>
 				</div>
@@ -66,9 +64,9 @@
 	</div>
 </section>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('js')
+<?php $__env->startPush('js'); ?>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $('.delete-btn').on('click', function(){
@@ -84,10 +82,10 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
-                        url : "{{ url('work-process') }}/"+model_slug,
+                        url : "<?php echo e(url('help')); ?>/"+model_slug,
 						type : 'DELETE',
                         data: {
-                                "_token": "{{ csrf_token() }}",
+                                "_token": "<?php echo e(csrf_token()); ?>",
                             },
                         success : function(response){
                             if(response){
@@ -96,13 +94,13 @@
                                     'Deleted!',
                                     'model has been deleted.',
                                     'success'
-                                ) 
+                                )
                             }else{
                                 Swal.fire(
                                     'Not Deleted!',
                                     'Sorry! Something went wrong.',
                                     'danger'
-                                ) 
+                                )
                             }
                         }
                     });
@@ -114,4 +112,6 @@
             $("#example1").DataTable();
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.admin.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/admin/help/index.blade.php ENDPATH**/ ?>

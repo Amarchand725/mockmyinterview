@@ -10,15 +10,16 @@ class SocialmediaController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:social media-list-list|social media-list-create|social media-list-edit|social media-list-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:social media-list|social media-list-create|social media-list-edit|social media-list-delete', ['only' => ['index','store']]);
         $this->middleware('permission:social media-list-create', ['only' => ['create','store']]);
         $this->middleware('permission:social media-list-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:social media-list-delete', ['only' => ['destroy']]);
     }
     public function index()
     {
+        $page_title = 'Social Media';
         $social = Socialmedia::first();
-        return View('admin.social_media.index', compact("social"));
+        return View('admin.social_media.index', compact("social", "page_title"));
     }
 
     public function update(Request $request)

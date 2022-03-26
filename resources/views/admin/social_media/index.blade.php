@@ -1,8 +1,9 @@
 @extends('layouts.admin.app')
+@section('title', $page_title)
 @section('content')
 	<section class="content-header">
 		<div class="content-header-left">
-			<h1>Social Media</h1>
+			<h1>{{ $page_title }}</h1>
 		</div>
 	</section>
 	<section class="content" style="min-height:auto;margin-bottom: -30px;">

@@ -22,10 +22,24 @@ class DegreeController extends Controller
         $this->middleware('permission:degree-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:degree-delete', ['only' => ['destroy']]);
     }
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $query = Degree::orderby('id', 'desc')->where('id', '>', 0);
+            if($request['search'] != ""){
+                $query->where('title', 'like', '%'. $request['search'] .'%');
+            }
+            if($request['status']!="All"){
+                if($request['status']==2){
+                    $request['status'] = 0;
+                }
+                $query->where('status', $request['status']);
+            }
+            $degrees = $query->paginate(5);
+            return (string) view('admin.degree.search', compact('degrees'));
+        }
         $page_title = 'All Degrees';
-        $degrees = Degree::orderBy('id','DESC')->paginate(10);
+        $degrees = Degree::orderBy('id','DESC')->paginate(5);
         return view('admin.degree.index',compact('page_title', 'degrees'));
     }
 
@@ -52,14 +66,14 @@ class DegreeController extends Controller
             'title' => 'required|max:100',
             'description' => 'max:255',
         ]);
-    
+
         Degree::create([
-            'created_by' => Auth::user()->id, 
-            'title' => $request->title, 
-            'slug' => \Str::slug($request->title), 
+            'created_by' => Auth::user()->id,
+            'title' => $request->title,
+            'slug' => \Str::slug($request->title),
             'description'=>$request->description
         ]);
-    
+
         return redirect()->route('degree.index')
                         ->with('message','Degree created successfully');
     }
@@ -102,14 +116,14 @@ class DegreeController extends Controller
             'title' => 'required|max:100',
             'description' => 'max:255',
         ]);
-    
+
         $degree = Degree::where('slug', $slug)->first();
         $degree->title = $request->title;
         $degree->slug = \Str::slug($request->title);
         $degree->description = $request->description;
         $degree->status = $request->status;
         $degree->save();
-    
+
         return redirect()->route('degree.index')
                         ->with('message','Degree updated successfully');
     }

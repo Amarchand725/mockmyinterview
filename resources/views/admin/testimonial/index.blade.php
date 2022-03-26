@@ -1,5 +1,5 @@
 @extends('layouts.admin.app')
-
+@section('title', $page_title)
 @section('content')
 <section class="content-header">
 	<div class="content-header-left">
@@ -41,7 +41,7 @@
 									<td>
 										@if($testimonial->image)
 											<img src="{{ asset('public/admin/assets/images/testimonials/'.$testimonial->image) }}" alt="" style="width:60px;">
-										@else 
+										@else
 											<img src="{{ asset('public/admin/assets/images/testimonials/no-photo1.jpg') }}" style="width:60px;">
 										@endif
 									</td>
@@ -96,13 +96,13 @@
                                     'Deleted!',
                                     'Testimonial has been deleted.',
                                     'success'
-                                ) 
+                                )
                             }else{
                                 Swal.fire(
                                     'Not Deleted!',
                                     'Sorry! Something went wrong.',
                                     'danger'
-                                ) 
+                                )
                             }
                         }
                     });
