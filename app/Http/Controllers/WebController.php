@@ -8,7 +8,7 @@ use App\Models\Testimonial;
 use App\Models\PageSetting;
 use App\Models\AdvantageMock;
 use App\Models\Service;
-use App\Models\WorkProcess;
+use App\Models\HowWork;
 use App\Models\Package;
 use App\Models\Team;
 use App\Models\HelpHire;
@@ -27,7 +27,7 @@ class WebController extends Controller
         $testimonials = Testimonial::orderby('id', 'desc')->where('status', 1)->get();
         $mock_advantages = AdvantageMock::orderby('id', 'desc')->where('status', 1)->get();
         $services = Service::orderby('id', 'desc')->where('status', 1)->get();
-        $work_processes = WorkProcess::orderby('id', 'asc')->where('status', 1)->get();
+        $work_processes = HowWork::orderby('id', 'asc')->where('status', 1)->get();
         $packages = Package::orderby('id', 'asc')->where('status', 1)->get();
         $teams = Team::orderby('id', 'asc')->where('status', 1)->get();
         $helps = HelpHire::orderby('id', 'asc')->where('status', 1)->get();
@@ -99,7 +99,7 @@ class WebController extends Controller
             'body' => "If you have any questions, just reply to this email—we're always happy to help out.",
             'verify_token' => $user->verify_token,
         ];
-       
+
         \Mail::to($user->email)->send(new \App\Mail\Email($details));
 
         return redirect()->back()->with('message', 'We have sent verification email. Click on link and get activation');
@@ -146,9 +146,9 @@ class WebController extends Controller
                 'body' => "You are receiving this email because we recieved a password reset request for your account.",
                 'verify_token' => $user->verify_token,
             ];
-           
+
             \Mail::to($user->email)->send(new \App\Mail\Email($details));
-    
+
             return redirect()->route('login')->with('message', 'We have emailed your password reset link!');
         }else{
             return redirect()->back()->with('error', 'Your email address is not matched.');
