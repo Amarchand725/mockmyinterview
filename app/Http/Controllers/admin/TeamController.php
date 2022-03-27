@@ -21,10 +21,25 @@ class TeamController extends Controller
         $this->middleware('permission:team-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:team-delete', ['only' => ['destroy']]);
     }
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $query = Team::orderby('id', 'desc')->where('id', '>', 0);
+            if($request['search'] != ""){
+                $query->where('first_name', 'like', '%'. $request['search'] .'%')
+                    ->orWhere('last_name', 'like', '%'. $request['search'] .'%');
+            }
+            if($request['status']!="All"){
+                if($request['status']==2){
+                    $request['status'] = 0;
+                }
+                $query->where('status', $request['status']);
+            }
+            $models = $query->paginate(1);
+            return (string) view('admin.team.search', compact('models'));
+        }
         $page_title = 'All Team Members';
-        $models = Team::orderby('id', 'desc')->get();
+        $models = Team::orderby('id', 'desc')->paginate(1);
         return View('admin.team.index', compact("models", "page_title"));
     }
 

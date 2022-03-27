@@ -21,10 +21,24 @@ class ServiceController extends Controller
         $this->middleware('permission:service-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:service-delete', ['only' => ['destroy']]);
     }
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $query = Service::orderby('id', 'desc')->where('id', '>', 0);
+            if($request['search'] != ""){
+                $query->where('name', 'like', '%'. $request['search'] .'%');
+            }
+            if($request['status']!="All"){
+                if($request['status']==2){
+                    $request['status'] = 0;
+                }
+                $query->where('status', $request['status']);
+            }
+            $services = $query->paginate(5);
+            return (string) view('admin.service.search', compact('services'));
+        }
         $page_title = 'All Services';
-        $services = Service::orderby('id', 'desc')->get();
+        $services = Service::orderby('id', 'desc')->paginate(5);
         return view('admin.service.index', compact('services', 'page_title'));
     }
 
@@ -36,7 +50,7 @@ class ServiceController extends Controller
     public function create()
     {
         $page_title = 'Add Service';
-        return view('admin.service.create', 'page_title');
+        return view('admin.service.create', compact('page_title'));
     }
 
     /**

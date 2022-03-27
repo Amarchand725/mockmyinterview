@@ -1,5 +1,6 @@
 <?php $__env->startSection('title', $page_title); ?>
 <?php $__env->startSection('content'); ?>
+<input type="hidden" id="page_url" value="<?php echo e(route('blog.index')); ?>">
 <section class="content-header">
 	<div class="content-header-left">
 		<h1>All Blogs</h1>
@@ -23,7 +24,20 @@
 
 			<div class="box box-info">
 				<div class="box-body">
-					<table id="example1" class="table table-bordered table-striped">
+                    <div class="row">
+                        <div class="col-sm-1">Search:</div>
+                        <div class="d-flex col-sm-6">
+                            <input type="text" id="search" class="form-control" placeholder="Search">
+                        </div>
+                        <div class="d-flex col-sm-5">
+                            <select name="" id="status" class="form-control status" style="margin-bottom:5px">
+                                <option value="All" selected>Search by status</option>
+                                <option value="1">Active</option>
+                                <option value="2">In-Active</option>
+                            </select>
+                        </div>
+                    </div>
+					<table id="" class="table table-bordered table-striped">
 						<thead>
 							<tr>
 								<th>SL</th>
@@ -37,10 +51,10 @@
 								<th width="140">Action</th>
 							</tr>
 						</thead>
-						<tbody>
-							<?php $__currentLoopData = $models; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $model): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-								<tr id="id-<?php echo e($model->id); ?>">
-									<td><?php echo e($model->id); ?>.</td>
+						<tbody id="body">
+							<?php $__currentLoopData = $models; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$model): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+								<tr id="id-<?php echo e($model->slug); ?>">
+									<td><?php echo e($models->firstItem()+$key); ?>.</td>
 									<td>
 										<?php if($model->post): ?>
 											<img src="<?php echo e(asset('public/admin/assets/posts/'.$model->post)); ?>" alt="" style="width:60px;">
@@ -65,11 +79,20 @@
 											<a href="<?php echo e(route('blog.edit', $model->slug)); ?>" data-toggle="tooltip" data-placement="top" title="Edit post" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
 										<?php endif; ?>
 										<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('blog-delete')): ?>
-											<a class="btn btn-danger btn-xs delete-btn" data-toggle="tooltip" data-placement="top" title="Delete post" data-id="<?php echo e($model->id); ?>"><i class="fa fa-trash"></i> Delete</a>
+                                            <button class="btn btn-danger btn-xs delete" data-slug="<?php echo e($model->slug); ?>" data-del-url="<?php echo e(url('blog', $model->slug)); ?>"><i class="fa fa-trash"></i> Delete</button>
 										<?php endif; ?>
 									</td>
 								</tr>
 							<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <tr>
+                                <td colspan="9">
+                                    Displying <?php echo e($models->count()); ?> of <?php echo e($models->total()); ?> records
+                                    <div class="d-flex justify-content-center">
+                                        <?php echo $models->links('pagination::bootstrap-4'); ?>
+
+                                    </div>
+                                </td>
+                            </tr>
 						</tbody>
 					</table>
 				</div>
@@ -80,50 +103,6 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('js'); ?>
-    <script>
-        $('.delete-btn').on('click', function(){
-            var id = $(this).attr('data-id');
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url : "<?php echo e(url('blog')); ?>/"+id,
-                        type : 'DELETE',
-                        data: {
-                                "_token": "<?php echo e(csrf_token()); ?>",
-                            },
-                        success : function(response){
-                            if(response){
-                                $('#id-'+id).hide();
-                                Swal.fire(
-                                    'Deleted!',
-                                    'category has been deleted.',
-                                    'success'
-                                )
-                            }else{
-                                Swal.fire(
-                                    'Not Deleted!',
-                                    'Sorry! Something went wrong.',
-                                    'danger'
-                                )
-                            }
-                        }
-                    });
-                }
-            })
-        });
-
-        $(document).ready(function() {
-            $("#example1").DataTable();
-        });
-    </script>
 <?php $__env->stopPush(); ?>
 
 <?php echo $__env->make('layouts.admin.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/admin/blog/index.blade.php ENDPATH**/ ?>

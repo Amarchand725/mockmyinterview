@@ -141,6 +141,7 @@ class LanguageController extends Controller
      */
     public function destroy($slug)
     {
+        return $slug;
         $language = Language::where('slug', $slug)->first();
 
         if ($language) {

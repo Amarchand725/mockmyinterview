@@ -14,7 +14,7 @@
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			<form action="{{ route('category.update', $model->id) }}" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+			<form action="{{ route('category.update', $model->slug) }}" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
 				@csrf
 				{{ method_field('PATCH') }}
 				<div class="box box-info">

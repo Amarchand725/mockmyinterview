@@ -21,10 +21,24 @@ class HelpHireController extends Controller
         $this->middleware('permission:help-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:help-delete', ['only' => ['destroy']]);
     }
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $query = HelpHire::orderby('id', 'desc')->where('id', '>', 0);
+            if($request['search'] != ""){
+                $query->where('title', 'like', '%'. $request['search'] .'%');
+            }
+            if($request['status']!="All"){
+                if($request['status']==2){
+                    $request['status'] = 0;
+                }
+                $query->where('status', $request['status']);
+            }
+            $models = $query->paginate(5);
+            return (string) view('admin.help.search', compact('models'));
+        }
         $page_title = 'All Hiring Helps';
-        $models = HelpHire::orderby('id', 'desc')->get();
+        $models = HelpHire::orderby('id', 'desc')->paginate(5);
         return View('admin.help.index', compact("models", "page_title"));
     }
 

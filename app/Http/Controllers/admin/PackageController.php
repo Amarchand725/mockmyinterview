@@ -21,10 +21,25 @@ class PackageController extends Controller
         $this->middleware('permission:package-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:package-delete', ['only' => ['destroy']]);
     }
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $query = Package::orderby('id', 'desc')->where('id', '>', 0);
+            if($request['search'] != ""){
+                $query->where('name', 'like', '%'. $request['search'] .'%')
+                    ->orWhere('price', 'like', '%'. $request['search'] .'%');
+            }
+            if($request['status']!="All"){
+                if($request['status']==2){
+                    $request['status'] = 0;
+                }
+                $query->where('status', $request['status']);
+            }
+            $models = $query->paginate(1);
+            return (string) view('admin.package.search', compact('models'));
+        }
         $page_title = 'All Packages';
-        $models = Package::orderby('id', 'desc')->get();
+        $models = Package::orderby('id', 'desc')->paginate(1);
         return View('admin.package.index', compact("models", "page_title"));
     }
 

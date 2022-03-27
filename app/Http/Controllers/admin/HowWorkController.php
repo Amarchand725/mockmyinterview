@@ -22,10 +22,24 @@ class HowWorkController extends Controller
         $this->middleware('permission:how_work-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:how_work-delete', ['only' => ['destroy']]);
     }
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $query = HowWork::orderby('id', 'desc')->where('id', '>', 0);
+            if($request['search'] != ""){
+                $query->where('title', 'like', '%'. $request['search'] .'%');
+            }
+            if($request['status']!="All"){
+                if($request['status']==2){
+                    $request['status'] = 0;
+                }
+                $query->where('status', $request['status']);
+            }
+            $models = $query->paginate(1);
+            return (string) view('admin.how_work.search', compact('models'));
+        }
         $page_title = 'All How Works';
-        $models = HowWork::orderby('id', 'desc')->get();
+        $models = HowWork::orderby('id', 'desc')->paginate(1);
         return View('admin.how_work.index', compact("models", "page_title"));
     }
 
@@ -53,23 +67,23 @@ class HowWorkController extends Controller
             'description' => 'required',
         ]);
 
-        $model = new WorkProcess();
+        $model = new HowWork();
         $model->created_by = Auth::user()->id;
         $model->title = $request->title;
         $model->slug = \Str::slug($request->title);
         $model->description = $request->description;
         $model->save();
 
-        return redirect()->route('how_work.index')->with('message', 'Work Process Added Successfully !');
+        return redirect()->route('how_work.index')->with('message', 'How Work Added Successfully !');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\WorkProcess  $workProcess
+     * @param  \App\Models\HowWork  $HowWork
      * @return \Illuminate\Http\Response
      */
-    public function show(WorkProcess $workProcess)
+    public function show(HowWork $HowWork)
     {
         //
     }
@@ -77,7 +91,7 @@ class HowWorkController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\WorkProcess  $workProcess
+     * @param  \App\Models\HowWork  $HowWork
      * @return \Illuminate\Http\Response
      */
     public function edit($slug)
@@ -91,7 +105,7 @@ class HowWorkController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\WorkProcess  $workProcess
+     * @param  \App\Models\HowWork  $HowWork
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $slug)
@@ -108,13 +122,13 @@ class HowWorkController extends Controller
         $update->status = $request->status;
         $update->update();
 
-        return redirect()->route('how_work.index')->with('message', 'Work Process Updated Successfully !');
+        return redirect()->route('how_work.index')->with('message', 'How Work Updated Successfully !');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\WorkProcess  $workProcess
+     * @param  \App\Models\HowWork  $HowWork
      * @return \Illuminate\Http\Response
      */
     public function destroy($slug)

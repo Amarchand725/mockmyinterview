@@ -16,6 +16,6 @@ class Blog extends Model
 
     public function hasCategory()
     {
-        return $this->hasOne(Category::class, 'id', 'category_id');
+        return $this->hasOne(Category::class, 'slug', 'category_slug');
     }
 }

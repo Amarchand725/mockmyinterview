@@ -70,9 +70,7 @@
                                         <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('user-edit')): ?>
                                             <a href="<?php echo e(route('user.edit', $user->id)); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
                                         <?php endif; ?>
-                                        <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('user-delete')): ?>
-                                            <a class="btn btn-danger btn-xs delete-btn" data-user-id="<?php echo e($user->id); ?>"><i class="fa fa-trash"></i> Delete</a>
-                                        <?php endif; ?>
+                                        
                                     </td>
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

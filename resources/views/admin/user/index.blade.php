@@ -70,9 +70,9 @@
                                         @can('user-edit')
                                             <a href="{{ route('user.edit', $user->id)}}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
                                         @endcan
-                                        @can('user-delete')
-                                            <a class="btn btn-danger btn-xs delete-btn" data-user-id="{{ $user->id }}"><i class="fa fa-trash"></i> Delete</a>
-                                        @endcan
+                                        {{-- @can('user-delete')
+                                            <button class="btn btn-danger btn-xs delete" data-slug="{{ $user->id }}" data-del-url="{{ url('user', $user->id) }}"><i class="fa fa-trash"></i> Delete</button>
+                                        @endcan --}}
                                     </td>
                                 </tr>
                             @endforeach
@@ -93,80 +93,4 @@
 @endsection
 
 @push('js')
-    <script>
-        $(document).on('change','#status',function(e) {
-            $select = $(this);
-            $selectedOption = $select.find( "option[value=" + $select.val() + "]" );
-            status =  $selectedOption.val();
-            var search = $('#search').val();
-            var page = 1;
-            fetchAll(page, search, status);
-        });
-        $('#search').keyup((function(e) {
-            var search = $(this).val();
-            var status = $('#status').val();
-            var page = 1;
-            fetchAll(page, search, status);
-        }));
-
-        $(document).on('click', '.pagination a', function(event){
-            event.preventDefault();
-            var search = $('#search').val();
-            var status = $('#status').val();
-            var page = $(this).attr('href').split('page=')[1];
-            fetchAll(page, search, status);
-        });
-
-        function fetchAll(page, search, status){
-            $.ajax({
-                url:'{{ route("user.index") }}?page='+page+'&search='+search+'&status='+status,
-                type: 'get',
-                success: function(response){
-                    $('#body').html(response);
-                }
-            });
-        }
-        $('.delete-btn').on('click', function(){
-            var user_id = $(this).attr('data-user-id');
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url : "{{ url('user') }}/"+user_id,
-                        type : 'DELETE',
-                        data: {
-                                "_token": "{{ csrf_token() }}",
-                            },
-                        success : function(response){
-                            if(response){
-                                $('#id-'+user_id).hide();
-                                Swal.fire(
-                                    'Deleted!',
-                                    'User has been deleted.',
-                                    'success'
-                                )
-                            }else{
-                                Swal.fire(
-                                    'Not Deleted!',
-                                    'Sorry! Something went wrong.',
-                                    'danger'
-                                )
-                            }
-                        }
-                    });
-                }
-            })
-        });
-
-        $(document).ready(function() {
-            $("#example1").DataTable();
-        });
-    </script>
 @endpush

@@ -16,10 +16,24 @@ class TestimonialController extends Controller
         $this->middleware('permission:testimonial-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:testimonial-delete', ['only' => ['destroy']]);
     }
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $query = Testimonial::orderby('id', 'desc')->where('id', '>', 0);
+            if($request['search'] != ""){
+                $query->where('name', 'like', '%'. $request['search'] .'%');
+            }
+            if($request['status']!="All"){
+                if($request['status']==2){
+                    $request['status'] = 0;
+                }
+                $query->where('status', $request['status']);
+            }
+            $testimonials = $query->paginate(1);
+            return (string) view('admin.testimonial.search', compact('testimonials'));
+        }
         $page_title = 'All Testimonials';
-        $testimonials = Testimonial::orderby('id', 'desc')->get();
+        $testimonials = Testimonial::orderby('id', 'desc')->paginate(1);
         return View('admin.testimonial.index', compact("testimonials", "page_title"));
     }
 

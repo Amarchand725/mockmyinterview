@@ -49,7 +49,7 @@
                                             <a href="{{ route('permission.edit', $permission->id) }}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
                                         @endcan
                                         @can('permission-delete')
-                                            <a class="btn btn-danger btn-xs delete-btn" data-permission-id="{{ $permission->id }}"><i class="fa fa-trash"></i> Delete</a>
+                                            <button class="btn btn-danger btn-xs delete" data-slug="{{ $permission->id }}" data-del-url="{{ url('permission', $permission->id) }}"><i class="fa fa-trash"></i> Delete</button>
                                         @endcan
                                     </td>
                                 </tr>
@@ -68,75 +68,6 @@
             </div>
         </div>
 </section>
-
 @endsection
-
 @push('js')
-    <script>
-        $('#search').keyup((function(e) {
-            var search = $(this).val();
-            var page = 1;
-            fetchAll(page, search);
-        }));
-
-        $(document).on('click', '.pagination a', function(event){
-            event.preventDefault();
-            var search = $('#search').val();
-            var page = $(this).attr('href').split('page=')[1];
-            fetchAll(page, search);
-        });
-
-        function fetchAll(page, search){
-            $.ajax({
-                url:'{{ route("permission.index") }}?page='+page+'&search='+search,
-                type: 'get',
-                success: function(response){
-                    $('#body').html(response);
-                }
-            });
-        }
-
-        $('.delete-btn').on('click', function(){
-            var permission_id = $(this).attr('data-permission-id');
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url : "{{ url('permission') }}/"+permission_id,
-                        type : 'DELETE',
-                        data: {
-                                "_token": "{{ csrf_token() }}",
-                            },
-                        success : function(response){
-                            if(response){
-                                $('#id-'+permission_id).hide();
-                                Swal.fire(
-                                    'Deleted!',
-                                    'Permission has been deleted.',
-                                    'success'
-                                )
-                            }else{
-                                Swal.fire(
-                                    'Not Deleted!',
-                                    'Sorry! Something went wrong.',
-                                    'danger'
-                                )
-                            }
-                        }
-                    });
-                }
-            })
-        });
-
-        $(document).ready(function() {
-            $("#example1").DataTable();
-        });
-    </script>
 @endpush

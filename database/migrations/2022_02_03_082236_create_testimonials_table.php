@@ -21,9 +21,6 @@ class CreateTestimonialsTable extends Migration
             $table->string("image")->nullable();
             $table->string("comment")->nullable();
             $table->boolean("status")->default(1);
-            $table->string("meta_title")->nullable();
-            $table->string("meta_keyword")->nullable();
-            $table->string("meta_description")->nullable();
             $table->string('deleted_at');
             $table->timestamps();
         });

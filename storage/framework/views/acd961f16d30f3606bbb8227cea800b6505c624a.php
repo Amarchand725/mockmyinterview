@@ -1,5 +1,6 @@
 <?php $__env->startSection('title', $page_title); ?>
 <?php $__env->startSection('content'); ?>
+<input type="hidden" id="page_url" value="<?php echo e(route('how_work.index')); ?>">
 <section class="content-header">
 	<div class="content-header-left">
 		<h1>All How Works</h1>
@@ -23,7 +24,20 @@
 
 			<div class="box box-info">
 				<div class="box-body">
-					<table id="example1" class="table table-bordered table-striped">
+                    <div class="row">
+                        <div class="col-sm-1">Search:</div>
+                        <div class="d-flex col-sm-6">
+                            <input type="text" id="search" class="form-control" placeholder="Search">
+                        </div>
+                        <div class="d-flex col-sm-5">
+                            <select name="" id="status" class="form-control status" style="margin-bottom:5px">
+                                <option value="All" selected>Search by status</option>
+                                <option value="1">Active</option>
+                                <option value="2">In-Active</option>
+                            </select>
+                        </div>
+                    </div>
+					<table id="" class="table table-bordered table-striped">
 						<thead>
 							<tr>
 								<th width="30">SL</th>
@@ -34,10 +48,10 @@
 								<th>Action</th>
 							</tr>
 						</thead>
-						<tbody>
-							<?php $__currentLoopData = $models; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $model): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+						<tbody id='body'>
+							<?php $__currentLoopData = $models; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$model): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 								<tr id="id-<?php echo e($model->slug); ?>">
-									<td><?php echo e($model->id); ?>.</td>
+									<td><?php echo e($models->firstItem()+$key); ?>.</td>
 									<td><?php echo \Illuminate\Support\Str::limit($model->title,40); ?></td>
 									<td><?php echo \Illuminate\Support\Str::limit($model->description,60); ?></td>
 									<td><?php echo e(isset($model->hasCreatedBy)?$model->hasCreatedBy->name:'N/A'); ?></td>
@@ -53,11 +67,20 @@
 											<a href="<?php echo e(route('how_work.edit', $model->slug)); ?>" data-toggle="tooltip" data-placement="top" title="Edit model" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
 										<?php endif; ?>
 										<?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('how_work-delete')): ?>
-											<a class="btn btn-danger btn-xs delete-btn" data-toggle="tooltip" data-placement="top" title="Delete model" data-model-slug="<?php echo e($model->slug); ?>"><i class="fa fa-trash"></i> Delete</a>
+                                            <button class="btn btn-danger btn-xs delete" data-slug="<?php echo e($model->slug); ?>" data-del-url="<?php echo e(url('how_work', $model->slug)); ?>"><i class="fa fa-trash"></i> Delete</button>
 										<?php endif; ?>
 									</td>
 								</tr>
 							<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <tr>
+                                <td colspan="6">
+                                    Displying <?php echo e($models->count()); ?> of <?php echo e($models->total()); ?> records
+                                    <div class="d-flex justify-content-center">
+                                        <?php echo $models->links('pagination::bootstrap-4'); ?>
+
+                                    </div>
+                                </td>
+                            </tr>
 						</tbody>
 					</table>
 				</div>
@@ -65,55 +88,8 @@
 		</div>
 	</div>
 </section>
-
 <?php $__env->stopSection(); ?>
-
 <?php $__env->startPush('js'); ?>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        $('.delete-btn').on('click', function(){
-            var model_slug = $(this).attr('data-model-slug');
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url : "<?php echo e(url('how_work')); ?>/"+model_slug,
-						type : 'DELETE',
-                        data: {
-                                "_token": "<?php echo e(csrf_token()); ?>",
-                            },
-                        success : function(response){
-                            if(response){
-                                $('#id-'+model_slug).hide();
-                                Swal.fire(
-                                    'Deleted!',
-                                    'model has been deleted.',
-                                    'success'
-                                )
-                            }else{
-                                Swal.fire(
-                                    'Not Deleted!',
-                                    'Sorry! Something went wrong.',
-                                    'danger'
-                                )
-                            }
-                        }
-                    });
-                }
-            })
-        });
-
-        $(document).ready(function() {
-            $("#example1").DataTable();
-        });
-    </script>
 <?php $__env->stopPush(); ?>
 
 <?php echo $__env->make('layouts.admin.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/admin/how_work/index.blade.php ENDPATH**/ ?>

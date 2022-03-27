@@ -16,10 +16,24 @@ class WhychooseController extends Controller
         $this->middleware('permission:why_choose-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:why_choose-delete', ['only' => ['destroy']]);
     }
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $query = Whychoose::orderby('id', 'desc')->where('id', '>', 0);
+            if($request['search'] != ""){
+                $query->where('name', 'like', '%'. $request['search'] .'%');
+            }
+            if($request['status']!="All"){
+                if($request['status']==2){
+                    $request['status'] = 0;
+                }
+                $query->where('status', $request['status']);
+            }
+            $whychooses = $query->paginate(1);
+            return (string) view('admin.why_choose.search', compact('whychooses'));
+        }
         $page_title = 'All Why Choose Us';
-        $whychooses = Whychoose::all();
+        $whychooses = Whychoose::orderby('id', 'desc')->paginate(1);
         return View('admin.why_choose.index', compact("whychooses","page_title"));
     }
 

@@ -69,7 +69,7 @@
 											<a href="{{route('page.edit', $model->slug)}}" data-toggle="tooltip" data-placement="top" title="Edit page" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
 										@endcan
 										{{-- @can('page-delete')
-											<a class="btn btn-danger btn-xs delete-btn" data-toggle="tooltip" data-placement="top" title="Delete page" data-page-slug="{{ $model->slug }}"><i class="fa fa-trash"></i> Delete</a>
+                                            <button class="btn btn-danger btn-xs delete" data-slug="{{ $page->slug }}" data-del-url="{{ url('page', $page->slug) }}"><i class="fa fa-trash"></i> Delete</button>
 										@endcan --}}
 
                                         <a href="{{route('page_setting.show', $model->slug)}}" data-toggle="tooltip" data-placement="top" title="Page Setting" class="btn btn-info btn-xs"><i class="fa fa-cog"></i> Setting</a>
@@ -95,81 +95,4 @@
 @endsection
 
 @push('js')
-<script>
-    $(document).on('change','#status',function(e) {
-        $select = $(this);
-        $selectedOption = $select.find( "option[value=" + $select.val() + "]" );
-        status =  $selectedOption.val();
-        var search = $('#search').val();
-        var page = 1;
-        fetchAll(page, search, status);
-    });
-    $('#search').keyup((function(e) {
-        var search = $(this).val();
-        var status = $('#status').val();
-        var page = 1;
-        fetchAll(page, search, status);
-    }));
-
-    $(document).on('click', '.pagination a', function(event){
-        event.preventDefault();
-        var search = $('#search').val();
-        var status = $('#status').val();
-        var page = $(this).attr('href').split('page=')[1];
-        fetchAll(page, search, status);
-    });
-
-    function fetchAll(page, search, status){
-        $.ajax({
-            url:'{{ route("page.index") }}?page='+page+'&search='+search+'&status='+status,
-            type: 'get',
-            success: function(response){
-                $('#body').html(response);
-            }
-        });
-    }
-
-    $('.delete-btn').on('click', function(){
-        var slug = $(this).attr('data-page-slug');
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url : "{{ url('page') }}/"+slug,
-                    type : 'DELETE',
-                    data: {
-                            "_token": "{{ csrf_token() }}",
-                        },
-                    success : function(response){
-                        if(response){
-                            $('#id-'+slug).hide();
-                            Swal.fire(
-                                'Deleted!',
-                                'Slider has been deleted.',
-                                'success'
-                            )
-                        }else{
-                            Swal.fire(
-                                'Not Deleted!',
-                                'Sorry! Something went wrong.',
-                                'danger'
-                            )
-                        }
-                    }
-                });
-            }
-        })
-    });
-
-    $(document).ready(function() {
-        $("#example1").DataTable();
-    });
-</script>
 @endpush

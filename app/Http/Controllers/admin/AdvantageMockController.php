@@ -22,10 +22,24 @@ class AdvantageMockController extends Controller
         $this->middleware('permission:advantage-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:advantage-delete', ['only' => ['destroy']]);
     }
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $query = AdvantageMock::orderby('id', 'desc')->where('id', '>', 0);
+            if($request['search'] != ""){
+                $query->where('title', 'like', '%'. $request['search'] .'%');
+            }
+            if($request['status']!="All"){
+                if($request['status']==2){
+                    $request['status'] = 0;
+                }
+                $query->where('status', $request['status']);
+            }
+            $models = $query->paginate(1);
+            return (string) view('admin.advantage.search', compact('models'));
+        }
         $page_title = 'All Mock Advantages';
-        $models = AdvantageMock::orderby('id', 'desc')->get();
+        $models = AdvantageMock::orderby('id', 'desc')->paginate(1);
         return View('admin.advantage.index', compact("models","page_title"));
     }
 

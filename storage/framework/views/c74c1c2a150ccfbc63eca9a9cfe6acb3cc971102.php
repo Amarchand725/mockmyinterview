@@ -6,7 +6,7 @@
 		<title><?php echo $__env->yieldContent('title'); ?></title>
 
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-		<meta name="csrf-token" content="<?php echo e(csrf_token()); ?>" />
+		<meta name="csrf-token" id="token" content="<?php echo e(csrf_token()); ?>" />
 
 		<link rel="stylesheet" href="<?php echo e(asset('public/admin/assets/css/bootstrap.min.css')); ?>">
 		<link rel="stylesheet" href="<?php echo e(asset('public/admin/assets/css/font-awesome.min.css')); ?>">
@@ -116,6 +116,7 @@
 	<script src="<?php echo e(asset('public/admin/assets/js/jquery.validate.min.js')); ?>"></script>
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="<?php echo e(asset('public/admin/assets/js/toastr.min.js')); ?>"></script>
+	<script src="<?php echo e(asset('public/admin/assets/js/search.js')); ?>"></script>
 	<script>
 		<?php if(Session::has('message')): ?>
 		toastr.options =

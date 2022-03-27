@@ -6,7 +6,7 @@
 		<title>@yield('title')</title>
 
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-		<meta name="csrf-token" content="{{ csrf_token() }}" />
+		<meta name="csrf-token" id="token" content="{{ csrf_token() }}" />
 
 		<link rel="stylesheet" href="{{asset('public/admin/assets/css/bootstrap.min.css')}}">
 		<link rel="stylesheet" href="{{asset('public/admin/assets/css/font-awesome.min.css')}}">
@@ -116,6 +116,7 @@
 	<script src="{{asset('public/admin/assets/js/jquery.validate.min.js')}}"></script>
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="{{asset('public/admin/assets/js/toastr.min.js')}}"></script>
+	<script src="{{asset('public/admin/assets/js/search.js')}}"></script>
 	<script>
 		@if(Session::has('message'))
 		toastr.options =

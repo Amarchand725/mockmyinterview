@@ -17,10 +17,24 @@ class SliderController extends Controller
         $this->middleware('permission:slider-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:slider-delete', ['only' => ['destroy']]);
     }
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $query = Slider::orderby('id', 'desc')->where('id', '>', 0);
+            if($request['search'] != ""){
+                $query->where('left_sec_title', 'like', '%'. $request['search'] .'%');
+            }
+            if($request['status']!="All"){
+                if($request['status']==2){
+                    $request['status'] = 0;
+                }
+                $query->where('status', $request['status']);
+            }
+            $sliders = $query->paginate(5);
+            return (string) view('admin.slider.search', compact('sliders'));
+        }
         $page_title = 'All Sliders';
-        $sliders = Slider::all();
+        $sliders = Slider::orderby('id', 'desc')->where('status', 1)->paginate(5);
         return View('admin.slider.index', compact("sliders", "page_title"));
     }
 

@@ -1,6 +1,7 @@
 @extends('layouts.admin.app')
 @section('title', $page_title)
 @section('content')
+<input type="hidden" id="page_url" value="{{ route('how_work.index') }}">
 <section class="content-header">
 	<div class="content-header-left">
 		<h1>All How Works</h1>
@@ -23,7 +24,20 @@
 
 			<div class="box box-info">
 				<div class="box-body">
-					<table id="example1" class="table table-bordered table-striped">
+                    <div class="row">
+                        <div class="col-sm-1">Search:</div>
+                        <div class="d-flex col-sm-6">
+                            <input type="text" id="search" class="form-control" placeholder="Search">
+                        </div>
+                        <div class="d-flex col-sm-5">
+                            <select name="" id="status" class="form-control status" style="margin-bottom:5px">
+                                <option value="All" selected>Search by status</option>
+                                <option value="1">Active</option>
+                                <option value="2">In-Active</option>
+                            </select>
+                        </div>
+                    </div>
+					<table id="" class="table table-bordered table-striped">
 						<thead>
 							<tr>
 								<th width="30">SL</th>
@@ -34,10 +48,10 @@
 								<th>Action</th>
 							</tr>
 						</thead>
-						<tbody>
-							@foreach($models as $model)
+						<tbody id='body'>
+							@foreach($models as $key=>$model)
 								<tr id="id-{{ $model->slug }}">
-									<td>{{$model->id}}.</td>
+									<td>{{ $models->firstItem()+$key }}.</td>
 									<td>{!! \Illuminate\Support\Str::limit($model->title,40) !!}</td>
 									<td>{!! \Illuminate\Support\Str::limit($model->description,60) !!}</td>
 									<td>{{isset($model->hasCreatedBy)?$model->hasCreatedBy->name:'N/A'}}</td>
@@ -53,11 +67,19 @@
 											<a href="{{route('how_work.edit', $model->slug)}}" data-toggle="tooltip" data-placement="top" title="Edit model" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
 										@endcan
 										@can('how_work-delete')
-											<a class="btn btn-danger btn-xs delete-btn" data-toggle="tooltip" data-placement="top" title="Delete model" data-model-slug="{{ $model->slug }}"><i class="fa fa-trash"></i> Delete</a>
+                                            <button class="btn btn-danger btn-xs delete" data-slug="{{ $model->slug }}" data-del-url="{{ url('how_work', $model->slug) }}"><i class="fa fa-trash"></i> Delete</button>
 										@endcan
 									</td>
 								</tr>
 							@endforeach
+                            <tr>
+                                <td colspan="6">
+                                    Displying {{$models->count()}} of {{$models->total()}} records
+                                    <div class="d-flex justify-content-center">
+                                        {!! $models->links('pagination::bootstrap-4') !!}
+                                    </div>
+                                </td>
+                            </tr>
 						</tbody>
 					</table>
 				</div>
@@ -65,53 +87,6 @@
 		</div>
 	</div>
 </section>
-
 @endsection
-
 @push('js')
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        $('.delete-btn').on('click', function(){
-            var model_slug = $(this).attr('data-model-slug');
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url : "{{ url('how_work') }}/"+model_slug,
-						type : 'DELETE',
-                        data: {
-                                "_token": "{{ csrf_token() }}",
-                            },
-                        success : function(response){
-                            if(response){
-                                $('#id-'+model_slug).hide();
-                                Swal.fire(
-                                    'Deleted!',
-                                    'model has been deleted.',
-                                    'success'
-                                )
-                            }else{
-                                Swal.fire(
-                                    'Not Deleted!',
-                                    'Sorry! Something went wrong.',
-                                    'danger'
-                                )
-                            }
-                        }
-                    });
-                }
-            })
-        });
-
-        $(document).ready(function() {
-            $("#example1").DataTable();
-        });
-    </script>
 @endpush

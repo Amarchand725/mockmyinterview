@@ -49,7 +49,7 @@
                                             <a href="<?php echo e(route('permission.edit', $permission->id)); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
                                         <?php endif; ?>
                                         <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('permission-delete')): ?>
-                                            <a class="btn btn-danger btn-xs delete-btn" data-permission-id="<?php echo e($permission->id); ?>"><i class="fa fa-trash"></i> Delete</a>
+                                            <button class="btn btn-danger btn-xs delete" data-slug="<?php echo e($permission->slug); ?>" data-del-url="<?php echo e(url('permission', $permission->slug)); ?>"><i class="fa fa-trash"></i> Delete</button>
                                         <?php endif; ?>
                                     </td>
                                 </tr>

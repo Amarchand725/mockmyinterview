@@ -21,10 +21,24 @@ class CategoryController extends Controller
         $this->middleware('permission:category-edit', ['only' => ['edit','update']]);
         $this->middleware('permission:category-delete', ['only' => ['destroy']]);
     }
-    public function index()
+    public function index(Request $request)
     {
+        if($request->ajax()){
+            $query = Category::orderby('id', 'desc')->where('id', '>', 0);
+            if($request['search'] != ""){
+                $query->where('name', 'like', '%'. $request['search'] .'%');
+            }
+            if($request['status']!="All"){
+                if($request['status']==2){
+                    $request['status'] = 0;
+                }
+                $query->where('status', $request['status']);
+            }
+            $models = $query->paginate(1);
+            return (string) view('admin.category.search', compact('models'));
+        }
         $page_title = 'All Categories';
-        $models = Category::all();
+        $models = Category::orderby('id', 'desc')->paginate(1);
         return View('admin.category.index', compact("models","page_title"));
     }
 
@@ -48,12 +62,14 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validator = $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:100',
+            'description' => 'max:250',
         ]);
 
         $model = new Category();
         $model->created_by = Auth::user()->id;
         $model->name = $request->name;
+        $model->slug = \Str::slug($request->name);
         $model->description = $request->description;
         $model->save();
 
@@ -77,10 +93,10 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($slug)
     {
         $page_title = 'Edit Category';
-        $model = Category::find($id);
+        $model = Category::where('slug', $slug)->first();
         return View('admin.category.edit', compact("model", "page_title"));
     }
 
@@ -91,14 +107,16 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug)
     {
-        $update = Category::find($id);
         $validator = $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:100',
+            'description' => 'max:250',
         ]);
 
+        $update = Category::where('slug', $slug)->first();
         $update->name = $request->name;
+        $update->slug = \Str::slug($request->name);
         $update->description = $request->description;
         $update->status = $request->status;
         $update->update();
@@ -112,9 +130,9 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $model = Category::find($id);
+        $model = Category::where('slug', $slug)->first();
         if ($model) {
             $model->delete();
             return true;

@@ -22,10 +22,10 @@
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Category <span style='color:red'>*</span></label>
 							<div class="col-sm-9">
-								<select name="category_id" id="" class="form-control">
+								<select name="category_slug" id="" class="form-control">
 									<option value="" selected>Select category</option>
 									@foreach($categories as $category)
-										<option value="{{ $category->id }}" {{ $category->id==$model->category_id?'selected':'' }}>{{ $category->name }}</option>
+										<option value="{{ $category->slug }}" {{ $category->slug==$model->category_slug?'selected':'' }}>{{ $category->name }}</option>
 									@endforeach
 								</select>
 								<span style="color: red">{{ $errors->first('category_id') }}</span>
