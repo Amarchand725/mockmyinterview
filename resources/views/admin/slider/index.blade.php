@@ -1,6 +1,7 @@
 @extends('layouts.admin.app')
 @section('title', $page_title)
 @section('content')
+<input type="hidden" id="page_url" value="{{ route('slider.index') }}">
 <section class="content-header">
 	<div class="content-header-left">
 		<h1>All Sliders</h1>
@@ -80,7 +81,7 @@
 							@endforeach
                             <tr>
                                 <td colspan="7">
-                                    Displying {{$sliders->count()}} of {{$sliders->total()}} records
+									Displying {{$sliders->firstItem()}} to {{$sliders->lastItem()}} of {{$sliders->total()}} records
                                     <div class="d-flex justify-content-center">
                                         {!! $sliders->links('pagination::bootstrap-4') !!}
                                     </div>

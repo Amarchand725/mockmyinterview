@@ -30,11 +30,11 @@ class SliderController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $sliders = $query->paginate(5);
+            $sliders = $query->paginate(1);
             return (string) view('admin.slider.search', compact('sliders'));
         }
         $page_title = 'All Sliders';
-        $sliders = Slider::orderby('id', 'desc')->where('status', 1)->paginate(5);
+        $sliders = Slider::orderby('id', 'desc')->where('status', 1)->paginate(1);
         return View('admin.slider.index', compact("sliders", "page_title"));
     }
 

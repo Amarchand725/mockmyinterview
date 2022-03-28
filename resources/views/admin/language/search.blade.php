@@ -23,7 +23,7 @@
 @endforeach
 <tr>
     <td colspan="6">
-        Displying {{$languages->count()}} of {{$languages->total()}} records
+        Displying {{$languages->firstItem()}} to {{$languages->lastItem()}} of {{$languages->total()}} records
         <div class="d-flex justify-content-center">
             {!! $languages->links('pagination::bootstrap-4') !!}
         </div>

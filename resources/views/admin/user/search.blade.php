@@ -27,7 +27,7 @@
 @endforeach
 <tr>
     <td colspan="7">
-        Displying {{$users->count()}} of {{$users->total()}} records
+        Displying {{$users->firstItem()}} to {{$users->lastItem()}} of {{$users->total()}} records
         <div class="d-flex justify-content-center">
             {!! $users->links('pagination::bootstrap-4') !!}
         </div>

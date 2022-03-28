@@ -1,6 +1,7 @@
 @extends('layouts.admin.app')
 @section('title', $page_title)
 @section('content')
+<input type="hidden" id="page_url" value="{{ route('page.index') }}">
 <section class="content-header">
     <div class="content-header-left">
         <h1>All Pages</h1>
@@ -78,7 +79,7 @@
 							@endforeach
                             <tr>
                                 <td colspan="8">
-                                    Displying {{$models->count()}} of {{$models->total()}} records
+									Displying {{$models->firstItem()}} to {{$models->lastItem()}} of {{$models->total()}} records
                                     <div class="d-flex justify-content-center">
                                         {!! $models->links('pagination::bootstrap-4') !!}
                                     </div>

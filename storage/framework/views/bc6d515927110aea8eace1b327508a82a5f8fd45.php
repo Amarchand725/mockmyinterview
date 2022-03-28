@@ -23,7 +23,7 @@
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 <tr>
     <td colspan="6">
-        Displying <?php echo e($degrees->count()); ?> of <?php echo e($degrees->total()); ?> records
+        Displying <?php echo e($degrees->firstItem()); ?> to <?php echo e($degrees->lastItem()); ?> of <?php echo e($degrees->total()); ?> records
         <div class="d-flex justify-content-center">
             <?php echo $degrees->links('pagination::bootstrap-4'); ?>
 

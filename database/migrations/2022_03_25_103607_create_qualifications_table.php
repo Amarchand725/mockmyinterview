@@ -16,10 +16,10 @@ class CreateQualificationsTable extends Migration
         Schema::create('qualifications', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
-            $table->text('institute');
-            $table->string('degree');
-            $table->string('course');
-            $table->string('passing_year');
+            $table->string('institute')->nullable();
+            $table->string('degree_slug')->nullable();
+            $table->string('course_slug')->nullable();
+            $table->string('passing_year')->nullable();
             $table->timestamps();
         });
     }

@@ -1,5 +1,7 @@
+
 <?php $__env->startSection('title', $page_title); ?>
 <?php $__env->startSection('content'); ?>
+    <input type="hidden" id="page_url" value="<?php echo e(route('role.index')); ?>">
     <section class="content-header">
         <div class="content-header-left">
             <h1>All Roles</h1>
@@ -28,6 +30,13 @@
                             <div class="d-flex col-sm-11">
                                 <input type="text" id="search" class="form-control" placeholder="Search" style="margin-bottom:5px">
                             </div>
+                            <div class="d-flex col-sm-5" style="display: none">
+                                <select name="" id="status" class="form-control status" style="margin-bottom:5px">
+                                    <option value="All" selected>Search by status</option>
+                                    <option value="1">Active</option>
+                                    <option value="2">In-Active</option>
+                                </select>
+                            </div>
                         </div>
                         <table id="" class="table table-bordered table-striped">
                             <thead>
@@ -54,7 +63,7 @@
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td colspan="4">
-                                        Displying <?php echo e($roles->count()); ?> of <?php echo e($roles->total()); ?> records
+                                        Displying <?php echo e($roles->firstItem()); ?> to <?php echo e($roles->lastItem()); ?> of <?php echo e($roles->total()); ?> records
                                         <div class="d-flex justify-content-center">
                                             <?php echo $roles->links('pagination::bootstrap-4'); ?>
 
@@ -70,72 +79,6 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('js'); ?>
-    <script>
-        $('#search').keyup((function(e) {
-            var search = $(this).val();
-            var page = 1;
-            fetchAll(page, search);
-        }));
-
-        $(document).on('click', '.pagination a', function(event){
-            event.preventDefault();
-            var search = $('#search').val();
-            var page = $(this).attr('href').split('page=')[1];
-            fetchAll(page, search);
-        });
-
-        function fetchAll(page, search){
-            $.ajax({
-                url:'<?php echo e(route("role.index")); ?>?page='+page+'&search='+search,
-                type: 'get',
-                success: function(response){
-                    $('#body').html(response);
-                }
-            });
-        }
-
-        $('.delete').on('click', function(){
-            var role_id = $(this).attr('data-role-id');
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url : "<?php echo e(url('role')); ?>/"+role_id,
-                        type : 'DELETE',
-                        data: {
-                                "_token": "<?php echo e(csrf_token()); ?>",
-                            },
-                        success : function(response){
-                            if(response){
-                                $('#id-'+role_id).hide();
-                                Swal.fire(
-                                    'Deleted!',
-                                    'Your file has been deleted.',
-                                    'success'
-                                )
-                            }else{
-                                Swal.fire(
-                                    'Not Deleted!',
-                                    'Sorry! Something went wrong.',
-                                    'danger'
-                                )
-                            }
-                        }
-                    });
-                }
-            })
-        });
-        $(document).ready(function() {
-            $("#example1").DataTable();
-        });
-    </script>
 <?php $__env->stopPush(); ?>
 
 <?php echo $__env->make('layouts.admin.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/admin/role/index.blade.php ENDPATH**/ ?>

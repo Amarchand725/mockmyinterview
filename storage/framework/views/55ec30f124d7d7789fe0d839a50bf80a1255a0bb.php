@@ -31,7 +31,7 @@
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 <tr>
     <td colspan="7">
-        Displying <?php echo e($sliders->count()); ?> of <?php echo e($sliders->total()); ?> records
+        Displying <?php echo e($sliders->firstItem()); ?> to <?php echo e($sliders->lastItem()); ?> of <?php echo e($sliders->total()); ?> records
         <div class="d-flex justify-content-center">
             <?php echo $sliders->links('pagination::bootstrap-4'); ?>
 

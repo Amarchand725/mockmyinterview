@@ -23,7 +23,7 @@
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 <tr>
     <td colspan="6">
-        Displying <?php echo e($languages->count()); ?> of <?php echo e($languages->total()); ?> records
+        Displying <?php echo e($languages->firstItem()); ?> to <?php echo e($languages->lastItem()); ?> of <?php echo e($languages->total()); ?> records
         <div class="d-flex justify-content-center">
             <?php echo $languages->links('pagination::bootstrap-4'); ?>
 

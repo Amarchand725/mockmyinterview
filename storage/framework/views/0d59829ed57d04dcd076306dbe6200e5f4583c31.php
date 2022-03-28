@@ -15,7 +15,7 @@
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 <tr>
     <td colspan="4">
-        Displying <?php echo e($roles->count()); ?> of <?php echo e($roles->total()); ?> records
+        Displying <?php echo e($roles->firstItem()); ?> to <?php echo e($roles->lastItem()); ?> of <?php echo e($roles->total()); ?> records
         <div class="d-flex justify-content-center">
             <?php echo $roles->links('pagination::bootstrap-4'); ?>
 

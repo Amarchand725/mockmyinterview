@@ -1,5 +1,7 @@
+
 <?php $__env->startSection('title', $page_title); ?>
 <?php $__env->startSection('content'); ?>
+<input type="hidden" id="page_url" value="<?php echo e(route('user.index')); ?>">
 <section class="content-header">
     <div class="content-header-left">
         <h1>All Users</h1>
@@ -76,7 +78,7 @@
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <td colspan="7">
-                                    Displying <?php echo e($users->count()); ?> of <?php echo e($users->total()); ?> records
+                                    Displying <?php echo e($users->firstItem()); ?> to <?php echo e($users->lastItem()); ?> of <?php echo e($users->total()); ?> records
                                     <div class="d-flex justify-content-center">
                                         <?php echo $users->links('pagination::bootstrap-4'); ?>
 
@@ -92,82 +94,6 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('js'); ?>
-    <script>
-        $(document).on('change','#status',function(e) {
-            $select = $(this);
-            $selectedOption = $select.find( "option[value=" + $select.val() + "]" );
-            status =  $selectedOption.val();
-            var search = $('#search').val();
-            var page = 1;
-            fetchAll(page, search, status);
-        });
-        $('#search').keyup((function(e) {
-            var search = $(this).val();
-            var status = $('#status').val();
-            var page = 1;
-            fetchAll(page, search, status);
-        }));
-
-        $(document).on('click', '.pagination a', function(event){
-            event.preventDefault();
-            var search = $('#search').val();
-            var status = $('#status').val();
-            var page = $(this).attr('href').split('page=')[1];
-            fetchAll(page, search, status);
-        });
-
-        function fetchAll(page, search, status){
-            $.ajax({
-                url:'<?php echo e(route("user.index")); ?>?page='+page+'&search='+search+'&status='+status,
-                type: 'get',
-                success: function(response){
-                    $('#body').html(response);
-                }
-            });
-        }
-        $('.delete-btn').on('click', function(){
-            var user_id = $(this).attr('data-user-id');
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url : "<?php echo e(url('user')); ?>/"+user_id,
-                        type : 'DELETE',
-                        data: {
-                                "_token": "<?php echo e(csrf_token()); ?>",
-                            },
-                        success : function(response){
-                            if(response){
-                                $('#id-'+user_id).hide();
-                                Swal.fire(
-                                    'Deleted!',
-                                    'User has been deleted.',
-                                    'success'
-                                )
-                            }else{
-                                Swal.fire(
-                                    'Not Deleted!',
-                                    'Sorry! Something went wrong.',
-                                    'danger'
-                                )
-                            }
-                        }
-                    });
-                }
-            })
-        });
-
-        $(document).ready(function() {
-            $("#example1").DataTable();
-        });
-    </script>
 <?php $__env->stopPush(); ?>
 
 <?php echo $__env->make('layouts.admin.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/admin/user/index.blade.php ENDPATH**/ ?>

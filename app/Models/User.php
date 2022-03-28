@@ -48,4 +48,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function hasUserDetails()
+    {
+        return $this->hasOne(UserDetail::class, 'user_id', 'id');
+    }
+    public function hasUserQualification()
+    {
+        return $this->hasMany(Qualification::class, 'user_id', 'id');
+    }
+    public function hasUserQualificationDetails()
+    {
+        return $this->hasOne(QualificationDetail::class, 'user_id', 'id');
+    }
 }

@@ -23,7 +23,7 @@
 @endforeach
 <tr>
     <td colspan="6">
-        Displying {{$testimonials->count()}} of {{$testimonials->total()}} records
+        Displying {{$testimonials->firstItem()}} to {{$testimonials->lastItem()}} of {{$testimonials->total()}} records
         <div class="d-flex justify-content-center">
             {!! $testimonials->links('pagination::bootstrap-4') !!}
         </div>

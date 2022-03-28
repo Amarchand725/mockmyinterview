@@ -50,6 +50,9 @@ Route::get('schedule-interview', 'CandidateController@scheduleInterview')->name(
 Route::get('report', 'CandidateController@report')->name('report');
 Route::get('test_setup', 'CandidateController@testSetup')->name('test_setup');
 Route::get('notifications', 'CandidateController@notifications')->name('notifications');
+Route::post('my_profile/personal_details', 'CandidateController@personalDetails')->name('my_profile.personal_details');
+Route::post('my_profile/qualifications', 'CandidateController@qualifications')->name('my_profile.qualifications');
+Route::post('my_profile/experience', 'CandidateController@experiences')->name('my_profile.experience');
 //Candidate
 
 //Interviewer

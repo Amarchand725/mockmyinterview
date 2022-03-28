@@ -1,3 +1,4 @@
+
 <?php $__env->startSection('title', $page_title); ?>
 <?php $__env->startSection('content'); ?>
     <input type="hidden" id="page_url" value="<?php echo e(route('degree.index')); ?>">
@@ -74,7 +75,7 @@
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td colspan="6">
-                                        Displying <?php echo e($degrees->count()); ?> of <?php echo e($degrees->total()); ?> records
+                                        Displying <?php echo e($degrees->firstItem()); ?> to <?php echo e($degrees->lastItem()); ?> of <?php echo e($degrees->total()); ?> records
                                         <div class="d-flex justify-content-center">
                                             <?php echo $degrees->links('pagination::bootstrap-4'); ?>
 

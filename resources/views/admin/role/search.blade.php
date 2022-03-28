@@ -15,7 +15,7 @@
 @endforeach
 <tr>
     <td colspan="4">
-        Displying {{$roles->count()}} of {{$roles->total()}} records
+        Displying {{$roles->firstItem()}} to {{$roles->lastItem()}} of {{$roles->total()}} records
         <div class="d-flex justify-content-center">
             {!! $roles->links('pagination::bootstrap-4') !!}
         </div>

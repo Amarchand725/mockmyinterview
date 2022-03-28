@@ -1,6 +1,7 @@
 @extends('layouts.admin.app')
 @section('title', $page_title)
 @section('content')
+<input type="hidden" id="page_url" value="{{ route('permission.index') }}">
 <section class="content-header">
     <div class="content-header-left">
         <h1>All Permissions</h1>
@@ -56,7 +57,7 @@
                             @endforeach
                             <tr>
                                 <td colspan="4">
-                                    Displying {{$permissions->count()}} of {{$permissions->total()}} records
+                                    Displying {{$permissions->firstItem()}} to {{$permissions->lastItem()}} of {{$permissions->total()}} records
                                     <div class="d-flex justify-content-center">
                                         {!! $permissions->links('pagination::bootstrap-4') !!}
                                     </div>

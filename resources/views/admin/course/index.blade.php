@@ -74,7 +74,7 @@
                                 @endforeach
                                 <tr>
                                     <td colspan="6">
-                                        Displying {{$courses->count()}} of {{$courses->total()}} records
+                                        Displying {{$courses->firstItem()}} to {{$courses->lastItem()}} of {{$courses->total()}} records
                                         <div class="d-flex justify-content-center">
                                             {!! $courses->links('pagination::bootstrap-4') !!}
                                         </div>

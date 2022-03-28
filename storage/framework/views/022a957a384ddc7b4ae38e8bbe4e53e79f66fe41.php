@@ -27,7 +27,7 @@
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 <tr>
     <td colspan="7">
-        Displying <?php echo e($users->count()); ?> of <?php echo e($users->total()); ?> records
+        Displying <?php echo e($users->firstItem()); ?> to <?php echo e($users->lastItem()); ?> of <?php echo e($users->total()); ?> records
         <div class="d-flex justify-content-center">
             <?php echo $users->links('pagination::bootstrap-4'); ?>
 

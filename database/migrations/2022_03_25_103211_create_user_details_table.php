@@ -19,6 +19,7 @@ class CreateUserDetailsTable extends Migration
             $table->date('date_of_birth')->nullable();
             $table->string('gender')->nullable();
             $table->text('address')->nullable();
+            $table->string('language_slug')->nullable();
             $table->string('skype_id')->nullable();
             $table->timestamps();
         });

@@ -1,5 +1,7 @@
+
 <?php $__env->startSection('title', $page_title); ?>
 <?php $__env->startSection('content'); ?>
+<input type="hidden" id="page_url" value="<?php echo e(route('permission.index')); ?>">
 <section class="content-header">
     <div class="content-header-left">
         <h1>All Permissions</h1>
@@ -49,14 +51,14 @@
                                             <a href="<?php echo e(route('permission.edit', $permission->id)); ?>" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
                                         <?php endif; ?>
                                         <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('permission-delete')): ?>
-                                            <button class="btn btn-danger btn-xs delete" data-slug="<?php echo e($permission->slug); ?>" data-del-url="<?php echo e(url('permission', $permission->slug)); ?>"><i class="fa fa-trash"></i> Delete</button>
+                                            <button class="btn btn-danger btn-xs delete" data-slug="<?php echo e($permission->id); ?>" data-del-url="<?php echo e(url('permission', $permission->id)); ?>"><i class="fa fa-trash"></i> Delete</button>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <td colspan="4">
-                                    Displying <?php echo e($permissions->count()); ?> of <?php echo e($permissions->total()); ?> records
+                                    Displying <?php echo e($permissions->firstItem()); ?> to <?php echo e($permissions->lastItem()); ?> of <?php echo e($permissions->total()); ?> records
                                     <div class="d-flex justify-content-center">
                                         <?php echo $permissions->links('pagination::bootstrap-4'); ?>
 
@@ -69,77 +71,8 @@
             </div>
         </div>
 </section>
-
 <?php $__env->stopSection(); ?>
-
 <?php $__env->startPush('js'); ?>
-    <script>
-        $('#search').keyup((function(e) {
-            var search = $(this).val();
-            var page = 1;
-            fetchAll(page, search);
-        }));
-
-        $(document).on('click', '.pagination a', function(event){
-            event.preventDefault();
-            var search = $('#search').val();
-            var page = $(this).attr('href').split('page=')[1];
-            fetchAll(page, search);
-        });
-
-        function fetchAll(page, search){
-            $.ajax({
-                url:'<?php echo e(route("permission.index")); ?>?page='+page+'&search='+search,
-                type: 'get',
-                success: function(response){
-                    $('#body').html(response);
-                }
-            });
-        }
-
-        $('.delete-btn').on('click', function(){
-            var permission_id = $(this).attr('data-permission-id');
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url : "<?php echo e(url('permission')); ?>/"+permission_id,
-                        type : 'DELETE',
-                        data: {
-                                "_token": "<?php echo e(csrf_token()); ?>",
-                            },
-                        success : function(response){
-                            if(response){
-                                $('#id-'+permission_id).hide();
-                                Swal.fire(
-                                    'Deleted!',
-                                    'Permission has been deleted.',
-                                    'success'
-                                )
-                            }else{
-                                Swal.fire(
-                                    'Not Deleted!',
-                                    'Sorry! Something went wrong.',
-                                    'danger'
-                                )
-                            }
-                        }
-                    });
-                }
-            })
-        });
-
-        $(document).ready(function() {
-            $("#example1").DataTable();
-        });
-    </script>
 <?php $__env->stopPush(); ?>
 
 <?php echo $__env->make('layouts.admin.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/admin/permission/index.blade.php ENDPATH**/ ?>

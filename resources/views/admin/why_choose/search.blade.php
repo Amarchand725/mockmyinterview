@@ -36,7 +36,7 @@
 @endforeach
 <tr>
     <td colspan="5">
-        Displying {{$whychooses->count()}} of {{$whychooses->total()}} records
+        Displying {{$whychooses->firstItem()}} to {{$whychooses->lastItem()}} of {{$whychooses->total()}} records
         <div class="d-flex justify-content-center">
             {!! $whychooses->links('pagination::bootstrap-4') !!}
         </div>

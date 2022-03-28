@@ -1,3 +1,4 @@
+
 <?php $__env->startSection('title', $page_title); ?>
 <?php $__env->startSection('content'); ?>
 <input type="hidden" id="page_url" value="<?php echo e(route('why_choose.index')); ?>">
@@ -94,7 +95,7 @@
 							<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <td colspan="5">
-                                    Displying <?php echo e($whychooses->count()); ?> of <?php echo e($whychooses->total()); ?> records
+                                    Displying <?php echo e($whychooses->firstItem()); ?> to <?php echo e($whychooses->lastItem()); ?> of <?php echo e($whychooses->total()); ?> records
                                     <div class="d-flex justify-content-center">
                                         <?php echo $whychooses->links('pagination::bootstrap-4'); ?>
 
@@ -108,9 +109,7 @@
 		</div>
 	</div>
 </section>
-
 <?php $__env->stopSection(); ?>
-
 <?php $__env->startPush('js'); ?>
 <?php $__env->stopPush(); ?>
 

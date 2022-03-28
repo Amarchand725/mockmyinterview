@@ -15,7 +15,7 @@
 @endforeach
 <tr>
     <td colspan="4">
-        Displying {{$permissions->count()}} of {{$permissions->total()}} records
+        Displying {{$permissions->firstItem()}} to {{$permissions->lastItem()}} of {{$permissions->total()}} records
         <div class="d-flex justify-content-center">
             {!! $permissions->links('pagination::bootstrap-4') !!}
         </div>

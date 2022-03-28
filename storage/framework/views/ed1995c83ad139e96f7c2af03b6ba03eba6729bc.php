@@ -15,7 +15,7 @@
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 <tr>
     <td colspan="4">
-        Displying <?php echo e($permissions->count()); ?> of <?php echo e($permissions->total()); ?> records
+        Displying <?php echo e($permissions->firstItem()); ?> to <?php echo e($permissions->lastItem()); ?> of <?php echo e($permissions->total()); ?> records
         <div class="d-flex justify-content-center">
             <?php echo $permissions->links('pagination::bootstrap-4'); ?>
 

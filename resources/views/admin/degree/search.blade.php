@@ -23,7 +23,7 @@
 @endforeach
 <tr>
     <td colspan="6">
-        Displying {{$degrees->count()}} of {{$degrees->total()}} records
+        Displying {{$degrees->firstItem()}} to {{$degrees->lastItem()}} of {{$degrees->total()}} records
         <div class="d-flex justify-content-center">
             {!! $degrees->links('pagination::bootstrap-4') !!}
         </div>

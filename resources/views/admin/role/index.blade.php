@@ -1,6 +1,7 @@
 @extends('layouts.admin.app')
 @section('title', $page_title)
 @section('content')
+    <input type="hidden" id="page_url" value="{{ route('role.index') }}">
     <section class="content-header">
         <div class="content-header-left">
             <h1>All Roles</h1>
@@ -27,6 +28,13 @@
                             <div class="col-sm-1">Search:</div>
                             <div class="d-flex col-sm-11">
                                 <input type="text" id="search" class="form-control" placeholder="Search" style="margin-bottom:5px">
+                            </div>
+                            <div class="d-flex col-sm-5" style="display: none">
+                                <select name="" id="status" class="form-control status" style="margin-bottom:5px">
+                                    <option value="All" selected>Search by status</option>
+                                    <option value="1">Active</option>
+                                    <option value="2">In-Active</option>
+                                </select>
                             </div>
                         </div>
                         <table id="" class="table table-bordered table-striped">
@@ -56,7 +64,7 @@
                                 @endforeach
                                 <tr>
                                     <td colspan="4">
-                                        Displying {{$roles->count()}} of {{$roles->total()}} records
+                                        Displying {{$roles->firstItem()}} to {{$roles->lastItem()}} of {{$roles->total()}} records
                                         <div class="d-flex justify-content-center">
                                             {!! $roles->links('pagination::bootstrap-4') !!}
                                         </div>

@@ -1,5 +1,6 @@
 <?php 
 use App\Models\PageSetting;
+use App\Models\Course;
 
 function globalData()
 {
@@ -9,4 +10,9 @@ function globalData()
         $home_page_data[$page_setting->key] = $page_setting->value;
     }
     return $home_page_data;
+}
+
+function courses($degree)
+{
+    return $courses = Course::where('degree_slug', $degree)->get(['degree_slug', 'title', 'slug']);
 }

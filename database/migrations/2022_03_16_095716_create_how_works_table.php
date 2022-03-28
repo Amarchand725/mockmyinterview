@@ -13,7 +13,7 @@ class CreateHowWorksTable extends Migration
      */
     public function up()
     {
-        Schema::create('work_processes', function (Blueprint $table) {
+        Schema::create('how_works', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('created_by');
             $table->string('title');
@@ -32,6 +32,6 @@ class CreateHowWorksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('work_processes');
+        Schema::dropIfExists('how_works');
     }
 }

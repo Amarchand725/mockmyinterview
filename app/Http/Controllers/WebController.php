@@ -38,7 +38,7 @@ class WebController extends Controller
     {
         $page_title = 'My Profile';
         $languages = Language::where('status', 1)->get();
-        $degrees = Degree::where('status', 1)->get();
+        $degrees = Degree::where('status', 1)->get(['slug', 'title']);
         if(Auth::check() && Auth::user()->hasRole('Candidate')){
             return view('web-views.candidate.my_profile', compact('page_title', 'languages', 'degrees'));
         }elseif(Auth::check() && Auth::user()->hasRole('Interviewer')){

@@ -33,256 +33,318 @@
                     </select>
                 </div>
 
+                <!-- Personl Details -->
                 <div id="tab01" class="tab-contents">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <form role="form">
+                    <form id="personal-details" method="post" action="{{ route('my_profile.personal_details') }}">
+                        @csrf
+                        @php $user_details = isset(Auth::user()->hasUserDetails)?Auth::user()->hasUserDetails:null; @endphp 
+                        <div class="row">
+                            <div class="col-md-6">
                                 <div class="form-group float-label-control">
-                                    <label for="">First Name  </label>
-                                    <input type="email" class="form-control" placeholder="First Name">
+                                    <label for="first_name">First Name  </label>
+                                    <input type="name" name="name" class="form-control" value="{{ Auth::user()->name }}" id="first_name" placeholder="First Name">
                                 </div>
                                 <div class="form-group float-label-control">
-                                    <label for="">Last Name</label>
-                                    <input type="text" class="form-control" placeholder="Last Name">
+                                    <label for="last_name">Last Name</label>
+                                    <input type="text" name="last_name" class="form-control" value="{{ Auth::user()->last_name }}" id="last_name" placeholder="Last Name">
                                 </div>
                                 <div class="form-group float-label-control">
-                                    <label for="">Email</label>
-                                    <input type="email" class="form-control" placeholder="email">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" readonly value="{{ Auth::user()->email }}" id="email" placeholder="email">
                                 </div>
                                 <div class="form-group float-label-control">
-                                    <label for="">Number</label>
-                                    <input type="number" class="form-control" placeholder="Number">
+                                    <label for="phone">Phone</label>
+                                    <input type="text" name="phone" class="form-control" value="{{ Auth::user()->phone }}" id="phone" placeholder="Phone">
                                 </div>
                                 <div class="form-group float-label-control">
-                                    <label for="">Date of Birth</label>
-                                    <input type="text" class="form-control my_profile" placeholder="Date of Birth">
+                                    <label for="date_of_birth">Date of Birth</label>
+                                    <input type="text" name="date_of_birth" value="{{ !empty($user_details)?$user_details->date_of_birth:'' }}" class="form-control datepicker" id="date_of_birth" placeholder="Date of Birth">
                                 </div>
-                                <div class="form-group float-label-control">
-                                    <label for="">Gender</label>
-                                    <input type="name" class="form-control" placeholder="Gender">
+                                <div class="form-check">
+                                    @if(!empty($user_details) && $user_details->gender=='male')
+                                        <input class="form-check-input" type="radio" value="male" name="gender" id="male" checked>
+                                    @else 
+                                        <input class="form-check-input" type="radio" value="male" name="gender" id="male">
+                                    @endif
+                                    <label class="form-check-label" for="male">
+                                        Male
+                                    </label>
                                 </div>
-                            </form>
-                        </div>
-                        <div class="col-md-6 language">
-                            <div class="form-group float-label-control">
-                                <label for="">Address</label>
-                                <textarea class="form-control" placeholder="Address" rows="1"></textarea>
+                                <div class="form-check">
+                                    @if(!empty($user_details) && $user_details->gender=='female')
+                                        <input class="form-check-input" type="radio" value="female" name="gender" id="female" checked>
+                                    @else 
+                                        <input class="form-check-input" type="radio" value="female" name="gender" id="female">
+                                    @endif
+                                    <label class="form-check-label" for="female">
+                                        Female
+                                    </label>
+                                </div>
                             </div>
-                            <label for="country">Languages Known (Hold shift/ctrl to select more than one language)</label>
-                            <select class="form-select select2" aria-label="Default select example">
-                                <option selected>Select Language</option>
-                                @foreach ($languages as $language)
-                                    <option value="{{ $language->slug }}">{{ $language->title }}</option>
-                                @endforeach    
-                            </select>
+                            <div class="col-md-6 language">
+                                <div class="form-group float-label-control">
+                                    <label for="address">Address</label>
+                                    <textarea name="address" class="form-control" id="address" placeholder="Address" rows="4">{{ !empty($user_details)?$user_details->address:'' }}</textarea>
+                                </div>
+                                <label for="language">Languages Known (Hold shift/ctrl to select more than one language)</label>
+                                <select class="form-select select2" name="language_slug" id="language">
+                                    @foreach ($languages as $language)
+                                        <option value="{{ $language->slug }}" {{ !empty($user_details)?($user_details->language_slug==$language->slug?'selected':''):'' }}>{{ $language->title }}</option>
+                                    @endforeach    
+                                </select>
+                                <div class="form-group float-label-control">
+                                    <label for="skype_id">Skype ID</label>
+                                    <input type="name" name="skype_id" class="form-control" value="{{ !empty($user_details)?$user_details->skype_id:'' }}" id="skype_id" placeholder="Skype ID">
+                                </div>
+                            </div>
                             <div class="form-group float-label-control">
-                                <label for="">Skype ID</label>
-                                <input type="name" class="form-control" placeholder="Skype ID">
+                                <button type="submit" class="btn btn-info">Save</button>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
 
-                <!-- end of tab 1 -->
+                <!-- Qualification & Qualification Details -->
                 <div id="tab02" class="tab-contents">
-                    <div id="edu ">
-                        <div id="edu1">
-                            <div class="row ">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="college">College</label>
-                                        <input type="text" name="edu1_college" id="edu1_college" class="form-control">
+                    @php 
+                        $qualifications = isset(Auth::user()->hasUserQualification)?Auth::user()->hasUserQualification:null;
+                        $qualification_details = isset(Auth::user()->hasUserQualificationDetails)?Auth::user()->hasUserQualificationDetails:null;
+                    @endphp 
+                    <form id="qualification-details" method="post" action="{{ route('my_profile.qualifications') }}">
+                        @csrf
+                        <div class="row institute">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="institute">Institute</label>
+                                    <input type="text" name="institutes[]" id="institute" class="form-control" placeholder="Enter institute name">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="degree">Degree</label>
+                                    <select name="degrees[]" class="form-control select2 degree" id="">
+                                        <option value="" selected>Select degree</option>
+                                        @foreach ($degrees as $degree)
+                                            <option value="{{ $degree->slug }}">{{ $degree->title }}</option>
+                                        @endforeach
+                                    </select>   
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="course">Course</label>
+                                    <select name="courses[]" id="courses" class="form-control selecte2">
+                                        <option value="" selected>Select course</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="passing_year">Year of Passing</label>
+                                    <input type="text" class="form-control" id="passing_year" name="passing_years[]" placeholder="Year e.g 2022">
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="tool-tip">
+                                    <div class="title">
+                                        <button type="button" data-degrees="{{ $degrees }}" id="institute-btn" class="blue-btn-small">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="degree">Degree</label>
-                                        <select name="degree" class="form-control select2 degree" id="">
-                                            <option value="" selected>Select degree</option>
-                                            @foreach ($degrees as $degree)
-                                                <option value="{{ $degree->slug }}">{{ $degree->title }}</option>
-                                            @endforeach
-                                        </select>   
+                            </div>
+                        </div>
+                        @if(!empty($qualifications))
+                            @foreach ($qualifications as $key=>$qualification)
+                                @php 
+                                    $courses = courses($qualification->degree_slug);
+                                @endphp 
+                                <div class="row institute">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <input type="text" name="institutes[]" id="institute" class="form-control" value="{{ $qualification->institute }}" placeholder="Enter institute name">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label for="course">Course</label>
-                                        <select name="course" id="courses" class="form-control selecte2">
-                                        </select>
-                                        <input type="text" name="edu1_course" class="form-control ng-pristine ng-untouched ng-valid" ng-model="input.edu[1].course" id="eduT1_course" aria-invalid="false" style="display: none;">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <select name="degrees[]" class="form-control select2 degree" id="">
+                                                <option value="" selected>Select degree</option>
+                                                @foreach ($degrees as $degree)
+                                                    <option value="{{ $degree->slug }}" {{ $qualification->degree_slug==$degree->slug?'selected':'' }}>{{ $degree->title }}</option>
+                                                @endforeach
+                                            </select>   
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="yearOfPassing">Year of Passing</label>
-                                        <input type="text" class="form-control" name="passing_year">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <select name="courses[]" id="courses" class="form-control selecte2">
+                                                <option value="" selected>Select course</option>
+                                                @foreach ($courses as $course)
+                                                    <option value="{{ $course->slug }}" {{ $qualification->course_slug==$course->slug?'selected':'' }}>{{ $course->title }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="tool-tip">
-                                        <div class="title">
-                                            <button id="addEducationinterviewerProfile" class="blue-btn-small">
-                                                <i class="fa fa-plus"></i>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <input type="text" value="{{ $qualification->passing_year }}" class="form-control" id="passing_year" name="passing_years[]" placeholder="Year e.g 2022">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="tool-tip">
+                                            <button type="button" data-degrees="{{ $degrees }}" id="remove-btn" style="background-color:#b92b2b" class="blue-btn-small ml-2">
+                                                <i class="fa fa-times"></i>
                                             </button>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <span id="added-more"></span>
-                        </div>
-                    </div>
+                                </div>   
+                            @endforeach
+                        @endif
+                        <span id="added-more"></span>    
 
-                    <div class="form-group float-label-control">
-                        <label for="">Achievemnts</label>
-                        <textarea class="form-control" placeholder="Achievemnts" rows="5"></textarea>
-                    </div>
-                    <div class="form-group float-label-control">
-                        <label for="">Awards</label>
-                        <textarea class="form-control" placeholder="Awards" rows="5"></textarea>
-                    </div>
-                    <div class="form-group float-label-control">
-                        <label for="">Additional data</label>
-                        <textarea class="form-control" placeholder="Additional" rows="5"></textarea>
-                    </div>
+                        <div class="form-group float-label-control">
+                            <label for="achievement">Achievemnts</label>
+                            <textarea class="form-control" id="achievement" name="achievements" placeholder="Achievemnts" rows="5">{{ isset($qualification_details->achievements)?$qualification_details->achievements:'' }}</textarea>
+                        </div>
+                        <div class="form-group float-label-control">
+                            <label for="awards">Awards</label>
+                            <textarea class="form-control" id="awards" name="awards" placeholder="Awards" rows="5">{{ isset($qualification_details->awards)?$qualification_details->awards:'' }}</textarea>
+                        </div>
+                        <div class="form-group float-label-control">
+                            <label for="additional">Additional </label>
+                            <textarea class="form-control" id="additional" name="additional_data" placeholder="Additional" rows="5">{{ isset($qualification_details->additional_data)?$qualification_details->additional_data:'' }}</textarea>
+                        </div>
+                        <div class="form-group float-label-control">
+                            <button type="submit" class="btn btn-info">Save</button>
+                        </div>
+                    </form>
                 </div>
 
+                <!-- Experience & Experience Details -->
                 <div id="tab03" class="tab-contents">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="col-md-12">
-                                <label for="Title">Title</label>
+                    <form id="experience-details" method="post" action="{{ route('my_profile.experience') }}">
+                        @csrf
+                        <div class="row experience">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="position">Position</label>
+                                    <input type="text" name="positions[]" class="form-control" placeholder="Enter position">
+                                </div>
                             </div>
-                            <div class="col-md-12">
-                                <input type="text" class="form-control ng-pristine ng-valid ng-valid-maxlength ng-touched" aria-invalid="false">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="col-md-12">
-                                <label for="Company">Company</label>
-                            </div>
-                            <div class="col-md-12">
-                                <input type="text" class="form-control ng-pristine ng-valid ng-valid-maxlength ng-touched" aria-invalid="false">
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="clearfix mb-3"></div>
-                    <div id="edu1">
-                        <div class="row ">
-                            <div class="col-md-10">
-                                <label for="job"> job Summary</label>
-                                <textarea name="awards" rows="3" id="interviewerProfilePersonalAwards" cols="50" class="form-control ng-pristine ng-valid ng-binding ng-touched" ng-model="input.awards" aria-multiline="true" aria-invalid="false" spellcheck="false"></textarea>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="Company">Company</label>
+                                    <input type="text" name="companieds[]" class="form-control" placeholder="Enter company name">
+                                </div>
                             </div>
                             <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="joining_dates">Joining Date</label>
+                                    <input class="form-control datepicker" name="joining_dates[]" id="joining-date" placeholder="Select joining date">
+                                    <span id="error-joining-date"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="leaving_date">leaving Date</label>
+                                    <input type="text" name="leaving_date[]" class="form-control datepicker" id="leaving-date" placeholder="Select leaving date">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="leaving_date">Experience</label>
+                                    <input type="text" name="experiences[]" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
                                 <div class="tool-tip">
                                     <div class="title">
-
-                                        <button id="addEducationinterviewerProfile" class="blue-btn-small">
-                                                        Add
-                                                    </button>
+                                        <button type="button" id="experience-btn" class="blue-btn-small">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
+                        
+                        <span id="added-more-experience"></span>
 
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <div class="col-md-12">
-                                    <label for="Title">Total experience(in years)</label>
-                                </div>
-                                <div class="col-md-12">
-                                    <input type="text" class="form-control ng-pristine ng-valid ng-valid-maxlength ng-touched" aria-invalid="false">
-                                </div>
-
+                        <div class="clearfix mb-3"></div>
+                        <div class="row ">
+                            <div class="form-group">
+                                <label for="summar">Summary</label>
+                                <textarea name="summary" rows="3" id="summar" class="form-control" placeholder="Enter summary"></textarea>
                             </div>
-                            <div class="col-md-6">
-                                <div class="col-md-12">
-                                    <label for="Company">                                 
-                                            Expertise Details
-                                    </label>
-                                </div>
-                                <div class="col-md-12">
-                                    <input type="text" class="form-control ng-pristine ng-valid ng-valid-maxlength ng-touched" aria-invalid="false">
-                                </div>
-                            </div>
-
                         </div>
-
-                    </div>
-
-
-
+                        <div class="row ">
+                            <div class="form-group">
+                                <label for="experties">Expertise Details</label>
+                                <textarea name="expertise" rows="3" id="experties" class="form-control" placeholder="Enter experties"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-info">Save</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
 
-
-
-                <!-- end of tab 3 -->
+                <!-- Resume -->
                 <div id="tab04" class="tab-contents">
-
                     <form action="/action_page.php">
                         <div class="row">
-                            <div class="col-md-6">
-                                <div>
-                                    <label for="upload">Resume</label>
-                                </div>
-                                <div>
-                                    <input type="file" id="myFile" name="filename2">
-
-                                </div>
-                            </div>
-                            <div class="col-md-6 mt-4 mb-4">
-                                <button type="submit" class="btn btn-primary pull-right blue-btn-small">Upload</button>
-
+                            <div class="form-group">
+                                <label for="upload">Resume</label>
+                                <input type="file" id="myFile" class="form-control" name="resume">
                             </div>
                             <div class="form-group float-label-control">
                                 <label for="">LinkedIn Url  </label>
                                 <input type="text" class="form-control" placeholder="LinkedIn Url">
                             </div>
                         </div>
-
-
-
-
+                        <div class="row">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-info">Save</button>
+                            </div>
+                        </div>
                     </form>
                 </div>
-                <div id="tab05" class="tab-contents">
 
+                <!-- Interview Type -->
+                <div id="tab05" class="tab-contents">
                     <div class="form-check">
                         <div class="row">
                             <div class="col-md-4">
-                                <div>
+                                <div class="div">
                                     <label for="interview">
-                                    Interview type
-                                </label>
+                                        Interview type
+                                    </label>
                                 </div>
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">
-                                Technical
-                            </label>
-                                <div class="mt-3">
-                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                    <label class="form-check-label" for="defaultCheck1">
-                                    HR
+                                <input class="form-check-input" type="checkbox" value="" id="technical">
+
+                                <label class="form-check-label" for="technical">
+                                    Technical
                                 </label>
+                                <div class="mt-3">
+                                    <input class="form-check-input" type="checkbox" value="" id="hr">
+
+                                    <label class="form-check-label" for="hr">
+                                        HR
+                                    </label>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-5 mt-3">
-                                    <button type="submit" class="btn btn-primary pull-left blue-btn-small">Save</button>
+                                    <button type="submit" class="btn btn-info">Save</button>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
 
-
-                <!-- end of 5  -->
+                <!-- Password Update  -->
                 <div id="tab06" class="tab-contents">
-
                     <form role="form">
                         <div class="form-group float-label-control">
                             <label for="">Current Password  </label>
@@ -298,12 +360,9 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12 mt-3">
-                                <button type="submit" class="btn btn-primary pull-right blue-btn-small">Update</button>
+                                <button type="submit" class="btn btn-info">Save</button>
                             </div>
                         </div>
-
-
-
                     </form>
                 </div>
             </div>
@@ -312,8 +371,125 @@
 @endsection
 @push('js')
     <script>
+        $(document).on('change', '#joining-date', function(){
+            var joining_date = $(this).val();
+            var leaving_date = $('#leaving-date').val();
+            if(joining_date > leaving_date){
+                $('#error-joining-date').html('Joining date should be less than leaving date.');
+            }else{
+                $('#error-joining-date').html('');
+            }
+        });
+        $(document).on('change', '#leaving-date', function(){
+            var leaving_date = $(this).val();
+            var joining_date = $('#joining-date').val();
+            if(leaving_date < leaving_date){
+                $('#error-joining-date').html('Leaving date should be greater than leaving date.');
+                return false; 
+            }else{
+                $('#error-joining-date').html('');
+            }
+            // Below one is the single line logic to calculate the no. of years...
+            var years = new Date(new Date(joining_date) - new Date(leaving_date)).getFullYear() - 1970;
+            alert(years);
+        });
+        /* document.getElementById('getYearsBtn').addEventListener('click', function () {
+            var enteredDate = document.getElementById('sampleDate').value;
+            // Below one is the single line logic to calculate the no. of years...
+            var years = new Date(new Date() - new Date(enteredDate)).getFullYear() - 1970;
+            console.log(years);
+        }); */
+
+        $(document).on('click', '#experience-btn', function(){
+            var html = '<div class="row experience">'+
+                            '<div class="col-md-2">'+
+                                '<div class="form-group">'+
+                                    '<input type="text" class="form-control" placeholder="Enter position">'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="col-md-3">'+
+                                '<div class="form-group">'+
+                                    '<input type="text" class="form-control" placeholder="Enter company name">'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="col-md-2">'+
+                                '<div class="form-group">'+
+                                    '<input type="text" class="form-control" placeholder="Select joining date">'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="col-md-2">'+
+                                '<div class="form-group">'+
+                                    '<input type="text" class="form-control" placeholder="Select leaving date">'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="col-md-2">'+
+                                '<div class="form-group">'+
+                                    '<input type="text" class="form-control" readonly>'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="col-md-1">'+
+                                '<div class="tool-tip">'+
+                                    '<button type="button" id="experience-remove-btn" style="background-color:#b92b2b" class="blue-btn-small ml-2">'+
+                                        '<i class="fa fa-times"></i>'+
+                                    '</button>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>';
+                $('#added-more-experience').append(html);
+        });
+
+        $(document).on('click', '#experience-remove-btn', function(){
+            $(this).parents('.experience').remove();
+        });
+
+        $(document).on('click', '#institute-btn', function(){
+            var degrees = $(this).data('degrees');
+            var html = '<div class="row institute">'+
+                            '<div class="col-md-3">'+
+                                '<div class="form-group">'+
+                                    '<input type="text" name="institutes[]" id="institute" class="form-control" placeholder="Enter institute name">'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="col-md-3">'+
+                                '<div class="form-group">'+
+                                    '<select name="degrees[]" class="form-control select2 degree" id="">'+
+                                        '<option value="" selected>Select degree</option>';
+                                        jQuery.each(degrees, function(index, val) {
+                                            html += '<option value="'+val.slug+'">'+val.title+'</option>';
+                                        });
+                                    html += '</select>'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="col-md-3">'+
+                                '<div class="form-group">'+
+                                    '<select name="courses[]" id="courses" class="form-control selecte2">'+
+                                        '<option value="" selected>Select course</option>'+
+                                    '</select>'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="col-md-2">'+
+                                '<div class="form-group">'+
+                                    '<input type="text" class="form-control" name="passing_years[]" placeholder="Year e.g 2022">'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="col-md-1">'+
+                                '<div class="tool-tip">'+
+                                    '<button type="button" id="remove-btn" style="background-color:#b92b2b" class="blue-btn-small ml-2">'+
+                                        '<i class="fa fa-times"></i>'+
+                                    '</button>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>';
+                $('#added-more').append(html);
+        });
+
+        $(document).on('click', '#remove-btn', function(){
+            $(this).parents('.institute').remove();
+        });
+
         $(document).on('change', '.degree', function(){
             var degree_slug = $(this).val();
+            var current = $(this);
             $.ajax({
                 type:'GET',
                 url:'{{ url("get_courses") }}/'+degree_slug,
@@ -322,21 +498,16 @@
                     jQuery.each(response, function(index, val) {
                         html += '<option value="'+val.slug+'">'+val.title+'</option>';
                     });
-                    $('#courses').html(html);
+                    $(current).parents('.institute').find('#courses').html(html);
                 }
             });
         })
-
+        
         $(document).ready(function() {
             $('.button-left').click(function() {
                 $('.sidebar').toggleClass('fliph');
             });
-
         });
-
-        /* $(function() {
-            $('.selectpicker').selectpicker();
-        }); */
 
         $(function() {
             var $tabButtonItem = $('#tab-button li'),

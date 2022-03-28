@@ -1,3 +1,4 @@
+
 <?php $__env->startSection('title', $page_title); ?>
 <?php $__env->startSection('content'); ?>
 <input type="hidden" id="page_url" value="<?php echo e(route('blog.index')); ?>">
@@ -86,7 +87,7 @@
 							<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <td colspan="9">
-                                    Displying <?php echo e($models->count()); ?> of <?php echo e($models->total()); ?> records
+									Displying <?php echo e($models->firstItem()); ?> to <?php echo e($models->lastItem()); ?> of <?php echo e($models->total()); ?> records
                                     <div class="d-flex justify-content-center">
                                         <?php echo $models->links('pagination::bootstrap-4'); ?>
 
