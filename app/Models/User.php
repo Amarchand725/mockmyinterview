@@ -61,4 +61,16 @@ class User extends Authenticatable
     {
         return $this->hasOne(QualificationDetail::class, 'user_id', 'id');
     }
+    public function hasUserExperiences()
+    {
+        return $this->hasMany(Experience::class, 'user_id', 'id');
+    }
+    public function hasUserExperienceDetails()
+    {
+        return $this->hasOne(ExperienceDetail::class, 'user_id', 'id');
+    }
+    public function hasResume()
+    {
+        return $this->hasOne(Resume::class, 'user_id', 'id');
+    }
 }

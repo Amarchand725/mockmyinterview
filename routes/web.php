@@ -50,9 +50,6 @@ Route::get('schedule-interview', 'CandidateController@scheduleInterview')->name(
 Route::get('report', 'CandidateController@report')->name('report');
 Route::get('test_setup', 'CandidateController@testSetup')->name('test_setup');
 Route::get('notifications', 'CandidateController@notifications')->name('notifications');
-Route::post('my_profile/personal_details', 'CandidateController@personalDetails')->name('my_profile.personal_details');
-Route::post('my_profile/qualifications', 'CandidateController@qualifications')->name('my_profile.qualifications');
-Route::post('my_profile/experience', 'CandidateController@experiences')->name('my_profile.experience');
 //Candidate
 
 //Interviewer
@@ -60,6 +57,14 @@ Route::get('booked-interviews', 'InterviewerController@bookedInterviews')->name(
 Route::get('blog-resources', 'InterviewerController@resources')->name('blog-resources');
 Route::get('buy-credits', 'InterviewerController@buyCredits')->name('buy-credits');
 Route::get('refer_and_earn', 'InterviewerController@referAndEarn')->name('refer_and_earn');
+//my profile
+Route::post('my_profile/personal_details', 'InterviewerController@personalDetails')->name('my_profile.personal_details');
+Route::post('my_profile/qualifications', 'InterviewerController@qualifications')->name('my_profile.qualifications');
+Route::post('my_profile/experience', 'InterviewerController@experiences')->name('my_profile.experience');
+Route::get('calculate-experience', 'InterviewerController@calculateExperience')->name('calculate-experience');
+Route::post('my_profile/resume', 'InterviewerController@resume')->name('my_profile.resume');
+Route::post('my_profile/interview', 'InterviewerController@interview')->name('my_profile.interview');
+Route::post('my_profile/password', 'InterviewerController@password')->name('my_profile.password');
 //Interviewer
 
 //Roles

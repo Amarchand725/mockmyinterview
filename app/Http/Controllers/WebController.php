@@ -40,9 +40,9 @@ class WebController extends Controller
         $languages = Language::where('status', 1)->get();
         $degrees = Degree::where('status', 1)->get(['slug', 'title']);
         if(Auth::check() && Auth::user()->hasRole('Candidate')){
-            return view('web-views.candidate.my_profile', compact('page_title', 'languages', 'degrees'));
+            return view('web-views.candidate.my_profile', compact('page_title'));
         }elseif(Auth::check() && Auth::user()->hasRole('Interviewer')){
-            return view('web-views.interviewer.my_profile', compact('page_title'));
+            return view('web-views.interviewer.my_profile', compact('page_title', 'languages', 'degrees'));
         }
     }
     public function login()

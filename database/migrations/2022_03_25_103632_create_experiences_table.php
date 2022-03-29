@@ -20,8 +20,7 @@ class CreateExperiencesTable extends Migration
             $table->string('company');
             $table->date('joining_date');
             $table->date('leaving_date')->nullable();
-            $table->float('total_years')->nullable();
-            $table->text('summary')->nullable();
+            $table->float('experiences')->nullable();
             $table->timestamps();
         });
     }
