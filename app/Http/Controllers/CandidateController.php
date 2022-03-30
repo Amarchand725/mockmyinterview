@@ -3,16 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\UserDetail;
-use App\Models\Qualification;
-use App\Models\QualificationDetail;
-use App\Models\Experience;
-use App\Models\ExperienceDetail;
-use App\Models\Resume;
-use Auth;
-use DateTime;
-use Hash;
 
 class CandidateController extends Controller
 {
@@ -22,8 +12,8 @@ class CandidateController extends Controller
     }
     public function scheduleInterview()
     {
-        $page_title = 'Interview Scheduler';
-        return view('web-views.candidate.schedule_interview', compact('page_title'));
+        $page_title = 'Book Interview';
+        return view('web-views.candidate.book_interview', compact('page_title'));
     }
 
     public function report()

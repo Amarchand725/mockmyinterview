@@ -26,12 +26,39 @@
                         </span>
                     </div>
                     <div class="col-md-12 mt-3">
-                        <div class="col-md-6 padding-none ng-scope" ng-if="user.group == 1">
-                            <button class="btn-default-enabled " type="button" ng-click="update_email()"><span style="text-align:center;">Update Email</span>
-                            </button> &nbsp;&nbsp;
-                            <button class="btn-default-enabled " type="button" id="verifyemail" ng-click="send_verification_email()"><span style="text-align:center;">Resend Email</span>
-                            </button>
+                        <div class="row padding-none ng-scope" ng-if="user.group == 1">
+                            <div class="col-md-2">
+                                <button class="btn-default-enabled edit-email-btn" type="button">
+                                    <span style="text-align:center;"><i class="fa fa-send"></i> Update Email</span>
+                                </button> 
+                            </div>
+                            <div class="col-md-2">
+                                <form action="<?php echo e(route('send_email')); ?>" method="post">
+                                    <?php echo csrf_field(); ?>
+                                    <input type="hidden" name="email" value="<?php echo e(Auth::user()->email); ?>">
+                                    <input type="hidden" name="type" value="resend">
+                                    <button class="btn-default-enabled " type="submit">
+                                        <i class="fa fa-send"></i> Resend Email
+                                    </button>
+                                </form>
+                            </div>
                         </div>
+                    </div>
+                    <div class="col-md-12 mt-3" id="editable-email" style="display: none">
+                        <form action="<?php echo e(route('send_email')); ?>" method="post">
+                            <?php echo csrf_field(); ?>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                <input type="email" name="email" class="form-control ng-pristine ng-valid ng-touched" placeholder="Enter your email*" required>
+                                <span style="color:red"><?php echo e($errors->first('email')); ?></span>
+                                <span class="input-group-btn ">
+                                    <button class="blue-btn-small p-2" type="submit" data-toggle="tooltip" data-placement="top" title="Click to submit email">
+                                        <i class="fa fa-send"></i> Update
+                                    </button>
+                                </span>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -118,5 +145,16 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('js'); ?>
+    <script>
+        $(document).on('click', '.edit-email-btn', function(){
+            if(!$(this).hasClass('edit-email')){
+                $(this).addClass("edit-email");
+                $('#editable-email').css('display', 'block');
+            }else{
+                $(this).removeClass("edit-email");
+                $('#editable-email').css('display', 'none');
+            }
+        });
+    </script>
 <?php $__env->stopPush(); ?>
 <?php echo $__env->make('web-views.dashboard.master.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/web-views/dashboard/candidate.blade.php ENDPATH**/ ?>

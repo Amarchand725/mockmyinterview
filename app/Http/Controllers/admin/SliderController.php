@@ -53,7 +53,7 @@ class SliderController extends Controller
         $slider = new Slider();
 
         if (isset($request->left_sec_image)) {
-            $photo = $request->file('left_sec_image')->getClientOriginalName();
+            $photo = date('d-m-Y-His').'.'.$request->file('left_sec_image')->getClientOriginalExtension();
             $request->left_sec_image->move(public_path('/admin/assets/images/slider'), $photo);
 
             $slider->left_sec_image = $photo;
@@ -86,7 +86,7 @@ class SliderController extends Controller
         $slider = Slider::find($id);
 
         if (isset($request->left_sec_image)) {
-            $photo = $request->file('left_sec_image')->getClientOriginalName();
+            $photo = date('d-m-Y-His').'.'.$request->file('left_sec_image')->getClientOriginalExtension();
             $request->left_sec_image->move(public_path('/admin/assets/images/slider'), $photo);
 
             $slider->left_sec_image = $photo;

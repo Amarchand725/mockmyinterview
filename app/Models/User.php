@@ -73,4 +73,12 @@ class User extends Authenticatable
     {
         return $this->hasOne(Resume::class, 'user_id', 'id');
     }
+    public function hasSkills()
+    {
+        return $this->hasOne(Skill::class, 'user_id', 'id');
+    }
+    public function hasProjects()
+    {
+        return $this->hasOne(Project::class, 'user_id', 'id');
+    }
 }

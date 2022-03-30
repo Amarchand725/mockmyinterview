@@ -71,7 +71,7 @@ class AdvantageMockController extends Controller
         $model = new AdvantageMock();
 
         if (isset($request->image)) {
-            $photo = $request->file('image')->getClientOriginalName();
+            $photo = date('d-m-Y-His').'.'.$request->file('image')->getClientOriginalExtension();
             $request->image->move(public_path('/admin/assets/images/advantage'), $photo);
             $model->image = $photo;
         }
@@ -125,7 +125,7 @@ class AdvantageMockController extends Controller
         ]);
 
         if (isset($request->image)) {
-            $photo = $request->file('image')->getClientOriginalName();
+            $photo = date('d-m-Y-His').'.'.$request->file('image')->getClientOriginalExtension();
             $request->image->move(public_path('/admin/assets/images/advantage'), $photo);
             $update->image = $photo;
         }

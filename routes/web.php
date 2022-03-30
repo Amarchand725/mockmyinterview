@@ -17,12 +17,27 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', 'WebController@index');
-Route::get('my_profile', 'WebController@myProfile')->name('my_profile');
+
 Route::get('login', 'WebController@login')->name('login');
 Route::post('user-authenticate', 'WebController@authenticate')->name('user-authenticate');
 Route::get('signup', 'WebController@signUp')->name('signup');
 Route::post('register/store', 'WebController@store')->name('register.store');
 Route::get('email-verification/{token}', 'WebController@verifyEmail')->name('email-verification');
+
+//my profile
+Route::get('my_profile', 'WebController@myProfile')->name('my_profile');
+Route::post('my_profile/personal_details', 'WebController@personalDetails')->name('my_profile.personal_details');
+Route::post('my_profile/qualifications', 'WebController@qualifications')->name('my_profile.qualifications');
+Route::post('my_profile/experience', 'WebController@experiences')->name('my_profile.experience');
+Route::post('my_profile/resume', 'WebController@resume')->name('my_profile.resume');
+Route::post('my_profile/interview', 'WebController@interview')->name('my_profile.interview');
+Route::post('my_profile/password', 'WebController@password')->name('my_profile.password');
+
+//change email with verify
+Route::post('send_email', 'WebController@sendEmail')->name('send_email');
+
+//dates different calculation
+Route::get('calculate-experience', 'WebController@calculateExperience')->name('calculate-experience');
 
 //forgot password
 Route::get('forgot-password', 'WebController@forgotPassword')->name('forgot-password');
@@ -57,14 +72,6 @@ Route::get('booked-interviews', 'InterviewerController@bookedInterviews')->name(
 Route::get('blog-resources', 'InterviewerController@resources')->name('blog-resources');
 Route::get('buy-credits', 'InterviewerController@buyCredits')->name('buy-credits');
 Route::get('refer_and_earn', 'InterviewerController@referAndEarn')->name('refer_and_earn');
-//my profile
-Route::post('my_profile/personal_details', 'InterviewerController@personalDetails')->name('my_profile.personal_details');
-Route::post('my_profile/qualifications', 'InterviewerController@qualifications')->name('my_profile.qualifications');
-Route::post('my_profile/experience', 'InterviewerController@experiences')->name('my_profile.experience');
-Route::get('calculate-experience', 'InterviewerController@calculateExperience')->name('calculate-experience');
-Route::post('my_profile/resume', 'InterviewerController@resume')->name('my_profile.resume');
-Route::post('my_profile/interview', 'InterviewerController@interview')->name('my_profile.interview');
-Route::post('my_profile/password', 'InterviewerController@password')->name('my_profile.password');
 //Interviewer
 
 //Roles

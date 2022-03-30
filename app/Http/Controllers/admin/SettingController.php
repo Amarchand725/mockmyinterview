@@ -19,7 +19,7 @@ class SettingController extends Controller
         $update = Settings::find($id);
 
         if (isset($request->photo_logo)) {
-            $photo_logo = date('dmYhis').$request->file('photo_logo')->getClientOriginalName();
+            $photo_logo = date('d-m-Y-His').'.'.$request->file('photo_logo')->getClientOriginalExtension();
             $Image = $request->photo_logo->move(public_path('/admin/assets/img'), $photo_logo);
             $update->photo_logo = $photo_logo;
             $update->update();

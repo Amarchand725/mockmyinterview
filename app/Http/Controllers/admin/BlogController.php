@@ -72,7 +72,7 @@ class BlogController extends Controller
         $model = new Blog();
 
         if (isset($request->post)) {
-            $post = $request->file('post')->getClientOriginalName();
+            $post = date('d-m-Y-His').'.'.$request->file('post')->getClientOriginalExtension();
             $request->post->move(public_path('/admin/assets/posts'), $post);
             $model->post = $post;
         }
@@ -129,7 +129,7 @@ class BlogController extends Controller
         $model = Blog::where('slug', $slug)->first();
 
         if (isset($request->post)) {
-            $post = $request->file('post')->getClientOriginalName();
+            $post = date('d-m-Y-His').'.'.$request->file('post')->getClientOriginalExtension();
             $request->post->move(public_path('/admin/assets/posts'), $post);
             $model->post = $post;
         }

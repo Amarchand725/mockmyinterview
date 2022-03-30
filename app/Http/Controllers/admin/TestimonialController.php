@@ -54,7 +54,7 @@ class TestimonialController extends Controller
         $testimonail = new Testimonial();
 
         if (isset($request->image)) {
-            $photo = $request->file('image')->getClientOriginalName();
+            $photo = date('d-m-Y-His').'.'.$request->file('image')->getClientOriginalExtension();
             $request->image->move(public_path('/admin/assets/images/testimonials'), $photo);
             $testimonail->image = $photo;
         }
@@ -84,7 +84,7 @@ class TestimonialController extends Controller
         ]);
 
         if (isset($request->image)) {
-            $photo = $request->file('image')->getClientOriginalName();
+            $photo = date('d-m-Y-His').'.'.$request->file('image')->getClientOriginalExtension();
             $Image = $request->image->move(public_path('/uploads'), $photo);
             $update->image = $photo;
         }

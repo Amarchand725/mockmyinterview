@@ -55,12 +55,12 @@ class WhychooseController extends Controller
         $whychoose = new Whychoose();
 
         if (isset($request->image)) {
-            $photo = $request->file('image')->getClientOriginalName();
+            $photo = date('d-m-Y-His').'.'.$request->file('image')->getClientOriginalExtension();
             $request->image->move(public_path('/admin/assets/images/why_choose'), $photo);
             $whychoose->image = $photo;
         }
         if (isset($request->icon)) {
-            $icon = $request->file('icon')->getClientOriginalName();
+            $icon = date('d-m-Y-His').'.'.$request->file('icon')->getClientOriginalExtension();
             $request->icon->move(public_path('/admin/assets/images/why_choose'), $icon);
             $whychoose->icon = $icon;
         }
@@ -89,13 +89,13 @@ class WhychooseController extends Controller
         ]);
 
         if(isset($request->image)) {
-            $photo = $request->file('image')->getClientOriginalName();
+            $photo = date('d-m-Y-His').'.'.$request->file('image')->getClientOriginalExtension();
             $request->image->move(public_path('/admin/assets/images/why_choose'), $photo);
             $update->image = $photo;
         }
 
         if(isset($request->icon)) {
-            $icon = $request->file('icon')->getClientOriginalName();
+            $icon = date('d-m-Y-His').'.'.$request->file('icon')->getClientOriginalExtension();
             $request->icon->move(public_path('/admin/assets/images/why_choose'), $icon);
             $update->icon = $icon;
         }

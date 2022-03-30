@@ -72,7 +72,7 @@ class TeamController extends Controller
         $model = new Team();
 
         if (isset($request->image)) {
-            $photo = $request->file('image')->getClientOriginalName();
+            $photo = date('d-m-Y-His').'.'.$request->file('image')->getClientOriginalExtension();
             $request->image->move(public_path('/admin/assets/images/team'), $photo);
             $model->image = $photo;
         }
@@ -134,7 +134,7 @@ class TeamController extends Controller
         $update = Team::where('slug', $slug)->first();
 
         if (isset($request->image)) {
-            $photo = $request->file('image')->getClientOriginalName();
+            $photo = date('d-m-Y-His').'.'.$request->file('image')->getClientOriginalExtension();
             $request->image->move(public_path('/admin/assets/images/team'), $photo);
             $update->image = $photo;
         }
