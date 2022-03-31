@@ -82,6 +82,7 @@ class BlogController extends Controller
         $model->title = $request->title;
         $model->slug = \Str::slug($request->title);
         $model->description = $request->description;
+        $model->paid_free = $request->paid_free;
         $model->save();
 
         return redirect()->route('blog.index')->with('message', 'blog Added Successfully !');
@@ -138,6 +139,8 @@ class BlogController extends Controller
         $model->title = $request->title;
         $model->slug = \Str::slug($request->title);
         $model->description = $request->description;
+        $model->paid_free = $request->paid_free;
+        $model->status = $request->status;
         $model->save();
 
         return redirect()->route('blog.index')->with('message', 'blog updated Successfully !');

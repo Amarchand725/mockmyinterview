@@ -46,6 +46,23 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">Paid/Free </label>
+							<div class="col-sm-9" style="padding-top:5px">
+							<div class="form-check">
+								<input class="form-check-input" type="radio" value="1" name="paid_free" id="paid" @if($model->paid_free) checked @endif>
+								<label class="form-check-label" for="paid">
+								  Paid
+								</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" value="0" name="paid_free" id="free" @if($model->paid_free==0) checked @endif>
+								<label class="form-check-label" for="free">
+								  Free
+								</label>
+							</div>
+							</div>
+						</div>
+						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Status</label>
 							<div class="col-sm-9">
 								<select name="status" class="form-control" id="">

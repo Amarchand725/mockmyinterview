@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBlogsTable extends Migration
+class CreateBookingTypeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,17 @@ class CreateBlogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('blogs', function (Blueprint $table) {
+        Schema::create('booking_types', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('created_by');
-            $table->string('category_slug');
             $table->string('title');
             $table->string('slug');
-            $table->text('description')->nullable();
-            $table->string('post')->nullable();
-            $table->boolean('paid_free');
+            $table->string('color');
+            $table->string('credits')->nullable();
+            $table->string('type');
+            $table->float('price')->nullable();
+            $table->string('currency_code')->nullable();
+            $table->string('description')->nullable();
             $table->boolean('status')->default(1);
             $table->string('deleted_at')->nullable();
             $table->timestamps();
@@ -35,6 +37,6 @@ class CreateBlogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('blogs');
+        Schema::dropIfExists('booking_types');
     }
 }

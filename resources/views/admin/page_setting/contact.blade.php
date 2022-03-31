@@ -2,7 +2,7 @@
 @section('content')
 <section class="content-header">
 	<div class="content-header-left">
-		<h1>Add Page Setting of <strong>{{ $model->title }}</strong></h1>
+		<h1><strong>{{ $model->title }}</strong></h1>
 	</div>
 	<div class="content-header-right">
 		<a href="{{ route('page.index') }}" class="btn btn-primary btn-sm">View All</a>
@@ -23,24 +23,6 @@
 				<input type="hidden" name="parent_slug" id="" value="{{ $model->slug }}">
 				<div class="box box-info">
 					<div class="box-body">
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Title </label>
-							<div class="col-sm-9">
-								<input type="text" name="mt_contact" class="form-control" value="{{ isset($page_data['mt_contact'])?$page_data['mt_contact']:'' }}" placeholder="Enter meta title">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Keyword </label>
-							<div class="col-sm-9">
-								<textarea class="form-control" name="mk_contact" style="height:60px;" placeholder="Enter meta keyword">{{ isset($page_data['mk_contact'])?$page_data['mk_contact']:'' }}</textarea>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Meta Description </label>
-							<div class="col-sm-9">
-								<textarea class="form-control" name="md_contact" style="height:60px;" placeholder="Enter meta description">{{ isset($page_data['md_contact'])?$page_data['md_contact']:'' }}</textarea>
-							</div>
-						</div>
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Contact Heading </label>
 							<div class="col-sm-9">

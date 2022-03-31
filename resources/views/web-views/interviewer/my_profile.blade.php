@@ -422,18 +422,18 @@
                         @csrf
                         <div class="form-group float-label-control">
                             <label for="password">Current Password  <span style="color: red">*</span></label>
-                            <input type="password" name="current_password" class="form-control" id="password" placeholder="Current Password" required>
-                            <span style="color: red">{{ $errors->first('current_password') }}</span>
-                        </div>
-                        <div class="form-group float-label-control">
-                            <label for="new_password">New password <span style="color: red">*</span></label>
-                            <input type="password" name="password" class="form-control" id="new_password" placeholder="New password" required>
+                            <input type="password" name="password" class="form-control" id="password" placeholder="Current Password" required>
                             <span style="color: red">{{ $errors->first('password') }}</span>
                         </div>
                         <div class="form-group float-label-control">
+                            <label for="new_password">New password <span style="color: red">*</span></label>
+                            <input type="password" name="new_password" class="form-control" id="new_password" placeholder="New password" required>
+                            <span style="color: red">{{ $errors->first('new_password') }}</span>
+                        </div>
+                        <div class="form-group float-label-control">
                             <label for="confirm_password">Confirm Password <span style="color: red">*</span></label>
-                            <input type="password" name="confirm-password" class="form-control" id="confirm_password" placeholder="Confirm Password" required>
-                            <span style="color: red">{{ $errors->first('confirm-password') }}</span>
+                            <input type="password" name="confirmed" class="form-control" id="confirm_password" placeholder="Confirm Password" required>
+                            <span style="color: red">{{ $errors->first('confirmed') }}</span>
                         </div>
                         <div class="row">
                             <div class="col-md-12 mt-3">

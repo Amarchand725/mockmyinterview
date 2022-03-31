@@ -10,7 +10,7 @@ class CandidateController extends Controller
     {
         $this->middleware('permission:schedule interview-list|report-list|test setup-list|notifications-list', ['only' => ['scheduleInterview','report', 'testSetup', 'notifications']]);
     }
-    public function scheduleInterview()
+    public function bookInterview()
     {
         $page_title = 'Book Interview';
         return view('web-views.candidate.book_interview', compact('page_title'));

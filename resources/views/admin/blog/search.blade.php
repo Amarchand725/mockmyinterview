@@ -12,13 +12,19 @@
         <td>{!! \Illuminate\Support\Str::limit($model->title,40) !!}</td>
         <td>{!! \Illuminate\Support\Str::limit($model->description,60) !!}</td>
         <td>
+            @if($model->paid_free)
+                <span class="badge badge-info">Paid</span>
+            @else
+                <span class="badge badge-primary">Free</span>
+            @endif
+        </td>
+        <td>
             @if($model->status)
                 <span class="badge badge-success">Active</span>
             @else
                 <span class="badge badge-danger">In-Active</span>
             @endif
         </td>
-        <td>{{isset($model->hasCreatedBy)?$model->hasCreatedBy->name:'N/A'}}</td>
         <td>{{ date('d, F-Y H:i:s A', strtotime($model->created_at)) }}</td>
         <td width="250px">
             @can('blog-edit')

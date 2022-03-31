@@ -8,9 +8,9 @@
             </li>
             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('schedule interview-list')): ?>
             <li>
-                <a href="<?php echo e(route('schedule-interview')); ?>" class="<?php echo e(request()->is('schedule-interview') ? 'active' : ''); ?>">
+                <a href="<?php echo e(route('book-interview')); ?>" class="<?php echo e(request()->is('book-interview') ? 'active' : ''); ?>">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
-                <span class="nav-label">Schedule Interview</span></a>
+                <span class="nav-label">Book Interview</span></a>
             </li>
             <?php endif; ?>
             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('report-list')): ?>

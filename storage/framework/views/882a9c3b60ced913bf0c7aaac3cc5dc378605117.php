@@ -48,25 +48,25 @@
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                        <label class="form-check-label" for="flexRadioDefault1">
+                                        <input type="radio" name="interview_type" class="form-check-input" id="hr" <?php if(empty(Auth::user()->hasUserQualification)): ?> disabled <?php endif; ?>>
+                                        <label class="form-check-label" for="hr">
                                         HR
                                     </label>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                        <label class="form-check-label" for="flexRadioDefault1">
+                                        <input type="radio" name="interview_type" class="form-check-input" id="technical" <?php if(empty(Auth::user()->hasUserQualification)): ?> disabled <?php endif; ?>>
+                                        <label class="form-check-label" for="technical">
                                         Technical
                                     </label>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                        <label class="form-check-label" for="flexRadioDefault1">
-                                        Specilized
+                                        <input type="radio" name="interview_type" class="form-check-input" id="spacialized" <?php if(empty(Auth::user()->hasUserQualification)): ?> disabled <?php endif; ?>>
+                                        <label class="form-check-label" for="spacialized">
+                                        Specialized
                                     </label>
                                     </div>
                                 </div>
@@ -80,24 +80,24 @@
                 </div>
             </div>
 
-            <!-- scheduling code -->
+            <!-- Booking interview -->
             <main class="container-fluid pt-5">
                 <div class="col-md-12 well bg-white avilable-slots" ng-hide="showSpecialForm" aria-hidden="false">
                     <div class="row m-l-none">
                        <b>
-                          <center>
+                            <center>
                               <span ng-show="isError" class="text-danger ng-binding ng-hide" aria-hidden="true"></span>
-                          </center>
+                            </center>
                        </b>
                     </div>
                     <span class="side-heading-font">
                         Available Slots <span style="font-size:12px !important;font-weight:400 !important;color:inherit; ">&nbsp;&nbsp;<small>(All time slots listed are in IST)</small></span>
                     </span>
                     <div class="col-md-12 text-right">
-                        <a id="previousDay" ng-click="previousDays()" class="bg-slotDisabledColor">
+                        <a href="#" id="previousDay" class="bg-slotDisabledColor prev-day">
                            &lt; Previous Day
                         </a>&nbsp;&nbsp;&nbsp;
-                        <a id="nextDay" class="prev-next-day" ng-click="nextDays()">
+                        <a href="#" id="nextDay" class="prev-next-day next-day">
                             Next Day &gt;
                         </a>
                     </div>
@@ -219,5 +219,18 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('js'); ?>
+    <script>
+        $('.next-day').on("click", function () {
+            var date = $('datepicker').datepicker('getDate');
+            date.setTime(date.getTime() + (1000*60*60*24))
+            $('datepicker').datepicker("setDate", date);
+        });
+
+        $('.prev-day').on("click", function () {
+            var date = $('datepicker').datepicker('getDate');
+            date.setTime(date.getTime() - (1000*60*60*24))
+            $('datepicker').datepicker("setDate", date);
+        });
+    </script>
 <?php $__env->stopPush(); ?>
 <?php echo $__env->make('web-views.dashboard.master.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/web-views/candidate/book_interview.blade.php ENDPATH**/ ?>

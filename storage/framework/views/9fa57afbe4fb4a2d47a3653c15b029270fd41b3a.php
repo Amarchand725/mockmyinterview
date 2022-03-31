@@ -1,3 +1,4 @@
+
 <?php $__env->startSection('title', $page_title); ?>
 <?php $__env->startSection('content'); ?>
 	<section class="content-header">

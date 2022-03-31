@@ -8,9 +8,9 @@
             </li>
             @can('schedule interview-list')
             <li>
-                <a href="{{ route('schedule-interview') }}" class="{{ request()->is('schedule-interview') ? 'active' : '' }}">
+                <a href="{{ route('book-interview') }}" class="{{ request()->is('book-interview') ? 'active' : '' }}">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
-                <span class="nav-label">Schedule Interview</span></a>
+                <span class="nav-label">Book Interview</span></a>
             </li>
             @endcan
             @can('report-list')

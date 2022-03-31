@@ -333,18 +333,21 @@ class WebController extends Controller
     public function password(Request $request)
     {
         $this->validate($request, [
-            'current_password' => 'required',
-            'password' => 'required|min:8|same:confirm-password',
+            'password' => 'required',
+            'new_password' => 'required|max:8|same:confirmed|different:password',
         ]);
 
         $user = User::where('email', Auth::user()->email)->first();
-        if(!empty($user)){
-            $user->password = Hash::make($request->password);
-            $user->update();
-            
+        
+        if (Hash::check($request->password, $user->password)) { 
+           $user->fill([
+            'password' => Hash::make($request->new_password)
+            ])->save();
+        
             return redirect()->back()->with('message', 'You have updated your password successfully!');
-        }else{
-            return redirect()->back()->with('error', 'Something went wrong!');
+        
+        } else {
+            return redirect()->back()->with('error', 'Did not match current password!');
         }
     }
     //my profile

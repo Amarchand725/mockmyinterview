@@ -34,6 +34,13 @@
                 </a>
             </li>
             @endcan
+            @can('booking_type-list')
+            <li class="treeview">
+                <a href="{{ route('booking_type.index') }}" class="{{ request()->is('booking_type') || request()->is('booking_type/*')? 'active' : '' }}">
+                    <i class="fa fa-book"></i> <span>Booking Types</span>
+                </a>
+            </li>
+            @endcan
             @can('language-list')
             <li class="treeview">
                 <a href="{{ route('language.index') }}" class="{{ request()->is('language') || request()->is('language/create') || request()->is('language/*/edit') ? 'active' : '' }}">

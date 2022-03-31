@@ -61,8 +61,8 @@ class PageController extends Controller
 
     public function edit($slug)
     {
-        $page_title = 'Edit Page';
         $model = Page::where('slug', $slug)->first();
+        $page_title = 'Edit '.$model->title;
         return View('admin.page.edit', compact("model", "page_title"));
     }
 

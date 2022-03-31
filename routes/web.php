@@ -61,7 +61,7 @@ Route::get('get_courses/{slug}', 'admin\CourseController@getCourses')->name('get
 //Admin Panel
 
 //Candidate
-Route::get('schedule-interview', 'CandidateController@scheduleInterview')->name('schedule-interview');
+Route::get('book-interview', 'CandidateController@bookInterview')->name('book-interview');
 Route::get('report', 'CandidateController@report')->name('report');
 Route::get('test_setup', 'CandidateController@testSetup')->name('test_setup');
 Route::get('notifications', 'CandidateController@notifications')->name('notifications');
@@ -134,3 +134,6 @@ Route::resource('degree', 'admin\DegreeController');
 
 //course
 Route::resource('course', 'admin\CourseController');
+
+//Booking type
+Route::resource('booking_type', 'admin\BookingTypeController');

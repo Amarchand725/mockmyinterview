@@ -34,6 +34,13 @@
                 </a>
             </li>
             <?php endif; ?>
+            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('booking_type-list')): ?>
+            <li class="treeview">
+                <a href="<?php echo e(route('booking_type.index')); ?>" class="<?php echo e(request()->is('booking_type') || request()->is('booking_type/*')? 'active' : ''); ?>">
+                    <i class="fa fa-book"></i> <span>Booking Types</span>
+                </a>
+            </li>
+            <?php endif; ?>
             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('language-list')): ?>
             <li class="treeview">
                 <a href="<?php echo e(route('language.index')); ?>" class="<?php echo e(request()->is('language') || request()->is('language/create') || request()->is('language/*/edit') ? 'active' : ''); ?>">
