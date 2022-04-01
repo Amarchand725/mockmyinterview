@@ -65,6 +65,7 @@ Route::get('book-interview', 'CandidateController@bookInterview')->name('book-in
 Route::get('report', 'CandidateController@report')->name('report');
 Route::get('test_setup', 'CandidateController@testSetup')->name('test_setup');
 Route::get('notifications', 'CandidateController@notifications')->name('notifications');
+ROute::get('next_pre_date', 'BookedSlotController@nextPreDate')->name('next_pre_date');
 //Candidate
 
 //Interviewer

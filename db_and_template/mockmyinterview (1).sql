@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 22, 2022 at 05:08 PM
+-- Generation Time: Apr 01, 2022 at 05:50 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.4.22
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `mock_interviews`
+-- Database: `mockmyinterview`
 --
 
 -- --------------------------------------------------------
@@ -62,15 +62,13 @@ INSERT INTO `advantage_mocks` (`id`, `created_by`, `title`, `slug`, `description
 CREATE TABLE `blogs` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `created_by` bigint(20) NOT NULL,
-  `category_id` bigint(20) NOT NULL,
+  `category_slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `post` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `paid_free` tinyint(1) DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1,
-  `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `meta_keyword` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `meta_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `deleted_at` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -80,8 +78,41 @@ CREATE TABLE `blogs` (
 -- Dumping data for table `blogs`
 --
 
-INSERT INTO `blogs` (`id`, `created_by`, `category_id`, `title`, `slug`, `description`, `post`, `status`, `meta_title`, `meta_keyword`, `meta_description`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 3, 'Neque omnis autem ul', 'neque-omnis-autem-ul', 'Irure iste pariatur Sapiente dolor aut pariatur Eaque laboriosam ad odit', NULL, 1, NULL, NULL, NULL, NULL, '2022-03-13 07:27:47', '2022-03-13 07:27:47');
+INSERT INTO `blogs` (`id`, `created_by`, `category_slug`, `title`, `slug`, `description`, `post`, `paid_free`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'zena-horton', 'Neque omnis autem ul', 'neque-omnis-autem-ul', 'Irure iste pariatur Sapiente dolor aut pariatur Eaque laboriosam ad odit', NULL, 1, 1, NULL, '2022-03-13 07:27:47', '2022-03-13 07:27:47'),
+(2, 1, 'zena-horton', 'In magnam ea qui cil', 'in-magnam-ea-qui-cil', '<p>tested</p>', NULL, 0, 1, NULL, '2022-03-28 02:54:46', '2022-03-28 02:54:46');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `booking_types`
+--
+
+CREATE TABLE `booking_types` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `created_by` bigint(20) NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `color` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `credits` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` double(8,2) DEFAULT NULL,
+  `currency_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `deleted_at` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `booking_types`
+--
+
+INSERT INTO `booking_types` (`id`, `created_by`, `title`, `slug`, `color`, `credits`, `type`, `price`, `currency_code`, `description`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Priority Booking', 'priority-booking', '#e64757', '1299', 'uno', 18.90, 'USD', 'Voluptatem Dolores', 1, NULL, '2022-03-31 09:04:41', '2022-03-31 09:31:00'),
+(2, 1, 'Standard Booking', 'standard-booking', '#3b8712', '2199', 'duo', 31.99, 'USD', 'Lorem ipsum', 1, NULL, '2022-03-31 09:33:34', '2022-03-31 09:33:34'),
+(3, 1, 'Tentative Booking', 'tentative-booking', '#9f9d9d', NULL, 'trio', NULL, 'USD', 'Lorem ipsum', 1, NULL, '2022-03-31 09:38:20', '2022-03-31 09:38:45');
 
 -- --------------------------------------------------------
 
@@ -93,6 +124,7 @@ CREATE TABLE `categories` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `created_by` bigint(20) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1,
   `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -107,9 +139,9 @@ CREATE TABLE `categories` (
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`id`, `created_by`, `name`, `description`, `status`, `meta_title`, `meta_keyword`, `meta_description`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(2, 1, 'Kiona Kane', 'Quo nesciunt earum iste dignissimos est sunt', 1, NULL, NULL, NULL, NULL, '2022-03-13 06:52:45', '2022-03-13 06:52:45'),
-(3, 1, 'Zena Horton', 'Rerum qui quibusdam id et ut quis', 1, NULL, NULL, NULL, NULL, '2022-03-13 06:52:56', '2022-03-13 06:52:56');
+INSERT INTO `categories` (`id`, `created_by`, `name`, `slug`, `description`, `status`, `meta_title`, `meta_keyword`, `meta_description`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(2, 1, 'Kiona Kane', 'kiona-kane', 'Quo nesciunt earum iste dignissimos est sunt', 1, NULL, NULL, NULL, NULL, '2022-03-13 06:52:45', '2022-03-13 06:52:45'),
+(3, 1, 'Zena Horton', 'zena-horton', 'Rerum qui quibusdam id et ut quis', 1, NULL, NULL, NULL, NULL, '2022-03-13 06:52:56', '2022-03-13 06:52:56');
 
 -- --------------------------------------------------------
 
@@ -130,6 +162,121 @@ CREATE TABLE `comments` (
 
 INSERT INTO `comments` (`id`, `code_body`, `created_at`, `updated_at`) VALUES
 (1, 'asdasd', '2022-02-08 05:49:47', '2022-02-10 08:18:23');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `courses`
+--
+
+CREATE TABLE `courses` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `created_by` bigint(20) NOT NULL,
+  `degree_slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `deleted_at` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `courses`
+--
+
+INSERT INTO `courses` (`id`, `created_by`, `degree_slug`, `title`, `slug`, `description`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'btech', 'Information Technology', 'information-technology', 'IT', 1, NULL, '2022-03-25 09:51:24', '2022-03-25 09:51:24'),
+(2, 1, 'btech', 'Computer Science & Engineering', 'computer-science-engineering', 'CSE', 1, NULL, '2022-03-25 09:51:49', '2022-03-25 09:51:49'),
+(3, 1, 'btech', 'Electronics & Communication Engineering', 'electronics-communication-engineering', 'ECE', 1, NULL, '2022-03-25 09:52:26', '2022-03-25 09:52:26'),
+(4, 1, 'btech', 'Electrical & Electronics Engineering', 'electrical-electronics-engineering', 'EEE', 1, NULL, '2022-03-25 09:53:06', '2022-03-25 09:53:06'),
+(5, 1, 'btech', 'Mechanical Engineering', 'mechanical-engineering', 'ME', 1, NULL, '2022-03-25 09:53:37', '2022-03-25 09:53:37'),
+(6, 1, 'btech', 'Civil Engineering', 'civil-engineering', 'CE', 1, NULL, '2022-03-25 09:53:57', '2022-03-25 09:53:57'),
+(7, 1, 'btech', 'Chemical Engineering', 'chemical-engineering', 'CE', 1, NULL, '2022-03-25 09:54:15', '2022-03-25 09:54:15'),
+(8, 1, 'btech', 'Auto Mobile Engineering', 'auto-mobile-engineering', 'AME', 1, NULL, '2022-03-25 09:54:40', '2022-03-25 09:54:40'),
+(9, 1, 'btech', 'Others', 'others', 'Others course', 1, NULL, '2022-03-25 09:55:04', '2022-03-25 09:55:04');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `degrees`
+--
+
+CREATE TABLE `degrees` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `created_by` bigint(20) NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `deleted_at` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `degrees`
+--
+
+INSERT INTO `degrees` (`id`, `created_by`, `title`, `slug`, `description`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'BTech', 'btech', 'Bachelor in Technology', 1, NULL, '2022-03-25 09:48:12', '2022-03-25 09:48:12'),
+(2, 1, 'BE', 'be', 'Bachelor in Engineering', 1, NULL, '2022-03-25 09:48:32', '2022-03-25 09:48:32'),
+(3, 1, 'MCA', 'mca', 'Master of Computer Applications', 1, NULL, '2022-03-25 09:49:17', '2022-03-25 09:49:17'),
+(4, 1, 'MBA', 'mba', 'Master of Business Administrations', 1, NULL, '2022-03-25 09:49:38', '2022-03-25 09:49:38'),
+(5, 1, 'MTech', 'mtech', 'Master of Technology', 1, NULL, '2022-03-25 09:50:00', '2022-03-25 09:50:00'),
+(6, 1, 'ME', 'me', 'Master of Engineerings', 1, NULL, '2022-03-25 09:50:15', '2022-03-25 09:50:15'),
+(7, 1, 'Others', 'others', 'Any other degree', 1, NULL, '2022-03-25 09:50:49', '2022-03-25 09:50:49');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `experiences`
+--
+
+CREATE TABLE `experiences` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `position` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `company` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `joining_date` date NOT NULL,
+  `leaving_date` date DEFAULT NULL,
+  `experiences` double(8,2) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `experiences`
+--
+
+INSERT INTO `experiences` (`id`, `user_id`, `position`, `company`, `joining_date`, `leaving_date`, `experiences`, `created_at`, `updated_at`) VALUES
+(8, 7, 'Junior Developer', 'Company 1', '2018-06-10', '2022-11-03', 4.40, '2022-03-29 08:23:12', '2022-03-29 08:23:12'),
+(9, 7, 'Mid Level Developer', 'Company 2', '2020-09-03', '2022-10-03', 2.00, '2022-03-29 08:23:12', '2022-03-29 08:23:12');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `experience_details`
+--
+
+CREATE TABLE `experience_details` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `total_experience` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `summary` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `expertise` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `experience_details`
+--
+
+INSERT INTO `experience_details` (`id`, `user_id`, `total_experience`, `summary`, `expertise`, `created_at`, `updated_at`) VALUES
+(1, 7, '6.4', 'My summary -updated', 'Laravel framework of php. updated\r\nmysql\r\ncss3', '2022-03-29 06:24:50', '2022-03-29 08:23:12'),
+(2, 7, '6.4', 'My summary', 'Laravel framework of php.\r\nmysql\r\ncss3', '2022-03-29 08:21:24', '2022-03-29 08:21:24');
 
 -- --------------------------------------------------------
 
@@ -183,6 +330,66 @@ INSERT INTO `help_hires` (`id`, `created_by`, `title`, `slug`, `description`, `i
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `how_works`
+--
+
+CREATE TABLE `how_works` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `created_by` bigint(20) NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `deleted_at` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `how_works`
+--
+
+INSERT INTO `how_works` (`id`, `created_by`, `title`, `slug`, `description`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'CREATE AN ACCOUNT', 'create-an-account', '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porttitor gravida aliquam. Morbi orci urna, iaculis in ligula et, posuere interdum lectus.</p>', 1, NULL, '2022-03-16 05:33:17', '2022-03-16 05:33:17'),
+(2, 1, 'COMPLETE PROFILE', 'complete-profile', '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porttitor gravida aliquam. Morbi orci urna, iaculis in ligula et, posuere interdum lectus.</p>', 1, NULL, '2022-03-16 05:33:30', '2022-03-16 05:33:30'),
+(3, 1, 'SCHEDULE ONE-ON-ONE Interview', 'schedule-one-on-one-interview', '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porttitor gravida aliquam. Morbi orci urna, iaculis in ligula et, posuere interdum lectus.</p>', 1, NULL, '2022-03-16 05:33:49', '2022-03-16 05:33:49'),
+(4, 1, 'PERFORMANCE FEEDBACK', 'performance-feedback', '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porttitor gravida aliquam. Morbi orci urna, iaculis in ligula et, posuere interdum lectus.</p>', 1, NULL, '2022-03-16 05:34:08', '2022-03-16 05:34:08');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `languages`
+--
+
+CREATE TABLE `languages` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `created_by` bigint(20) NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `deleted_at` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `languages`
+--
+
+INSERT INTO `languages` (`id`, `created_by`, `title`, `slug`, `code`, `description`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'English', 'english', 'en', 'International language', 1, NULL, '2022-03-25 09:43:51', '2022-03-25 09:43:51'),
+(2, 1, 'French', 'french', 'fr', 'Lorem ipsum', 1, NULL, '2022-03-25 09:44:21', '2022-03-25 09:44:21'),
+(3, 1, 'Hindi', 'hindi', 'hi', 'Hindi language', 1, NULL, '2022-03-25 09:44:53', '2022-03-25 09:44:53'),
+(4, 1, 'Italian', 'italian', 'it', 'Italian language', 1, NULL, '2022-03-25 09:45:22', '2022-03-25 09:45:22'),
+(5, 1, 'Latin', 'latin', 'la', 'Latin Language', 1, NULL, '2022-03-25 09:45:51', '2022-03-25 09:45:51'),
+(6, 1, 'Urdu', 'urdu', 'ur', 'Urdu Language', 1, NULL, '2022-03-25 09:46:43', '2022-03-25 09:46:43'),
+(7, 1, 'Arabic', 'arabic', 'ar', 'Arabic Language', 1, NULL, '2022-03-25 09:47:23', '2022-03-25 09:47:23');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `migrations`
 --
 
@@ -210,10 +417,23 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (28, '2022_03_14_143426_create_page_settings_table', 19),
 (30, '2022_03_16_082713_create_advantage_mocks_table', 20),
 (32, '2022_02_03_082316_create_services_table', 21),
-(34, '2022_03_16_095716_create_work_processes_table', 22),
+(34, '2022_03_16_095716_create_how_works_table', 22),
 (35, '2022_03_09_150554_create_packages_table', 23),
 (38, '2022_03_09_150411_create_teams_table', 24),
-(39, '2022_03_16_140653_create_help_hires_table', 25);
+(39, '2022_03_16_140653_create_help_hires_table', 25),
+(40, '2022_03_25_103211_create_user_details_table', 26),
+(44, '2022_03_25_104218_create_user_know_languages_table', 30),
+(47, '2022_03_25_111536_create_qualification_details_table', 33),
+(54, '2022_03_25_113514_create_languages_table', 37),
+(55, '2022_03_25_113435_create_degrees_table', 38),
+(58, '2022_03_25_113456_create_courses_table', 39),
+(60, '2022_03_25_103607_create_qualifications_table', 41),
+(62, '2022_03_28_145241_create_experience_details_table', 42),
+(64, '2022_03_25_103632_create_experiences_table', 43),
+(65, '2022_03_25_103702_create_resumes_table', 44),
+(66, '2022_03_25_110315_create_skills_table', 45),
+(67, '2022_03_25_110427_create_projects_table', 46),
+(75, '2022_03_31_113222_create_booking_types_table', 47);
 
 -- --------------------------------------------------------
 
@@ -247,7 +467,34 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (1, 'App\\Models\\User', 1),
 (3, 'App\\Models\\User', 7),
 (6, 'App\\Models\\User', 5),
-(6, 'App\\Models\\User', 6);
+(6, 'App\\Models\\User', 6),
+(6, 'App\\Models\\User', 8),
+(6, 'App\\Models\\User', 9),
+(6, 'App\\Models\\User', 10),
+(6, 'App\\Models\\User', 11),
+(6, 'App\\Models\\User', 12),
+(6, 'App\\Models\\User', 13),
+(6, 'App\\Models\\User', 14),
+(6, 'App\\Models\\User', 15),
+(6, 'App\\Models\\User', 16),
+(6, 'App\\Models\\User', 17),
+(6, 'App\\Models\\User', 18),
+(6, 'App\\Models\\User', 19),
+(6, 'App\\Models\\User', 20),
+(6, 'App\\Models\\User', 21),
+(6, 'App\\Models\\User', 22),
+(6, 'App\\Models\\User', 23),
+(6, 'App\\Models\\User', 24),
+(6, 'App\\Models\\User', 25),
+(6, 'App\\Models\\User', 26),
+(6, 'App\\Models\\User', 27),
+(6, 'App\\Models\\User', 28),
+(6, 'App\\Models\\User', 29),
+(6, 'App\\Models\\User', 30),
+(6, 'App\\Models\\User', 31),
+(6, 'App\\Models\\User', 32),
+(6, 'App\\Models\\User', 33),
+(6, 'App\\Models\\User', 34);
 
 -- --------------------------------------------------------
 
@@ -452,13 +699,21 @@ INSERT INTO `page_settings` (`id`, `parent_slug`, `key`, `value`, `created_at`, 
 (119, 'footer', 'footer_description', '<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s</p>', '2022-03-21 06:36:49', '2022-03-21 06:36:49'),
 (120, 'footer', 'form_blog', NULL, '2022-03-21 06:36:49', '2022-03-21 06:36:49'),
 (121, 'footer', 'footer_app_image', '21032022113649.png', '2022-03-21 06:36:49', '2022-03-21 06:36:49'),
-(122, 'header', '_token', '9I64zkdwB3n0l4djkzvJWdKXbebFl2wVMuYLuqBx', '2022-03-21 06:53:09', '2022-03-21 06:53:09'),
+(122, 'header', '_token', 'wh7riChaXAC2NZ2qSeO3Y933vw5EulCDtVrQKRKh', '2022-03-21 06:53:09', '2022-03-31 10:48:46'),
 (123, 'header', 'parent_slug', 'header', '2022-03-21 06:53:09', '2022-03-21 06:53:09'),
 (124, 'header', 'header_email', 'info@example.com', '2022-03-21 06:53:09', '2022-03-21 06:53:09'),
 (125, 'header', 'header_phone', '+91-9999878398', '2022-03-21 06:53:09', '2022-03-21 06:53:09'),
 (126, 'header', 'form_blog', NULL, '2022-03-21 06:53:09', '2022-03-21 06:53:09'),
 (127, 'header', 'header_logo', '21032022115356.png', '2022-03-21 06:53:09', '2022-03-21 06:53:56'),
-(128, 'header', 'header_favicon', '21032022115309.png', '2022-03-21 06:53:09', '2022-03-21 06:53:09');
+(128, 'header', 'header_favicon', '21032022115309.png', '2022-03-21 06:53:09', '2022-03-21 06:53:09'),
+(139, 'header', 'weekdays_morning_from_time', '11:00', '2022-03-31 10:54:25', '2022-03-31 10:54:25'),
+(140, 'header', 'weekdays_morning_to_time', '13:00', '2022-03-31 10:54:25', '2022-03-31 10:54:25'),
+(141, 'header', 'weekdays_evening_from_time', '17:00', '2022-03-31 10:54:25', '2022-03-31 10:54:25'),
+(142, 'header', 'weekdays_evening_to_time', '23:00', '2022-03-31 10:54:25', '2022-03-31 10:54:25'),
+(143, 'header', 'weekends_morning_from_time', '10:00', '2022-03-31 10:54:25', '2022-03-31 10:54:25'),
+(144, 'header', 'weekends_morning_to_time', '17:00', '2022-03-31 10:54:25', '2022-03-31 10:54:25'),
+(145, 'header', 'weekends_evening_from_time', '17:30', '2022-03-31 10:54:25', '2022-03-31 10:54:25'),
+(146, 'header', 'weekends_evening_to_time', '23:00', '2022-03-31 10:54:25', '2022-03-31 10:54:25');
 
 -- --------------------------------------------------------
 
@@ -471,6 +726,14 @@ CREATE TABLE `password_resets` (
   `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `password_resets`
+--
+
+INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
+('admin@gmail.com', '$2y$10$fRS5diiggPCYLFz8Umegl.pbd8AcsbePifZcho7hJ.uJO7Xt3UIu2', '2022-03-25 02:34:06'),
+('chandamar725@gmail.com', '$2y$10$dkjMZ4dj0fpOsUqq5ZjgI.XanDRaLTQRTJwm/ia.pMXQ3j/fGk/aO', '2022-03-25 04:07:03');
 
 -- --------------------------------------------------------
 
@@ -573,7 +836,23 @@ INSERT INTO `permissions` (`id`, `name`, `guard_name`, `deleted_at`, `created_at
 (94, 'buy & credits-list', 'web', NULL, '2022-03-22 10:41:50', '2022-03-22 10:41:50'),
 (95, 'buy & credits-create', 'web', NULL, '2022-03-22 10:41:50', '2022-03-22 10:41:50'),
 (96, 'refer & earn-list', 'web', NULL, '2022-03-22 10:42:03', '2022-03-22 10:42:03'),
-(97, 'refer & earn-create', 'web', NULL, '2022-03-22 10:42:03', '2022-03-22 10:42:03');
+(97, 'refer & earn-create', 'web', NULL, '2022-03-22 10:42:03', '2022-03-22 10:42:03'),
+(98, 'language-list', 'web', NULL, '2022-03-25 06:42:42', '2022-03-25 06:42:42'),
+(99, 'language-create', 'web', NULL, '2022-03-25 06:42:42', '2022-03-25 06:42:42'),
+(100, 'language-edit', 'web', NULL, '2022-03-25 06:42:42', '2022-03-25 06:42:42'),
+(101, 'language-delete', 'web', NULL, '2022-03-25 06:42:42', '2022-03-25 06:42:42'),
+(102, 'degree-list', 'web', NULL, '2022-03-25 06:42:51', '2022-03-25 06:42:51'),
+(103, 'degree-create', 'web', NULL, '2022-03-25 06:42:51', '2022-03-25 06:42:51'),
+(104, 'degree-edit', 'web', NULL, '2022-03-25 06:42:51', '2022-03-25 06:42:51'),
+(105, 'degree-delete', 'web', NULL, '2022-03-25 06:42:51', '2022-03-25 06:42:51'),
+(106, 'course-list', 'web', NULL, '2022-03-25 06:43:00', '2022-03-25 06:43:00'),
+(107, 'course-create', 'web', NULL, '2022-03-25 06:43:00', '2022-03-25 06:43:00'),
+(108, 'course-edit', 'web', NULL, '2022-03-25 06:43:00', '2022-03-25 06:43:00'),
+(109, 'course-delete', 'web', NULL, '2022-03-25 06:43:00', '2022-03-25 06:43:00'),
+(110, 'booking_type-list', 'web', NULL, '2022-03-31 08:01:28', '2022-03-31 08:01:28'),
+(111, 'booking_type-create', 'web', NULL, '2022-03-31 08:01:28', '2022-03-31 08:01:28'),
+(112, 'booking_type-edit', 'web', NULL, '2022-03-31 08:01:28', '2022-03-31 08:01:28'),
+(113, 'booking_type-delete', 'web', NULL, '2022-03-31 08:01:28', '2022-03-31 08:01:28');
 
 -- --------------------------------------------------------
 
@@ -620,6 +899,105 @@ INSERT INTO `pricingtables` (`id`, `title`, `icon`, `price`, `subtitle`, `text`,
 (1, 'mk', 'mk', '456456', 'mk', '<p>mkmkmk</p>', 'mk', 'mk', '2022-02-08 06:47:08', '2022-02-09 06:27:08'),
 (5, 'asd', 'asd', 'asd', 'asd', '<p>asd</p>', 'asd', 'asd', '2022-02-08 06:47:34', '2022-02-08 06:47:34'),
 (6, 'mk', 'sdfsdf', '1231', 'sdfs', '<p>hello mk</p>', '1', '2', '2022-02-08 06:50:06', '2022-02-08 06:50:06');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `projects`
+--
+
+CREATE TABLE `projects` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `projects` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `projects`
+--
+
+INSERT INTO `projects` (`id`, `user_id`, `projects`, `created_at`, `updated_at`) VALUES
+(1, 6, 'My Projects', '2022-03-30 08:16:06', '2022-03-30 08:16:06');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `qualifications`
+--
+
+CREATE TABLE `qualifications` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `institute` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `degree_slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `course_slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `passing_year` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `qualifications`
+--
+
+INSERT INTO `qualifications` (`id`, `user_id`, `institute`, `degree_slug`, `course_slug`, `passing_year`, `created_at`, `updated_at`) VALUES
+(9, 7, 'Deleniti consequatur', 'btech', 'chemical-engineering', '1985', '2022-03-28 09:51:10', '2022-03-28 09:51:10'),
+(10, 7, 'Inventore omnis quas', 'btech', 'others', '2012', '2022-03-28 09:51:10', '2022-03-28 09:51:10'),
+(11, 7, 'testedd', 'btech', 'electronics-communication-engineering', '1994', '2022-03-28 09:51:10', '2022-03-28 09:51:10'),
+(14, 6, 'Institute 1', 'btech', 'electrical-electronics-engineering', '1994', '2022-03-30 08:16:06', '2022-03-30 08:16:06'),
+(15, 6, 'Institute 2', 'btech', 'civil-engineering', '1985', '2022-03-30 08:16:06', '2022-03-30 08:16:06');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `qualification_details`
+--
+
+CREATE TABLE `qualification_details` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `achievements` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `awards` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `additional_data` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `qualification_details`
+--
+
+INSERT INTO `qualification_details` (`id`, `user_id`, `achievements`, `awards`, `additional_data`, `created_at`, `updated_at`) VALUES
+(1, 7, 'achievements update', 'Award update', 'Additional update', '2022-03-28 09:05:26', '2022-03-28 09:50:48'),
+(2, 6, NULL, NULL, NULL, '2022-03-30 08:06:55', '2022-03-30 08:06:55');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `resumes`
+--
+
+CREATE TABLE `resumes` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `technical` tinyint(1) DEFAULT 0,
+  `hr` tinyint(1) NOT NULL DEFAULT 0,
+  `linkedin_url` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `resume` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `introduction_video` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `resumes`
+--
+
+INSERT INTO `resumes` (`id`, `user_id`, `technical`, `hr`, `linkedin_url`, `resume`, `introduction_video`, `created_at`, `updated_at`) VALUES
+(1, 7, 1, 1, NULL, 'sample.pdf', 'file_example_MP4_480_1_5MG.mp4', '2022-03-29 09:00:51', '2022-03-29 10:14:54'),
+(2, 6, 0, 0, NULL, '30-03-2022-130928.pdf', '30-03-2022-130928.mp4', '2022-03-30 08:09:28', '2022-03-30 08:09:28');
 
 -- --------------------------------------------------------
 
@@ -741,7 +1119,23 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (94, 3),
 (95, 3),
 (96, 3),
-(97, 3);
+(97, 3),
+(98, 1),
+(99, 1),
+(100, 1),
+(101, 1),
+(102, 1),
+(103, 1),
+(104, 1),
+(105, 1),
+(106, 1),
+(107, 1),
+(108, 1),
+(109, 1),
+(110, 1),
+(111, 1),
+(112, 1),
+(113, 1);
 
 -- --------------------------------------------------------
 
@@ -844,6 +1238,27 @@ INSERT INTO `settings` (`id`, `photo_logo`, `photo_favicon`, `top_bar_email`, `t
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `skills`
+--
+
+CREATE TABLE `skills` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `skills` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `skills`
+--
+
+INSERT INTO `skills` (`id`, `user_id`, `skills`, `created_at`, `updated_at`) VALUES
+(1, 6, 'My Skills', '2022-03-30 08:16:06', '2022-03-30 08:16:06');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sliders`
 --
 
@@ -870,7 +1285,8 @@ CREATE TABLE `sliders` (
 --
 
 INSERT INTO `sliders` (`id`, `created_by`, `left_sec_title`, `left_sec_sub_description`, `left_sec_description`, `left_sec_image`, `right_sect_title`, `right_sec_description`, `right_sec_left_btn_lbl`, `right_sec_right_btn_lbl`, `right_sec_video_link`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Compare Interviewers including their fees', '<h4 class=\"font-weight-normal\">Be confident. Compare Interviewers.</h4>', '<h2 class=\"col-12\">leading comparison service and the only place you can compare Interviewers/candidates fees side-by-side.</h2>', 'bg1.jpg', 'Virtual Face-to-Face Mock Interviews with industry Experts', 'Live | On-demand | Anywhere', 'Learn More', 'Sign Up', 'https://www.youtube.com/watch?v=jDDaplaOz7Q', 1, NULL, '2022-03-14 08:01:28', '2022-03-16 09:59:23');
+(1, 1, 'Compare Interviewers including their fees', '<h4 class=\"font-weight-normal\">Be confident. Compare Interviewers.</h4>', '<h2 class=\"col-12\">leading comparison service and the only place you can compare Interviewers/candidates fees side-by-side.</h2>', 'bg1.jpg', 'Virtual Face-to-Face Mock Interviews with industry Experts', 'Live | On-demand | Anywhere', 'Learn More', 'Sign Up', 'https://www.youtube.com/watch?v=jDDaplaOz7Q', 1, NULL, '2022-03-14 08:01:28', '2022-03-16 09:59:23'),
+(2, 1, 'Delectus eum ullam', 'Doloremque magni cum', '<p>tested</p>', 'download.png', 'At at aut ab dolor i', 'Culpa unde proident', 'Eum sed quis incidun', 'Assumenda rerum minu', NULL, 1, NULL, '2022-03-28 02:47:52', '2022-03-28 02:47:52');
 
 -- --------------------------------------------------------
 
@@ -980,15 +1396,19 @@ INSERT INTO `testimonials` (`id`, `name`, `slug`, `designation`, `image`, `comme
 
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `first_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `promo_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `temprary_email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `verify_token` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 0,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `deleted_at` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -998,11 +1418,57 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `first_name`, `last_name`, `phone`, `promo_code`, `email`, `email_verified_at`, `password`, `remember_token`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 'Hardik tested', NULL, NULL, NULL, NULL, 'admin@gmail.com', NULL, '$2y$10$sM4N.5NfoYrYD1W/Ojhp3.lBm3tOWd/mwm68nTpTwzMXiBp3mCrF2', NULL, NULL, '2022-03-09 11:01:24', '2022-03-21 09:53:54'),
-(5, 'Alika Avila', 'Alika', NULL, NULL, NULL, 'lawukobov@mailinator.com', NULL, '$2y$10$/MR9SKwPqOJbVU0uHvd1MOzLwrsQDeUy4aiC1dM3/vnCqF5HFUBKO', NULL, NULL, '2022-03-22 03:43:24', '2022-03-22 03:43:24'),
-(6, 'Yvette Glover', NULL, 'Cash', '12345678', NULL, 'cibuxuzef@mailinator.com', NULL, '$2y$10$tSSIjfXmPoJnPDrNGfvYsOiuZhNxUfEnWHU5Qj7kGWmX3sboVIMWm', NULL, NULL, '2022-03-22 06:02:18', '2022-03-22 06:02:18'),
-(7, 'Sydnee Langley', NULL, 'Ratliff', '12345678', NULL, 'dudaguhu@interviewer.com', NULL, '$2y$10$FOPwgyZsULtdMI1jLRl6auhIEwb5LjKfe1I2ztVoxHSzYdX3h8Yvm', NULL, NULL, '2022-03-22 06:04:59', '2022-03-22 06:04:59');
+INSERT INTO `users` (`id`, `user_id`, `name`, `last_name`, `phone`, `promo_code`, `email`, `temprary_email`, `email_verified_at`, `password`, `remember_token`, `verify_token`, `status`, `image`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 4046, 'Hardik tested', NULL, NULL, NULL, 'admin@gmail.com', NULL, NULL, '$2y$10$TrSMTkdqZ4CkZe8zLOz/AuMG5CYt3vVpO4dHwUN.ecPMsAorlD416', NULL, NULL, 1, NULL, NULL, '2022-03-09 11:01:24', '2022-03-25 05:12:33'),
+(5, 5465, 'Alika Avila', NULL, NULL, NULL, 'lawukobov@mailinator.com', NULL, NULL, '$2y$10$/MR9SKwPqOJbVU0uHvd1MOzLwrsQDeUy4aiC1dM3/vnCqF5HFUBKO', NULL, NULL, 1, NULL, NULL, '2022-03-22 03:43:24', '2022-03-22 03:43:24'),
+(6, 2964, 'Yvette Glover', 'Cash', '1234567800', NULL, 'chandamar725@gmail.com', NULL, '2022-03-30 09:34:14', '$2y$10$FipZvMlM.AsqEoPvqF8PHOdl7DN43JYgAm4IZRevIZEBwZVLlV6/.', NULL, NULL, 1, '30-03-2022-112134.jpg', NULL, '2022-03-22 06:02:18', '2022-03-31 03:32:33'),
+(7, 5461, 'Sydnee Langley', 'Ratliff', '12345678', NULL, 'dudaguhu@interviewer.com', NULL, NULL, '$2y$10$0YqFHYTffC4jMVOzF9oL3.o2AFDbqifo/eWT/FSQlQxTQmI8KIZ6i', NULL, NULL, 1, NULL, NULL, '2022-03-22 06:04:59', '2022-03-31 03:39:09'),
+(8, 8002, 'Quail Spence', 'Foley', '12345678', NULL, 'xytudip@mailinator.com', NULL, NULL, '$2y$10$QnJbTYfCsFklwp3sSS9njue.6Z0dZhofmCOh8JUSRps2gGPq8gArG', NULL, '623c97c42c7c5', 1, NULL, NULL, '2022-03-24 05:11:51', '2022-03-25 02:18:42'),
+(9, 8261, 'Kibo Bryan', 'Martinez', '3333333', NULL, 'xanytabaki@mailinator.com', NULL, NULL, '$2y$10$NqsSaD8g/gS.dUG1ld3jXeocINr2AACWC0KzWkMlp49XVR7DEFp2m', NULL, NULL, 1, NULL, NULL, '2022-03-24 06:29:39', '2022-03-24 06:29:39'),
+(10, 7074, 'Reuben Barry', 'Torres', '34343343', NULL, 'viqytujehy@mailinator.com', NULL, NULL, '$2y$10$YfFUjBeeyy0Zos/laTDfR.As6L8Ks4NOsV2XDNhGEDGladKGgKP8q', NULL, '623c568702ce1', 1, NULL, NULL, '2022-03-24 06:31:19', '2022-03-24 06:31:19'),
+(11, 1410, 'Georgia Brock', 'Rutledge', '2222222', NULL, 'cesyxi@mailinator.com', NULL, NULL, '$2y$10$lCMuQ1gcYGzuJ7wzR9Ijwu1JExN7Of.oI8Y/9bSQd7PmuUUP6rpme', NULL, '623c5719ceffa', 1, NULL, NULL, '2022-03-24 06:33:45', '2022-03-24 10:04:19'),
+(34, 5362, 'Farhan', NULL, NULL, NULL, 'farhandigtandigtal@gmail.com', NULL, NULL, '$2y$10$/Y1cOHddN8DyfpYxMBtaKOEaGHspmUeo7j4RpEBY2C.IYuVV6djxy', NULL, NULL, 1, NULL, NULL, '2022-03-24 09:18:22', '2022-03-25 04:28:38');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_details`
+--
+
+CREATE TABLE `user_details` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `gender` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `language_slug` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `skype_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_details`
+--
+
+INSERT INTO `user_details` (`id`, `user_id`, `date_of_birth`, `gender`, `address`, `language_slug`, `skype_id`, `created_at`, `updated_at`) VALUES
+(1, 7, '2022-03-28', 'male', 'Address tested', 'hindi', '12222222', '2022-03-28 07:36:41', '2022-03-28 08:05:32');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_know_languages`
+--
+
+CREATE TABLE `user_know_languages` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) NOT NULL,
+  `language_id` bigint(20) NOT NULL,
+  `level` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `percent` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1036,34 +1502,6 @@ INSERT INTO `whychooses` (`id`, `image`, `name`, `content`, `icon`, `status`, `m
 (4, 'IMG-20211128-WA0036.jpg', 'Brian Vang', '<p>Lorem ipsum&nbsp;</p>', 'IMG-20211128-WA0036.jpg', 1, NULL, NULL, NULL, NULL, '2022-03-13 02:05:58', '2022-03-13 02:05:58'),
 (5, 'IMG-20211128-WA0036.jpg', 'Deanna Odonnell', '<p>Lorem ispsum&nbsp;</p>', 'IMG-20211128-WA0036.jpg', 1, NULL, NULL, NULL, NULL, '2022-03-13 02:27:19', '2022-03-13 02:27:19');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `work_processes`
---
-
-CREATE TABLE `work_processes` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `created_by` bigint(20) NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 1,
-  `deleted_at` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `work_processes`
---
-
-INSERT INTO `work_processes` (`id`, `created_by`, `title`, `slug`, `description`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 'CREATE AN ACCOUNT', 'create-an-account', '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porttitor gravida aliquam. Morbi orci urna, iaculis in ligula et, posuere interdum lectus.</p>', 1, NULL, '2022-03-16 05:33:17', '2022-03-16 05:33:17'),
-(2, 1, 'COMPLETE PROFILE', 'complete-profile', '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porttitor gravida aliquam. Morbi orci urna, iaculis in ligula et, posuere interdum lectus.</p>', 1, NULL, '2022-03-16 05:33:30', '2022-03-16 05:33:30'),
-(3, 1, 'SCHEDULE ONE-ON-ONE Interview', 'schedule-one-on-one-interview', '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porttitor gravida aliquam. Morbi orci urna, iaculis in ligula et, posuere interdum lectus.</p>', 1, NULL, '2022-03-16 05:33:49', '2022-03-16 05:33:49'),
-(4, 1, 'PERFORMANCE FEEDBACK', 'performance-feedback', '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed porttitor gravida aliquam. Morbi orci urna, iaculis in ligula et, posuere interdum lectus.</p>', 1, NULL, '2022-03-16 05:34:08', '2022-03-16 05:34:08');
-
 --
 -- Indexes for dumped tables
 --
@@ -1081,6 +1519,12 @@ ALTER TABLE `blogs`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `booking_types`
+--
+ALTER TABLE `booking_types`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `categories`
 --
 ALTER TABLE `categories`
@@ -1090,6 +1534,30 @@ ALTER TABLE `categories`
 -- Indexes for table `comments`
 --
 ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `courses`
+--
+ALTER TABLE `courses`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `degrees`
+--
+ALTER TABLE `degrees`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `experiences`
+--
+ALTER TABLE `experiences`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `experience_details`
+--
+ALTER TABLE `experience_details`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1103,6 +1571,18 @@ ALTER TABLE `failed_jobs`
 -- Indexes for table `help_hires`
 --
 ALTER TABLE `help_hires`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `how_works`
+--
+ALTER TABLE `how_works`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `languages`
+--
+ALTER TABLE `languages`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1171,6 +1651,30 @@ ALTER TABLE `pricingtables`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `projects`
+--
+ALTER TABLE `projects`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `qualifications`
+--
+ALTER TABLE `qualifications`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `qualification_details`
+--
+ALTER TABLE `qualification_details`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `resumes`
+--
+ALTER TABLE `resumes`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `roles`
 --
 ALTER TABLE `roles`
@@ -1194,6 +1698,12 @@ ALTER TABLE `services`
 -- Indexes for table `settings`
 --
 ALTER TABLE `settings`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `skills`
+--
+ALTER TABLE `skills`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1228,15 +1738,21 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
--- Indexes for table `whychooses`
+-- Indexes for table `user_details`
 --
-ALTER TABLE `whychooses`
+ALTER TABLE `user_details`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `work_processes`
+-- Indexes for table `user_know_languages`
 --
-ALTER TABLE `work_processes`
+ALTER TABLE `user_know_languages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `whychooses`
+--
+ALTER TABLE `whychooses`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1253,7 +1769,13 @@ ALTER TABLE `advantage_mocks`
 -- AUTO_INCREMENT for table `blogs`
 --
 ALTER TABLE `blogs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `booking_types`
+--
+ALTER TABLE `booking_types`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -1268,6 +1790,30 @@ ALTER TABLE `comments`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `courses`
+--
+ALTER TABLE `courses`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `degrees`
+--
+ALTER TABLE `degrees`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `experiences`
+--
+ALTER TABLE `experiences`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `experience_details`
+--
+ALTER TABLE `experience_details`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -1280,10 +1826,22 @@ ALTER TABLE `help_hires`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT for table `how_works`
+--
+ALTER TABLE `how_works`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `languages`
+--
+ALTER TABLE `languages`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `packages`
@@ -1301,13 +1859,13 @@ ALTER TABLE `pages`
 -- AUTO_INCREMENT for table `page_settings`
 --
 ALTER TABLE `page_settings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=147;
 
 --
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -1320,6 +1878,30 @@ ALTER TABLE `personal_access_tokens`
 --
 ALTER TABLE `pricingtables`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `projects`
+--
+ALTER TABLE `projects`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `qualifications`
+--
+ALTER TABLE `qualifications`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `qualification_details`
+--
+ALTER TABLE `qualification_details`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `resumes`
+--
+ALTER TABLE `resumes`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -1340,10 +1922,16 @@ ALTER TABLE `settings`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `skills`
+--
+ALTER TABLE `skills`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `sliders`
 --
 ALTER TABLE `sliders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `socialmedia`
@@ -1367,19 +1955,25 @@ ALTER TABLE `testimonials`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+
+--
+-- AUTO_INCREMENT for table `user_details`
+--
+ALTER TABLE `user_details`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `user_know_languages`
+--
+ALTER TABLE `user_know_languages`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `whychooses`
 --
 ALTER TABLE `whychooses`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `work_processes`
---
-ALTER TABLE `work_processes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables

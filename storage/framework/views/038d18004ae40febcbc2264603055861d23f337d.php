@@ -70,7 +70,9 @@
                         Get Yourself Interview Ready!
                     </h1>
 
-                    <button class="col-md-4 blue-btn-large" type="button" id="scheduleFirstInterview" ng-show="!is_sessions_completed &amp;&amp; !is_sessions_scheduled" ng-click="schedule_session()" aria-hidden="false">Schedule First Interview</button>
+                    <form action="<?php echo e(route('book-interview')); ?>">
+                        <button class="col-md-4 blue-btn-large" type="submit">Schedule First Interview</button>
+                    </form>
                 </center>
             </div>
         </div>

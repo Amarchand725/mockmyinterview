@@ -17,6 +17,33 @@
             border-top: 0px solid #eceeef;
             padding-left: 80px;
         }
+        .slot{
+            border: none;
+            font-style: inherit;
+            font-variant: inherit;
+            font-stretch: inherit;
+            line-height: inherit;
+            font-size: 16px;
+            font-family: "Open Sans";
+            background: 0 0!important;
+            cursor: pointer;
+        }
+        .slot-selected{
+            color: #fff!important;
+            padding: 4px 8px!important;
+            border-radius: 4px;
+            background: #ff5900!important;
+        }
+
+        .next-btn{
+            color: #0d6efd;
+            
+        }
+        .next-btn:focus, .next-btn:hover {
+            color: #014c8c;
+            text-decoration: underline;
+            cursor: pointer;
+        }
     </style>
 <?php $__env->stopPush(); ?>
 
@@ -73,7 +100,7 @@
                             </div>
                             <!-- date -->
                             <div class="mt-3">
-                                <input type="text" class="form-control datepicker" name="" value="<?php echo e(date('d/m/Y')); ?>">
+                                <input type="text" class="form-control datepicker" name="" value="<?php echo e(date('d/m/Y')); ?>" id="current-date">
                             </div>
                         </div>
                     </div>
@@ -94,122 +121,99 @@
                         Available Slots <span style="font-size:12px !important;font-weight:400 !important;color:inherit; ">&nbsp;&nbsp;<small>(All time slots listed are in IST)</small></span>
                     </span>
                     <div class="col-md-12 text-right">
-                        <a href="#" id="previousDay" class="bg-slotDisabledColor prev-day">
-                           &lt; Previous Day
-                        </a>&nbsp;&nbsp;&nbsp;
-                        <a href="#" id="nextDay" class="prev-next-day next-day">
-                            Next Day &gt;
-                        </a>
+                        <span class="prev-day next-btn" >< Previous Day</span>
+                        &nbsp;&nbsp;&nbsp;
+                        <span class="next-day next-btn" >Next Day ></span>
                     </div>
                     <!-- iterate here -->
                     <div class="card-block p-0 ">
-                        <table class="table  table-responsive  w-100 ">
-                            <tbody>
-                                <tr>
-                                    <th rowspan="3">29 Jan' 2022</th>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                </tr>
-                                <tr>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                </tr>
-                                <tr>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                </tr>
-                                <tr>
-                                    <th rowspan="3">29 Jan' 2022</th>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                </tr>
-                                <tr>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                </tr>
-                                <tr>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                    <td>10:00AM</td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <!-- booking sec -->
+                        <div class="col-md-12 block-rows next-slots">
+                            <div class="row" id="slotsInDate">
+                               <div class="col-md-2 available-date ng-binding" id="slotDate">
+                                  <span id="first_date"><?php echo e(date('d M Y')); ?></span>
+                               </div>
+                               <div class="col-md-10">
+                                 <div class="row">
+                                    <?php 
+                                    $date = date('Y-m-d');
+                                    $day = date("D", strtotime($date));
+                                    ?>
+                                    <?php if($day == 'Sat' || $day == 'Sun'): ?>
+                                        <?php $__currentLoopData = $slots['weekends_slots']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $weekend_slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <div class="col-sm-2">
+                                                <button class="mt-3 slot"><?php echo e($weekday_slot); ?></button>
+                                            </div>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php else: ?>
+                                        <?php $__currentLoopData = $slots['weekdays_slots']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $weekday_slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <div class="col-sm-2">
+                                                <button class="mt-3 slot"><?php echo e($weekday_slot); ?></button>
+                                            </div>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php endif; ?>
+                                 </div>
+                               </div>
+                            </div>
+                            <hr />
+                            <div class="row" id="slotsInDate">
+                                <div class="col-md-2 available-date ng-binding" id="slotDate">
+                                   <span id="second_date"><?php echo e(date('d M Y', strtotime("+1 day"))); ?></span>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="row">
+                                        <?php 
+                                        $date = date('d M Y', strtotime("+1 day"));
+                                        $day = date("D", strtotime($date));
+                                        ?>
+                                        <?php if($day == 'Sat' || $day == 'Sun'): ?>
+                                            <?php $__currentLoopData = $slots['weekends_slots']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $weekend_slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <div class="col-sm-2">
+                                                    <button class="mt-3 slot"><?php echo e($weekend_slot); ?></button>
+                                                </div>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php else: ?>
+                                            <?php $__currentLoopData = $slots['weekdays_slots']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $weekday_slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <div class="col-sm-2">
+                                                    <button class="mt-3 slot"><?php echo e($weekday_slot); ?></button>
+                                                </div>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <hr />
                         <div class="row py-3 ml-2">
-                            <div class="col-md-4">
-                                <div class="row">
-                                    <div class="col-md-1">
-                                        <div class="priority_circle"></div>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <strong>
-                                            <span class="ml-3">                                               
-                                                Priority Booking: 1599 Credits
-                                            </span>
-                                        </strong>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="row">
-                                    <div class="col-md-1">
-                                        <div class="regular_circle"></div>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <strong>
-                                            <span class="ml-3">                                               
-                                                Standard Booking: 1299 Credits
-                                            </span>
-                                        </strong>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
+                            <?php $__currentLoopData = $booking_types; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $booking_type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <div class="priority_circle" style="background: <?php echo e($booking_type->color); ?>"></div>
+                                        </div>
+                                        <?php if($booking_type->title=='Tentative Booking'): ?>
+                                            <div class="col-md-7">
+                                        <?php else: ?> 
+                                            <div class="col-md-10">
+                                        <?php endif; ?>
+                                            <strong>
+                                                <span class="ml-3">                                               
+                                                    <?php echo e($booking_type->title); ?>
 
-                            <div class="col-md-4">
-                                <div class="row">
-                                    <div class="col-md-1">
-                                        <div class="waitlist_circle"></div>
+                                                    <?php if($booking_type->title!='Tentative Booking'): ?>
+                                                        : <?php echo e($booking_type->credits); ?> Credits
+                                                    <?php endif; ?>
+                                                </span>
+                                            </strong>
+                                        </div>
+                                        <?php if($booking_type->title=='Tentative Booking'): ?>
+                                            <div class="col-sm-1">
+                                                <button class="blue-btn-small">Continue</button>
+                                            </div>
+                                        <?php endif; ?>
+                                        <div class="clearfix"></div>
                                     </div>
-                                    <div class="col-md-7">
-                                        <strong>
-                                            <span class="ml-3">                                               
-                                                Tentative Booking
-                                            </span>
-                                        </strong>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <button class="blue-btn-small">Continue</button>
-                                    </div>
-                                    <div class="clearfix"></div>
                                 </div>
-                            </div>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
                  </div>
@@ -220,16 +224,38 @@
 
 <?php $__env->startPush('js'); ?>
     <script>
+        $(document).on('click', '.slot', function(){
+            if($(this).hasClass('slot-selected')){
+                $(this).removeClass('slot-selected');
+            }else{
+                $(this).addClass('slot-selected');
+            }
+        });
+
+        var date = $('.datepicker').datepicker({ dateFormat: 'dd-mm-yy' }).val();
         $('.next-day').on("click", function () {
-            var date = $('datepicker').datepicker('getDate');
+            var date = $('.datepicker').datepicker('getDate');
             date.setTime(date.getTime() + (1000*60*60*24))
-            $('datepicker').datepicker("setDate", date);
+            $('.datepicker').datepicker("setDate", date);
+
+            var current_date = $('#current-date').val();
+
+            // alert(current_date);
+
+            $.ajax({
+                url : "<?php echo e(route('next_pre_date')); ?>",
+                type : 'GET',
+                data: {current_date:current_date}
+                success : function(response){
+                    console.log(response);
+                })
+            });
         });
 
         $('.prev-day').on("click", function () {
-            var date = $('datepicker').datepicker('getDate');
+            var date = $('.datepicker').datepicker('getDate');
             date.setTime(date.getTime() - (1000*60*60*24))
-            $('datepicker').datepicker("setDate", date);
+            $('.datepicker').datepicker("setDate", date);
         });
     </script>
 <?php $__env->stopPush(); ?>
