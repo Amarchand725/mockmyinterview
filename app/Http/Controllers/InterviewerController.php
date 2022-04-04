@@ -8,12 +8,12 @@ class InterviewerController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:booked interviews-list|resources-list|buy & credits-list|refer & earn-list', ['only' => ['bookedInterviews','resources','buyCredits','referAndEarn']]);
+        $this->middleware('permission:schedule interview-list|resources-list|buy & credits-list|refer & earn-list', ['only' => ['scheduleInterview','resources','buyCredits','referAndEarn']]);
     }
-    public function bookedInterviews()
+    public function scheduleInterview()
     {
-        $page_title = 'Booked Interviews';
-        return view('web-views.interviewer.booked-interviews', compact('page_title'));
+        $page_title = 'Schedule Interview';
+        return view('web-views.interviewer.schedule-interview', compact('page_title'));
     }
     public function resources()
     {

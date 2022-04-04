@@ -137,7 +137,7 @@
                         <img src="http://via.placeholder.com/160x160" class="user-image" alt="User Image">
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">My profile</a>
+                        <a class="dropdown-item" href="<?php echo e(route('my_profile')); ?>">My profile</a>
                         <a class="dropdown-item border-top" href="<?php echo e(route('logout')); ?>"
                             onclick="event.preventDefault();
                                             document.getElementById('logout-form').submit();">

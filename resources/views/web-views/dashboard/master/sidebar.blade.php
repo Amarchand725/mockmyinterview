@@ -6,11 +6,18 @@
                     <i class="fa fa-th-large"></i> <span class="nav-label"> Dashboard </span>
                 </a>
             </li>
-            @can('schedule interview-list')
+            @can('book interview-list')
             <li>
                 <a href="{{ route('book-interview') }}" class="{{ request()->is('book-interview') ? 'active' : '' }}">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
                 <span class="nav-label">Book Interview</span></a>
+            </li>
+            @endcan
+            @can('schedule interview-list')
+            <li>
+                <a href="{{ route('schedule-interview') }}" class="{{ request()->is('schedule-interview') ? 'active' : '' }}">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+                <span class="nav-label">Schedule Interview</span></a>
             </li>
             @endcan
             @can('report-list')
@@ -33,12 +40,6 @@
                     <i class="fa fa-bell" aria-hidden="true"></i>
                     <span class="nav-label">Notifications</span>
                 </a>
-            </li>
-            @endcan
-            @can('booked interviews-list')
-            <li> <a href="{{ route('booked-interviews') }}" class="{{ request()->is('booked-interviews') ? 'active' : '' }}">
-                <i class="fa fa-calendar" aria-hidden="true"></i>
-                <span class="nav-label">Booked Interviews </span></a>
             </li>
             @endcan
             @can('resources-list')

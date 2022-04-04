@@ -11,7 +11,9 @@ class CandidateController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:schedule interview-list|report-list|test setup-list|notifications-list', ['only' => ['scheduleInterview','report', 'testSetup', 'notifications']]);
+        $this->middleware('permission:schedule interview-list|report-list|test setup-list|notifications-list|book interview-list', 
+            ['only' =>['scheduleInterview', 'report', 'testSetup', 'notifications','bookInterview']]
+        );
     }
     public function bookInterview()
     {
@@ -66,7 +68,7 @@ class CandidateController extends Controller
             $startTime = date('H:i',strtotime('+'.$interval.' minutes',strtotime($startTime)));
             $i++;
             if(strtotime($startTime) <= strtotime($endTime)){
-                $time[] = $start;
+                $time[] = $start;   
                 // $time[] = $end;
             }
         }

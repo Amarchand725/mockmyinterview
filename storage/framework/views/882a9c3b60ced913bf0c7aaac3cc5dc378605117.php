@@ -44,6 +44,12 @@
             text-decoration: underline;
             cursor: pointer;
         }
+        .available-date {
+            font-family: Open Sans;
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+        }
     </style>
 <?php $__env->stopPush(); ?>
 
@@ -234,28 +240,39 @@
 
         var date = $('.datepicker').datepicker({ dateFormat: 'dd-mm-yy' }).val();
         $('.next-day').on("click", function () {
+            var type = 'plus';
             var date = $('.datepicker').datepicker('getDate');
             date.setTime(date.getTime() + (1000*60*60*24))
             $('.datepicker').datepicker("setDate", date);
 
             var current_date = $('#current-date').val();
 
-            // alert(current_date);
-
             $.ajax({
                 url : "<?php echo e(route('next_pre_date')); ?>",
                 type : 'GET',
-                data: {current_date:current_date}
+                data: {current_date:current_date, type:type},
                 success : function(response){
-                    console.log(response);
-                })
+                    $('.next-slots').html(response);
+                }
             });
         });
 
         $('.prev-day').on("click", function () {
+            var type = 'minus';
             var date = $('.datepicker').datepicker('getDate');
             date.setTime(date.getTime() - (1000*60*60*24))
             $('.datepicker').datepicker("setDate", date);
+
+            var current_date = $('#current-date').val();
+
+            $.ajax({
+                url : "<?php echo e(route('next_pre_date')); ?>",
+                type : 'GET',
+                data: {current_date:current_date, type:type},
+                success : function(response){
+                    $('.next-slots').html(response);
+                }
+            });
         });
     </script>
 <?php $__env->stopPush(); ?>

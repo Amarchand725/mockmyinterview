@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\PageSetting;
+use DateTime;
 
 class BookedSlotController extends Controller
 {
     public function nextPreDate(Request $request)
     {
-        return $request;
+        $current_date = $request->current_date;
+        $type = $request->type;
+
         //weekdays morning 
         $weekdays_morning_from_time = PageSetting::where('key', 'weekdays_morning_from_time')->first()->value;
         $weekdays_morning_to_time = PageSetting::where('key', 'weekdays_morning_to_time')->first()->value;
@@ -42,8 +45,27 @@ class BookedSlotController extends Controller
         //Weekends merged morning & evening slots
         $slots['weekends_slots'] = array_merge($weekends_morning_slots, $weekends_evening_slots);
 
+        return (string) view('web-views.candidate.next-pre-slots', compact('slots', 'current_date', 'type'));
+    }
 
-
-        return (string) view('web-views.candidate.next-pre-slots', compact('slots'));
+    function getTimeSlot($interval, $start_time, $end_time)
+    {
+        $start = new DateTime($start_time);
+        $end = new DateTime($end_time);
+        $startTime = $start->format('H:i');
+        $endTime = $end->format('H:i');
+        $i=0;
+        $time = [];
+        while(strtotime($startTime) <= strtotime($endTime)){
+            $start = $startTime;
+            $end = date('H:i',strtotime('+'.$interval.' minutes',strtotime($startTime)));
+            $startTime = date('H:i',strtotime('+'.$interval.' minutes',strtotime($startTime)));
+            $i++;
+            if(strtotime($startTime) <= strtotime($endTime)){
+                $time[] = $start;
+                // $time[] = $end;
+            }
+        }
+        return $time;
     }
 }

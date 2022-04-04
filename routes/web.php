@@ -69,7 +69,7 @@ ROute::get('next_pre_date', 'BookedSlotController@nextPreDate')->name('next_pre_
 //Candidate
 
 //Interviewer
-Route::get('booked-interviews', 'InterviewerController@bookedInterviews')->name('booked-interviews');
+Route::get('schedule-interview', 'InterviewerController@scheduleInterview')->name('schedule-interview');
 Route::get('blog-resources', 'InterviewerController@resources')->name('blog-resources');
 Route::get('buy-credits', 'InterviewerController@buyCredits')->name('buy-credits');
 Route::get('refer_and_earn', 'InterviewerController@referAndEarn')->name('refer_and_earn');

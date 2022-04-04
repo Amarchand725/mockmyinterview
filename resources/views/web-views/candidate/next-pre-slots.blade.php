@@ -1,11 +1,11 @@
 <div class="row" id="slotsInDate">
     <div class="col-md-2 available-date ng-binding" id="slotDate">
-       <span id="first_date">{{ date('d M Y') }}</span>
+       <span id="first_date">{{ date('d M Y', strtotime($current_date)) }}</span>
     </div>
     <div class="col-md-10">
       <div class="row">
          @php 
-         $date = date('Y-m-d');
+         $date = date('Y-m-d', strtotime($current_date));
          $day = date("D", strtotime($date));
          @endphp
          @if($day == 'Sat' || $day == 'Sun')
@@ -27,27 +27,27 @@
  <hr />
  <div class="row" id="slotsInDate">
      <div class="col-md-2 available-date ng-binding" id="slotDate">
-        <span id="second_date">{{ date('d M Y', strtotime("+1 day")) }}</span>
+        <span id="second_date">{{ date('d M Y', strtotime($date. "+1 day")) }}</span>
      </div>
      <div class="col-md-10">
          <div class="row">
-             @php 
-             $date = date('d M Y', strtotime("+1 day"));
-             $day = date("D", strtotime($date));
-             @endphp
-             @if($day == 'Sat' || $day == 'Sun')
-                 @foreach ($slots['weekends_slots'] as $weekend_slot)
-                     <div class="col-sm-2">
-                         <button class="mt-3 slot">{{ $weekend_slot }}</button>
-                     </div>
-                 @endforeach
-             @else
-                 @foreach ($slots['weekdays_slots'] as $weekday_slot)
-                     <div class="col-sm-2">
-                         <button class="mt-3 slot">{{ $weekday_slot }}</button>
-                     </div>
-                 @endforeach
-             @endif
+            @php 
+            $date = date('d M Y', strtotime($date. "+1 day"));
+            $day = date("D", strtotime($date));
+            @endphp
+            @if($day == 'Sat' || $day == 'Sun')
+                @foreach ($slots['weekends_slots'] as $weekend_slot)
+                    <div class="col-sm-2">
+                        <button class="mt-3 slot">{{ $weekend_slot }}</button>
+                    </div>
+                @endforeach
+            @else
+                @foreach ($slots['weekdays_slots'] as $weekday_slot)
+                    <div class="col-sm-2">
+                        <button class="mt-3 slot">{{ $weekday_slot }}</button>
+                    </div>
+                @endforeach
+            @endif
          </div>
      </div>
  </div>

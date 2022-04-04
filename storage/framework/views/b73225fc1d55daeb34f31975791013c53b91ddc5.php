@@ -6,11 +6,18 @@
                     <i class="fa fa-th-large"></i> <span class="nav-label"> Dashboard </span>
                 </a>
             </li>
-            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('schedule interview-list')): ?>
+            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('book interview-list')): ?>
             <li>
                 <a href="<?php echo e(route('book-interview')); ?>" class="<?php echo e(request()->is('book-interview') ? 'active' : ''); ?>">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
                 <span class="nav-label">Book Interview</span></a>
+            </li>
+            <?php endif; ?>
+            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('schedule interview-list')): ?>
+            <li>
+                <a href="<?php echo e(route('schedule-interview')); ?>" class="<?php echo e(request()->is('schedule-interview') ? 'active' : ''); ?>">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+                <span class="nav-label">Schedule Interview</span></a>
             </li>
             <?php endif; ?>
             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('report-list')): ?>
@@ -33,12 +40,6 @@
                     <i class="fa fa-bell" aria-hidden="true"></i>
                     <span class="nav-label">Notifications</span>
                 </a>
-            </li>
-            <?php endif; ?>
-            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('booked interviews-list')): ?>
-            <li> <a href="<?php echo e(route('booked-interviews')); ?>" class="<?php echo e(request()->is('booked-interviews') ? 'active' : ''); ?>">
-                <i class="fa fa-calendar" aria-hidden="true"></i>
-                <span class="nav-label">Booked Interviews </span></a>
             </li>
             <?php endif; ?>
             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('resources-list')): ?>
