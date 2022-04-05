@@ -3,49 +3,80 @@
 <?php $__env->startSection('title', $page_title); ?>
 <?php $__env->startPush('css'); ?>
     <link href="<?php echo e(asset('public/css/calendar/main.min.css')); ?>" rel="stylesheet" />
+
+    <style>
+        .slot{
+            border: none;
+            font-style: inherit;
+            font-variant: inherit;
+            font-stretch: inherit;
+            line-height: inherit;
+            font-size: 16px;
+            font-family: "Open Sans";
+            cursor: pointer;
+            border: 1px solid;
+            border-radius: 15px;
+            padding: 5px 17px;
+            border-color: #050505f2;
+            background: #847e7e;
+            color: white;
+        }
+        .slot-selected{
+            color: #fff!important;
+            border-radius: 4px;
+            background: #008739!important;
+            border: 1px solid;
+            border-radius: 15px;
+            padding: 5px 17px;
+            border-color: #050505f2;
+        }
+    </style>
 <?php $__env->stopPush(); ?>
 <?php $__env->startSection('content'); ?>
     <div class="container-fluid py-3 ">
         <h2 class="mb-3 text-center">Interview Scheduler </h2>
         <div class="py-3">
-            <div class="row mx-auto" style="border: 2px solid #eee;">
-                <div class="col-md-6">
-                    <div class="form-group float-label-control">
-                        <label for="start-date">Start Date</label>
-                        <input type="text" class="form-control datepicker" id="start-date" placeholder="Start Date">
-                    </div>
-                </div>
+            <form action="<?php echo e(route('available_slot.store')); ?>" method="post">
+                <?php echo csrf_field(); ?>
 
-                <div class="col-md-6">
-                    <div class="form-check">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div>
-                                    <h6> Interview Type </h6>
-                                </div>
-                                <input class="form-check-input" type="checkbox" name="technical_type" value="1" id="technical">
-                                <label class="form-check-label" for="technical">
-                                Technical
-                            </label>
-                                <div class="mt-3">
-                                    <input class="form-check-input" type="checkbox" name="hr_type" value="1" id="hr">
-                                    <label class="form-check-label" for="hr">
-                                    HR
+                <div class="row mx-auto" style="border: 2px solid #eee;">
+                    <div class="col-md-6">
+                        <div class="form-group float-label-control">
+                            <label for="start-date">Start Date</label>
+                            <input type="text" name="start_date" class="form-control datepicker" id="start-date" value="<?php echo e(date('d-m-Y')); ?>" placeholder="Start Date">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div>
+                                        <h6> Interview Type </h6>
+                                    </div>
+                                    <input class="form-check-input" type="checkbox" name="technical_type" value="1" id="technical">
+                                    <label class="form-check-label" for="technical">
+                                    Technical
                                 </label>
+                                    <div class="mt-3">
+                                        <input class="form-check-input" type="checkbox" name="hr_type" value="1" id="hr">
+                                        <label class="form-check-label" for="hr">
+                                        HR
+                                    </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-md-6">
-                    <div class="form-group float-label-control">
-                        <label for="end-date">End Date</label>
-                        <input type="text" class="form-control datepicker" id="end-date" placeholder="End Date">
+                    <div class="col-md-6">
+                        <div class="form-group float-label-control">
+                            <label for="end-date">End Date</label>
+                            <input type="text" name="end_date" class="form-control datepicker" id="end-date" value="<?php echo e(date('d-m-Y')); ?>" placeholder="End Date">
+                        </div>
                     </div>
                 </div>
-            </div>
-            
+                
                 <div class="row mx-auto" style="border: 2px solid #eee;">
                     <div class="col-md-8">
                         <div class="row text-md">
@@ -54,145 +85,41 @@
                     </div>
                     <div class="col-md-10">
                         <label class="radio-inline">
-                            <input type="radio" name="sessiontype" id="createBulkInterviews" ng-change="sessionType('1')" ng-model="selection.sessionType" style="height:20px; width:20px;" value="1" class="ng-pristine ng-untouched ng-valid" aria-checked="true" tabindex="0" aria-invalid="false"> &nbsp;&nbsp;Create
+                            <input type="radio" name="sessiontype" id="createBulkInterviews" style="height:20px; width:20px;" value="1"> &nbsp;&nbsp;Create
                         </label>
                     </div>
                     <div class="col-md-10">
                         <label class="radio-inline">
-                            <input type="radio" name="sessiontype" id="cancelBulkInterviews" ng-change="sessionType('2')" ng-model="selection.sessionType" style="height:20px; width:20px;" value="2" class="ng-pristine ng-untouched ng-valid" aria-checked="false" tabindex="-1" aria-invalid="false">&nbsp;&nbsp;Cancel 
+                            <input type="radio" name="sessiontype" id="cancelBulkInterviews" style="height:20px; width:20px;" value="2">&nbsp;&nbsp;Cancel 
                         </label>
                     </div>
                 </div>
-
                 
-                    <div class="row mx-auto pt-4" style="border: 2px solid #eee;">
-                        <center>
-                            <div class="panel-heading weekdays-slot-days" id="weekdays" style="display: block">
-                                <label><span class="text-md">&nbsp;<strong>Weekdays</strong> </span></label>
-                                <input type="checkbox" name="weekdays[]" id="mon" value="Mon" class="text-md"> 
-                                <label for="mon">Mon</label> 
-                                <input type="checkbox" name="weekdays[]" id="tues" value="Tue" class="text-md"> 
-                                <label for="tues">Tue</label> 
-                                <input type="checkbox" name="weekdays[]" id="wed" value="Wed" class="text-md"> 
-                                <label for="wed">Wed</label> 
-                                <input type="checkbox" name="weekdays[]" id="thur" value="Thu" class="text-md"> 
-                                <label for="thur">Thu</label> 
-                                <input type="checkbox" name="weekdays[]" id="fri" value="Fri" class="text-md"> 
-                                <label for="fri">Fri</label> 
-                            </div>
-                            <div class="panel-heading weekands-slot-days" id="weekdays" style="display: none">
-                                <label><span class="text-md">&nbsp;<strong>Weekands</strong> </span></label>
-                                <input type="checkbox" name="weekands[]" id="sat" value="sat" class="text-md"> 
-                                <label for="sat">Sat</label> 
-                                <input type="checkbox" name="weekands[]" id="sun" value="sun" class="text-md"> 
-                                <label for="sun">Sun</label> 
-                            </div>
-                        </center>
-                        <center>
-                            <div class="row mb-4">
-                                <div class="col-sm-12">
-                                    <div class="title">
-                                        <button class="blue-btn-small weekdays-btn opened">
-                                            Weekdays(-)
-                                        </button>
-                                        <button class="blue-btn-small weekands-btn">
-                                            Weekands(+)
-                                        </button>
-                                    </div>
+                <div class="row mx-auto pt-4" style="border: 2px solid #eee;">
+                    <center>
+                        <div class="row mb-4">
+                            <div class="col-sm-12">
+                                <div class="title">
+                                    <button class="blue-btn-small get-slots-btn opened" id="weekdays_btn_label" value="weekdays">
+                                        Weekdays(-)
+                                    </button>
+                                    <button class="blue-btn-small get-slots-btn" id="weekands_btn_label" value="weekands">
+                                        Weekands(+)
+                                    </button>
                                 </div>
                             </div>
-                        </center>
-                        <span class="weekdays-slot-days">
-                            <div class="row mt-4 mb-4" style="margin-left:97px">
-                                <div class="well col-sm-5">
-                                    <div class="py-3">
-                                        <center> <h6>Morning Slots</h6></center>
-                                        <div class="row py-3">
-                                            <div class="col-md-3">
-                                                <button class="btn btn-success">11;30</button>
-                                            </div>
-                                            <div class="col-md-3">
-                                            <button class="btn btn-success">11;30</button>
-                                            </div>
-                                            <div class="col-md-3">
-                                            <button class="btn btn-success">11;30</button>
-                                            </div>
-                                            <div class="col-md-3">
-                                            <button class="btn btn-success">11;30</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="well col-sm-5 ml-4">
-                                    <div class=" py-3">
-                                        <center> <h6>Evening Slots</h6></center>
-                                        <div class="row py-3">
-                                            <div class="col-md-3">
-                                                <button class="btn btn-success">11;30</button>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <button class="btn btn-success">11;30</button>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <button class="btn btn-success">11;30</button>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <button class="btn btn-success">11;30</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </span>
-                        <span class="weekands-slot-days">
-                            <div class="row mt-4 mb-4" style="margin-left:97px; display:none">
-                                <div class="well col-sm-5">
-                                    <div class="py-3">
-                                        <center> <h6>Morning Slots</h6></center>
-                                        <div class="row py-3">
-                                            <div class="col-md-3">
-                                                <button class="btn btn-success">11;30</button>
-                                            </div>
-                                            <div class="col-md-3">
-                                            <button class="btn btn-success">11;30</button>
-                                            </div>
-                                            <div class="col-md-3">
-                                            <button class="btn btn-success">11;30</button>
-                                            </div>
-                                            <div class="col-md-3">
-                                            <button class="btn btn-success">11;30</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="well col-sm-5 ml-4">
-                                    <div class=" py-3">
-                                        <center> <h6>Evening Slots</h6></center>
-                                        <div class="row py-3">
-                                            <div class="col-md-3">
-                                                <button class="btn btn-success">11;30</button>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <button class="btn btn-success">11;30</button>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <button class="btn btn-success">11;30</button>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <button class="btn btn-success">11;30</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </span>
-                    </div>
-                    <div class="row">
+                        </div>
+                    </center>
+                    
+                    <span class="slot-days"></span>
+                </div>
+
+                <div class="row">
                     <div class="col-md-12">
                         <center>
                             <div class="tool-tip">
                                 <div class="title">
-                                    <button id="addEducationinterviewerProfile" class="blue-btn-small">
+                                    <button type="submit" class="blue-btn-small" id="create-avialable-slot-btn">
                                         Create
                                     </button>
                                 </div>
@@ -202,7 +129,7 @@
                     </div>
                     <div id="calendar"></div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 <?php $__env->stopSection(); ?>
@@ -212,36 +139,104 @@
     <script src="<?php echo e(asset('public/js/calendar/main.js')); ?>"></script>
     <script src="<?php echo e(asset('public/js/calendar/interaction/main.js')); ?>"></script>
     <script>
-        $(document).on('click', '.weekdays-btn', function(){
-            if(!$(this).hasClass('opened')){
-                $(this).addClass('opened');
-                $('.weekdays-slot-days').css('display', 'block');
-                $(this).text('Weekdays(-)');
-            }else{
-                $(this).removeClass('opened');
-                $('.weekdays-slot-days').css('display', 'none');
-                $(this).text('Weekdays(+)');
-            }
+        $(document).on('click', '.m-slot-btn', function(){
+            var slot = $(this).val();
+            var index = $(this).attr('data-index');
+            $('#slot-m-'+index).val(slot);
         });
-        $(document).on('click', '.weekands-btn', function(){
-            $('.opened').removeClass();
+
+        $(document).on('click', '.e-slot-btn', function(){
+            var slot = $(this).val();
+            var index = $(this).attr('data-index');
+            $('#slot-e-'+index).val(slot);
+        });
+
+        $(document).on('click', '.get-slots-btn', function(){
+            var slot_type = $(this).val();
+
             if(!$(this).hasClass('opened')){
                 $(this).addClass('opened');
-                $('.weekdays-slot-days').css('display', 'none');
-                $('.weekands-slot-days').css('display', 'block');
-                $(this).text('Weekands(-)');
+                if(slot_type=='weekdays'){
+                    $(this).text('Weekdays(-)');
+                    $('#weekands_btn_label').text('Weekands(+)');
+                    $('#weekands_btn_label').removeClass('opened');
+                }else{
+                    $(this).text('Weekands(-)');
+                    $('#weekdays_btn_label').text('Weekdays(+)');
+                    $('#weekdays_btn_label').removeClass('opened');
+                }
+                
+                $.ajax({
+                    url : "<?php echo e(route('get-slots')); ?>",
+                    data : {'slot_type' : slot_type},
+                    success : function(response){
+                        $('.slot-days').html(response);
+                    }
+                });
             }else{
                 $(this).removeClass('opened');
-                $('.weekdays-slot-days').css('display', 'block');
-                $('.weekands-slot-days').css('display', 'none');
-                $(this).text('Weekands(+)');
+                $('.slot-days').html('');
+                if(slot_type=='weekdays'){
+                    $(this).text('Weekdays(+)');
+                }else{
+                    $(this).text('Weekands(+)');
+                }
             }
         });
 
         $(document).ready(function() {
+            var slot_type = $('.get-slots-btn').val();
+            if(!$('.get-slots-btn').hasClass('opened')){
+                $('.get-slots-btn').addClass('opened');
+                if(slot_type=='weekdays'){
+                    $('.get-slots-btn').text('Weekdays(-)');
+                }else{
+                    $('.get-slots-btn').text('Weekands(-)');
+                }
+
+                $.ajax({
+                    url : "<?php echo e(route('get-slots')); ?>",
+                    data : {'slot_type' : slot_type},
+                    success : function(response){
+                        $('.slot-days').html(response);
+                    }
+                });
+            }else{
+                $('.slot-days').html('');
+                if($('.get-slots-btn').hasClass('opened')){
+                    if(slot_type=='weekdays'){
+                        $('.opened').text('Weekdays(-)');
+                    }else{
+                        $('.opened').text('Weekands(-)');
+                    }
+
+                    $.ajax({
+                        url : "<?php echo e(route('get-slots')); ?>",
+                        data : {'slot_type' : slot_type},
+                        success : function(response){
+                            $('.slot-days').html(response);
+                        }
+                    });
+                }else{
+                    if(slot_type=='weekdays'){
+                        $('.opened').text('Weekdays(+)');    
+                    }else{
+                        $('.opened').text('Weekands(+)');    
+                    }
+                }
+            }
+
             $('.button-left').click(function() {
                 $('.sidebar').toggleClass('fliph');
             });
+        });
+
+        $(document).on('click', '.slot', function(){
+            if($(this).hasClass('slot-selected')){
+                $(this).removeClass('slot-selected');
+            }else{
+                $(this).addClass('slot-selected');
+            }
         });
 
         // calander scripts

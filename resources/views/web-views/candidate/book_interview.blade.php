@@ -25,14 +25,23 @@
             line-height: inherit;
             font-size: 16px;
             font-family: "Open Sans";
-            background: 0 0!important;
             cursor: pointer;
+            border: 1px solid;
+            border-radius: 15px;
+            padding: 5px 17px;
+            border-color: #050505f2;
+            background: #847e7e;
+            color: white;
         }
         .slot-selected{
             color: #fff!important;
             padding: 4px 8px!important;
             border-radius: 4px;
-            background: #ff5900!important;
+            background: #008739!important;
+            border: 1px solid;
+            border-radius: 15px;
+            padding: 5px 17px;
+            border-color: #050505f2;
         }
 
         .next-btn{

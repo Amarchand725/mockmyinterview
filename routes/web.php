@@ -73,6 +73,10 @@ Route::get('schedule-interview', 'InterviewerController@scheduleInterview')->nam
 Route::get('blog-resources', 'InterviewerController@resources')->name('blog-resources');
 Route::get('buy-credits', 'InterviewerController@buyCredits')->name('buy-credits');
 Route::get('refer_and_earn', 'InterviewerController@referAndEarn')->name('refer_and_earn');
+
+Route::get('get-slots', 'InterviewerController@getSlots')->name('get-slots');
+
+Route::post('available_slot.store', 'AvailableSlotDateController@store')->name('available_slot.store');
 //Interviewer
 
 //Roles
