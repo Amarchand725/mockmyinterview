@@ -12,6 +12,13 @@ class AvailableSlotDateController extends Controller
 {
     public function store(Request $request)
     {
+        if(empty($request->hr_type) && empty($request->technical_type)){
+            return redirect()->back()->with('error', 'Select interview type hr or technical!');
+        }
+
+        if(sizeof($request->mornings)==0 && sizeof($request->evenings) == 0){
+            return redirect()->back()->with('error', 'Choose slot.!');
+        }
         $model = AvailableSlotDate::create([
             'interviewer_id' => Auth::user()->id,
             'hr_type' => $request->hr_type,

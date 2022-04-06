@@ -1,8 +1,8 @@
-@extends('web-views.dashboard.master.app')
 
-@section('title', $page_title)
 
-@push('css')
+<?php $__env->startSection('title', $page_title); ?>
+
+<?php $__env->startPush('css'); ?>
     <style>
         .table tbody td {
             vertical-align: bottom;
@@ -59,12 +59,12 @@
             color: #333;
         }
     </style>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="container-fluid py-3 ">
         <div class="row mx-auto">
-            <h2 class="mb-3">{{ $page_title }}</h2>
+            <h2 class="mb-3"><?php echo e($page_title); ?></h2>
             <div class="col-md-12  email_verificaion_box ">
                 <div class="row side-heading-font">
                     <span class="col-md-12">Check Your System Date and Time</span>
@@ -89,7 +89,7 @@
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-check">
-                                        <input type="radio" name="interview_type" class="form-check-input" id="hr" @if(empty(Auth::user()->hasUserQualification)) disabled @endif>
+                                        <input type="radio" name="interview_type" class="form-check-input" id="hr" <?php if(empty(Auth::user()->hasUserQualification)): ?> disabled <?php endif; ?>>
                                         <label class="form-check-label" for="hr">
                                         HR
                                     </label>
@@ -97,7 +97,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-check">
-                                        <input type="radio" name="interview_type" class="form-check-input" id="technical" @if(empty(Auth::user()->hasUserQualification)) disabled @endif>
+                                        <input type="radio" name="interview_type" class="form-check-input" id="technical" <?php if(empty(Auth::user()->hasUserQualification)): ?> disabled <?php endif; ?>>
                                         <label class="form-check-label" for="technical">
                                         Technical
                                     </label>
@@ -105,7 +105,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-check">
-                                        <input type="radio" name="interview_type" class="form-check-input" id="spacialized" @if(empty(Auth::user()->hasUserQualification)) disabled @endif>
+                                        <input type="radio" name="interview_type" class="form-check-input" id="spacialized" <?php if(empty(Auth::user()->hasUserQualification)): ?> disabled <?php endif; ?>>
                                         <label class="form-check-label" for="spacialized">
                                         Specialized
                                     </label>
@@ -114,7 +114,7 @@
                             </div>
                             <!-- date -->
                             <div class="mt-3">
-                                <input type="text" class="form-control datepicker" name="" value="{{ date('d/m/Y') }}" id="current-date">
+                                <input type="text" class="form-control datepicker" name="" value="<?php echo e(date('d/m/Y')); ?>" id="current-date">
                             </div>
                         </div>
                     </div>
@@ -144,98 +144,99 @@
                         <div class="col-md-12 block-rows next-slots">
                             <div class="row" id="slotsInDate">
                                <div class="col-md-2 available-date ng-binding" id="slotDate">
-                                  <span id="first_date">{{ date('d M Y') }}</span>
+                                  <span id="first_date"><?php echo e(date('d M Y')); ?></span>
                                </div>
                                <div class="col-md-10">
                                  <div class="row">
-                                    @php 
+                                    <?php 
                                     $date = date('Y-m-d');
                                     $day = date("D", strtotime($date));
-                                    @endphp
-                                    @if($day == 'Sat' || $day == 'Sun')
-                                        @foreach ($slots['weekends_slots'] as $weekend_slot)
+                                    ?>
+                                    <?php if($day == 'Sat' || $day == 'Sun'): ?>
+                                        <?php $__currentLoopData = $slots['weekends_slots']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $weekend_slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <div class="col-sm-2">
-                                                <button class="mt-3 slot">{{ $weekday_slot }}</button>
+                                                <button class="mt-3 slot"><?php echo e($weekday_slot); ?></button>
                                             </div>
-                                        @endforeach
-                                    @else
-                                        @foreach ($slots['weekdays_slots'] as $weekday_slot)
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php else: ?>
+                                        <?php $__currentLoopData = $slots['weekdays_slots']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $weekday_slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <div class="col-sm-2">
-                                                <button class="mt-3 slot">{{ $weekday_slot }}</button>
+                                                <button class="mt-3 slot"><?php echo e($weekday_slot); ?></button>
                                             </div>
-                                        @endforeach
-                                    @endif
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php endif; ?>
                                  </div>
                                </div>
                             </div>
                             <hr />
                             <div class="row" id="slotsInDate">
                                 <div class="col-md-2 available-date ng-binding" id="slotDate">
-                                   <span id="second_date">{{ date('d M Y', strtotime("+1 day")) }}</span>
+                                   <span id="second_date"><?php echo e(date('d M Y', strtotime("+1 day"))); ?></span>
                                 </div>
                                 <div class="col-md-10">
                                     <div class="row">
-                                        @php 
+                                        <?php 
                                         $date = date('d M Y', strtotime("+1 day"));
                                         $day = date("D", strtotime($date));
-                                        @endphp
-                                        @if($day == 'Sat' || $day == 'Sun')
-                                            @foreach ($slots['weekends_slots'] as $weekend_slot)
+                                        ?>
+                                        <?php if($day == 'Sat' || $day == 'Sun'): ?>
+                                            <?php $__currentLoopData = $slots['weekends_slots']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $weekend_slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <div class="col-sm-2">
-                                                    <button class="mt-3 slot">{{ $weekend_slot }}</button>
+                                                    <button class="mt-3 slot"><?php echo e($weekend_slot); ?></button>
                                                 </div>
-                                            @endforeach
-                                        @else
-                                            @foreach ($slots['weekdays_slots'] as $weekday_slot)
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php else: ?>
+                                            <?php $__currentLoopData = $slots['weekdays_slots']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $weekday_slot): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <div class="col-sm-2">
-                                                    <button class="mt-3 slot">{{ $weekday_slot }}</button>
+                                                    <button class="mt-3 slot"><?php echo e($weekday_slot); ?></button>
                                                 </div>
-                                            @endforeach
-                                        @endif
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <hr />
                         <div class="row py-3 ml-2">
-                            @foreach ($booking_types as $booking_type)
+                            <?php $__currentLoopData = $booking_types; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $booking_type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="col-md-4">
                                     <div class="row">
                                         <div class="col-md-1">
-                                            <div class="priority_circle" style="background: {{ $booking_type->color }}"></div>
+                                            <div class="priority_circle" style="background: <?php echo e($booking_type->color); ?>"></div>
                                         </div>
-                                        @if($booking_type->title=='Tentative Booking')
+                                        <?php if($booking_type->title=='Tentative Booking'): ?>
                                             <div class="col-md-7">
-                                        @else 
+                                        <?php else: ?> 
                                             <div class="col-md-10">
-                                        @endif
+                                        <?php endif; ?>
                                             <strong>
                                                 <span class="ml-3">                                               
-                                                    {{ $booking_type->title }}
-                                                    @if($booking_type->title!='Tentative Booking')
-                                                        : {{ $booking_type->credits }} Credits
-                                                    @endif
+                                                    <?php echo e($booking_type->title); ?>
+
+                                                    <?php if($booking_type->title!='Tentative Booking'): ?>
+                                                        : <?php echo e($booking_type->credits); ?> Credits
+                                                    <?php endif; ?>
                                                 </span>
                                             </strong>
                                         </div>
-                                        @if($booking_type->title=='Tentative Booking')
+                                        <?php if($booking_type->title=='Tentative Booking'): ?>
                                             <div class="col-sm-1">
                                                 <button class="blue-btn-small">Continue</button>
                                             </div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="clearfix"></div>
                                     </div>
                                 </div>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
                     </div>
                  </div>
             </main>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('js')
+<?php $__env->startPush('js'); ?>
     <script>
         $(document).on('click', '.slot', function(){
             if($(this).hasClass('slot-selected')){
@@ -255,7 +256,7 @@
             var current_date = $('#current-date').val();
 
             $.ajax({
-                url : "{{ route('next_pre_date') }}",
+                url : "<?php echo e(route('next_pre_date')); ?>",
                 type : 'GET',
                 data: {current_date:current_date, type:type},
                 success : function(response){
@@ -273,7 +274,7 @@
             var current_date = $('#current-date').val();
 
             $.ajax({
-                url : "{{ route('next_pre_date') }}",
+                url : "<?php echo e(route('next_pre_date')); ?>",
                 type : 'GET',
                 data: {current_date:current_date, type:type},
                 success : function(response){
@@ -282,4 +283,5 @@
             });
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('web-views.dashboard.master.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/web-views/candidate/book_interview.blade.php ENDPATH**/ ?>

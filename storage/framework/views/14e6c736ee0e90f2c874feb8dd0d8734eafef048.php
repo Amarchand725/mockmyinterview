@@ -14,7 +14,7 @@
             font-size: 16px;
             font-family: "Open Sans";
             cursor: pointer;
-            border: 1px solid;
+            border: 2px solid;
             border-radius: 15px;
             padding: 5px 17px;
             border-color: #050505f2;
@@ -25,7 +25,7 @@
             color: #fff!important;
             border-radius: 4px;
             background: #008739!important;
-            border: 1px solid;
+            border: 2px solid;
             border-radius: 15px;
             padding: 5px 17px;
             border-color: #050505f2;
@@ -36,7 +36,7 @@
     <div class="container-fluid py-3 ">
         <h2 class="mb-3 text-center">Interview Scheduler </h2>
         <div class="py-3">
-            <form action="<?php echo e(route('available_slot.store')); ?>" method="post">
+            <form action="<?php echo e(route('available_slot.store')); ?>" method="post" id="subform">
                 <?php echo csrf_field(); ?>
 
                 <div class="row mx-auto" style="border: 2px solid #eee;">
@@ -54,12 +54,20 @@
                                     <div>
                                         <h6> Interview Type </h6>
                                     </div>
-                                    <input class="form-check-input" type="checkbox" name="technical_type" value="1" id="technical">
+                                    <?php if(Auth::user()->hasResume->technical): ?>
+                                        <input type="checkbox" name="technical_type" value="1" id="technical" class="form-check-input">
+                                    <?php else: ?> 
+                                        <input type="checkbox" name="technical_type" value="1" disabled id="technical" class="form-check-input">
+                                    <?php endif; ?>
                                     <label class="form-check-label" for="technical">
                                     Technical
                                 </label>
                                     <div class="mt-3">
-                                        <input class="form-check-input" type="checkbox" name="hr_type" value="1" id="hr">
+                                        <?php if(Auth::user()->hasResume->hr): ?>
+                                            <input type="checkbox" name="hr_type" value="1" id="hr" class="form-check-input">
+                                        <?php else: ?> 
+                                            <input type="checkbox" name="hr_type" value="1" disabled id="hr" class="form-check-input">
+                                        <?php endif; ?>
                                         <label class="form-check-label" for="hr">
                                         HR
                                     </label>
