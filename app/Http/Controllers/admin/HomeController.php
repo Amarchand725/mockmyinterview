@@ -32,7 +32,7 @@ class HomeController extends Controller
     public function index()
     {
         if(Auth::check() && Auth::user()->hasRole('Admin')){
-            $page_title = 'Dashboard';
+            $page_title = 'Dashboard - Admin';
             $total_team_members = Team::count();
             $total_categories = Category::count();
             $total_blogs = Blog::count();
@@ -41,10 +41,10 @@ class HomeController extends Controller
             $total_packages = Package::count();
             return View('admin.dashboard.dashboard', compact('page_title', 'total_team_members', 'total_categories', 'total_blogs', 'total_services', 'total_testimonials', 'total_packages'));
         }elseif(Auth::check() && Auth::user()->hasRole('Candidate')){
-            $page_title = 'Candidate';
+            $page_title = 'Dashboard - Candidate';
             return View('web-views.dashboard.candidate', compact('page_title'));
         }elseif(Auth::check() && Auth::user()->hasRole('Interviewer')){
-            $page_title = 'Interviewer';
+            $page_title = 'Dashboard - Interviewer';
             return View('web-views.dashboard.interviewer', compact('page_title'));
         }else{
             return redirect()->route('admin.login');

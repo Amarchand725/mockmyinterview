@@ -1,7 +1,19 @@
 <aside>
     <div class="sidebar left ">
         <ul class="list-sidebar bg-defoult">
-            <li>
+            <li style="border-bottom: 1px solid white;">
+                <a href="" class="">
+                    <i class="fa fa-user"></i> 
+                    <span class="nav-label">Loged In: <?php echo e(Auth::user()->roles->pluck('name')[0]); ?> 
+                        <?php if(Auth::check()): ?>
+                            <span class="logged-in">●</span>
+                        <?php else: ?> 
+                            <span class="logged-out">●</span>
+                        <?php endif; ?>
+                    </span>
+                </a>
+            </li>
+            <li style="margin-top:4px">
                 <a href="<?php echo e(route('dashboard')); ?>" class="<?php echo e(request()->is('dashboard') ? 'active' : ''); ?>">
                     <i class="fa fa-th-large"></i> <span class="nav-label"> Dashboard </span>
                 </a>

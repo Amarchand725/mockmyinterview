@@ -22,18 +22,11 @@
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Name <span style="color: red">*</span></label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="name" value="{{$permission->name}}">
-								<span style="color: red">{{ $errors->first('name') }}</span>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Guard Name <span style="color: red">*</span></label>
-							<div class="col-sm-4">
 								<input type="text" class="form-control" name="guard_name" value="{{$permission->guard_name}}">
+								<input type="hidden" name="permission" value="{{ $permission->permission }}">
 								<span style="color: red">{{ $errors->first('guard_name') }}</span>
 							</div>
 						</div>
-
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label"></label>
 							<div class="col-sm-6">

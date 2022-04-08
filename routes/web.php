@@ -142,3 +142,6 @@ Route::resource('course', 'admin\CourseController');
 
 //Booking type
 Route::resource('booking_type', 'admin\BookingTypeController');
+
+//Interview type
+Route::resource('interview_type', 'admin\InterviewTypeController');

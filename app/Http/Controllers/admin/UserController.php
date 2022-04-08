@@ -41,11 +41,11 @@ class UserController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $users = $query->paginate(5);
+            $users = $query->paginate(10);
             return (string) view('admin.user.search', compact('users'));
         }
         $page_title = 'All Users';
-        $users = User::orderBy('id','DESC')->paginate(5);
+        $users = User::orderBy('id','DESC')->paginate(10);
         return view('admin.user.index', compact('users','page_title'));
     }
 

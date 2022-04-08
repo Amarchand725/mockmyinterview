@@ -37,11 +37,11 @@ class LanguageController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $languages = $query->paginate(5);
+            $languages = $query->paginate(10);
             return (string) view('admin.language.search', compact('languages'));
         }
         $page_title = 'All Languages';
-        $languages = Language::orderBy('id','DESC')->paginate(5);
+        $languages = Language::orderBy('id','DESC')->paginate(10);
         return view('admin.language.index',compact('page_title', 'languages'));
     }
 

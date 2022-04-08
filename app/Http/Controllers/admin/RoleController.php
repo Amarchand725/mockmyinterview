@@ -36,11 +36,11 @@ class RoleController extends Controller
             if($request['search'] != ""){
                 $query->where('name', 'like', '%'. $request['search'] .'%');
             }
-            $roles = $query->paginate(2);
+            $roles = $query->paginate(10);
             return (string) view('admin.role.search', compact('roles'));
         }
         $page_title = 'All Roles';
-        $roles = Role::orderBy('id','DESC')->paginate(2);
+        $roles = Role::orderBy('id','DESC')->paginate(10);
         return view('admin.role.index',compact('roles','page_title'));
     }
 

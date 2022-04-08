@@ -1,7 +1,19 @@
 <aside>
     <div class="sidebar left ">
         <ul class="list-sidebar bg-defoult">
-            <li>
+            <li style="border-bottom: 1px solid white;">
+                <a href="" class="">
+                    <i class="fa fa-user"></i> 
+                    <span class="nav-label">Loged In: {{ Auth::user()->roles->pluck('name')[0] }} 
+                        @if(Auth::check())
+                            <span class="logged-in">●</span>
+                        @else 
+                            <span class="logged-out">●</span>
+                        @endif
+                    </span>
+                </a>
+            </li>
+            <li style="margin-top:4px">
                 <a href="{{ route('dashboard') }}" class="{{ request()->is('dashboard') ? 'active' : '' }}">
                     <i class="fa fa-th-large"></i> <span class="nav-label"> Dashboard </span>
                 </a>

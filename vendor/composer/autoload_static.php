@@ -602,6 +602,7 @@ class ComposerStaticInit7b4eaadea75595c361efd5dd677ab0a7
         'App\\Models\\ExperienceDetail' => __DIR__ . '/../..' . '/app/Models/ExperienceDetail.php',
         'App\\Models\\HelpHire' => __DIR__ . '/../..' . '/app/Models/HelpHire.php',
         'App\\Models\\HowWork' => __DIR__ . '/../..' . '/app/Models/HowWork.php',
+        'App\\Models\\InterviewType' => __DIR__ . '/../..' . '/app/Models/InterviewType.php',
         'App\\Models\\Language' => __DIR__ . '/../..' . '/app/Models/Language.php',
         'App\\Models\\Package' => __DIR__ . '/../..' . '/app/Models/Package.php',
         'App\\Models\\Page' => __DIR__ . '/../..' . '/app/Models/Page.php',

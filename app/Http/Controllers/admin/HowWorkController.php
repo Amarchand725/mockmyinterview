@@ -35,11 +35,11 @@ class HowWorkController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $models = $query->paginate(1);
+            $models = $query->paginate(10);
             return (string) view('admin.how_work.search', compact('models'));
         }
         $page_title = 'All How Works';
-        $models = HowWork::orderby('id', 'desc')->paginate(1);
+        $models = HowWork::orderby('id', 'desc')->paginate(10);
         return View('admin.how_work.index', compact("models", "page_title"));
     }
 

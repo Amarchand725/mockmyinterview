@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\BookingType;
 use App\Models\PageSetting;
 use DateTime;
+use Auth;
 
 class CandidateController extends Controller
 {
@@ -17,7 +18,7 @@ class CandidateController extends Controller
     }
     public function bookInterview()
     {
-        $page_title = 'Book Interview';
+        $page_title = 'Book Interview - '.Auth::user()->roles->pluck('name')[0];
         $booking_types = BookingType::where('status', 1)->get();
 
         //weekdays morning 
@@ -77,17 +78,17 @@ class CandidateController extends Controller
 
     public function report()
     {
-        $page_title = 'Report';
+        $page_title = 'Report - '.Auth::user()->roles->pluck('name')[0];
         return view('web-views.candidate.report', compact('page_title'));
     }
     public function testSetup()
     {
-        $page_title = 'Test Setup';
+        $page_title = 'Test Setup - '.Auth::user()->roles->pluck('name')[0];
         return view('web-views.candidate.test-setup', compact('page_title'));
     }
     public function notifications()
     {
-        $page_title = 'Notifications';
+        $page_title = 'Notifications - '.Auth::user()->roles->pluck('name')[0];
         return view('web-views.candidate.notifications', compact('page_title'));
     }
 }

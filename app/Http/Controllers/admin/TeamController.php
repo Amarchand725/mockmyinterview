@@ -35,11 +35,11 @@ class TeamController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $models = $query->paginate(1);
+            $models = $query->paginate(10);
             return (string) view('admin.team.search', compact('models'));
         }
         $page_title = 'All Team Members';
-        $models = Team::orderby('id', 'desc')->paginate(1);
+        $models = Team::orderby('id', 'desc')->paginate(10);
         return View('admin.team.index', compact("models", "page_title"));
     }
 

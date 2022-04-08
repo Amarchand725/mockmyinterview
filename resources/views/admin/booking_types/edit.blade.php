@@ -6,14 +6,14 @@
 			<h1>{{ $page_title }}</h1>
 		</div>
 		<div class="content-header-right">
-			<a href="{{ route('booking_credit.index') }}" class="btn btn-primary btn-sm">View All</a>
+			<a href="{{ route('booking_type.index') }}" class="btn btn-primary btn-sm">View All</a>
 		</div>
 	</section>
 
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			<form action="{{ route('booking_credit.update', $model->slug) }}" id="regform" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+			<form action="{{ route('booking_type.update', $model->slug) }}" id="regform" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
 				@csrf
 				{{ method_field('PATCH') }}
 				<div class="box box-info">

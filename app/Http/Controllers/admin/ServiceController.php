@@ -34,11 +34,11 @@ class ServiceController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $services = $query->paginate(5);
+            $services = $query->paginate(10);
             return (string) view('admin.service.search', compact('services'));
         }
         $page_title = 'All Services';
-        $services = Service::orderby('id', 'desc')->paginate(5);
+        $services = Service::orderby('id', 'desc')->paginate(10);
         return view('admin.service.index', compact('services', 'page_title'));
     }
 
@@ -83,8 +83,9 @@ class ServiceController extends Controller
      */
     public function show($slug)
     {
+        $page_title = 'Show Service';
         $service = Service::where('slug', $slug)->first();
-        return View('admin.service.show', compact('service'));
+        return View('admin.service.show', compact('service', 'page_title'));
     }
 
     /**

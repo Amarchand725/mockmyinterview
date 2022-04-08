@@ -34,11 +34,11 @@ class CategoryController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $models = $query->paginate(1);
+            $models = $query->paginate(10);
             return (string) view('admin.category.search', compact('models'));
         }
         $page_title = 'All Categories';
-        $models = Category::orderby('id', 'desc')->paginate(1);
+        $models = Category::orderby('id', 'desc')->paginate(10);
         return View('admin.category.index', compact("models","page_title"));
     }
 

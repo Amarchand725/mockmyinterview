@@ -35,11 +35,11 @@ class AdvantageMockController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $models = $query->paginate(1);
+            $models = $query->paginate(10);
             return (string) view('admin.advantage.search', compact('models'));
         }
         $page_title = 'All Mock Advantages';
-        $models = AdvantageMock::orderby('id', 'desc')->paginate(1);
+        $models = AdvantageMock::orderby('id', 'desc')->paginate(10);
         return View('admin.advantage.index', compact("models","page_title"));
     }
 

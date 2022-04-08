@@ -67,8 +67,9 @@ class PermissionController extends Controller
                 $ifnotfound = Permission::where('name', Str::lower($request->name).'-'.$permission)->first();
                 if(empty($ifnotfound)){
                     Permission::create([
-                        'name' => Str::lower($request->name).'-'.$permission,
-                        'guard_name' => 'web'
+                        'name' =>  str_replace(' ', '-', Str::lower($request->name)).'-'.$permission,
+                        'guard_name' => 'web',
+                        'permission' => $permission,
                     ]);
                 }else{
                     $bool = true;
@@ -77,14 +78,15 @@ class PermissionController extends Controller
         }else{
             $bool = false;
             Permission::create([
-                'name' => str_replace('-', ' ', Str::lower($request->name)),
-                'guard_name' => 'web'
+                'name' =>  str_replace(' ', '-', Str::lower($request->name)).'-'.$permission,
+                'guard_name' => $request->name,
+                'permission' => $permission,
             ]);
         }
 
         if($bool){
             return redirect()->route('permission.index')
-            ->with('message','You have already available these permission.');
+            ->with('message','You have already available these permissions.');
         }
 
         return redirect()->route('permission.index')
@@ -130,13 +132,11 @@ class PermissionController extends Controller
     public function update(Request $request, $permission_id)
     {
         $this->validate($request, [
-            'name' => 'required',
             'guard_name' => 'required',
         ]);
 
         $permission = Permission::find($permission_id);
-        $permission->name = $request->name;
-        $permission->guard_name = $request->guard_name;
+        $permission->name = str_replace(' ', '-', Str::lower($request->guard_name)).'-'.$request->permission;
         $permission->save();
 
         return redirect()->route('permission.index')

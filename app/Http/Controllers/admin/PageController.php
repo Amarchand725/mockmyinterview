@@ -25,11 +25,11 @@ class PageController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $models = $query->paginate(5);
+            $models = $query->paginate(10);
             return (string) view('admin.page.search', compact('models'));
         }
         $page_title = 'Settings';
-        $models = Page::orderby('id', 'desc')->paginate(5);
+        $models = Page::orderby('id', 'desc')->paginate(10);
         return View('admin.page.index', compact("models", "page_title"));
     }
 

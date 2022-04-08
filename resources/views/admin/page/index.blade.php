@@ -70,7 +70,7 @@
 											<a href="{{route('page.edit', $model->slug)}}" data-toggle="tooltip" data-placement="top" title="Edit page" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
 										@endcan
 										{{-- @can('page-delete')
-                                            <button class="btn btn-danger btn-xs delete" data-slug="{{ $page->slug }}" data-del-url="{{ url('page', $page->slug) }}"><i class="fa fa-trash"></i> Delete</button>
+                                            <button class="btn btn-danger btn-xs delete" data-slug="{{ $model->slug }}" data-del-url="{{ url('page', $model->slug) }}"><i class="fa fa-trash"></i> Delete</button>
 										@endcan --}}
 
                                         <a href="{{route('page_setting.show', $model->slug)}}" data-toggle="tooltip" data-placement="top" title="Page Setting" class="btn btn-info btn-xs"><i class="fa fa-cog"></i> Setting</a>

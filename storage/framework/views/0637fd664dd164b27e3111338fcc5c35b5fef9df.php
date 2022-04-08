@@ -1,10 +1,17 @@
 <header class="header">
     <nav class="navbar navbar-toggleable-md navbar-light pt-0 pb-0 ">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand p-0 mr-5" href="#"><img src="assets/img/logo.png"></a>
-        <div class="float-left"> <a href="#" class="button-left"><span class="fa fa-fw fa-bars "></span></a> </div>
+        
+        <?php if($home_page_data['header_logo']): ?>
+            <h1 class="logo">
+                <a href="<?php echo e(route('dashboard')); ?>"> 
+                    <img src="<?php echo e(asset('public/admin/assets/images/page')); ?>/<?php echo e($home_page_data['header_logo']); ?>" style="width: 80px" alt="logo" class="img-fluid">
+                </a>
+            </h1>
+        <?php endif; ?>
+        <div class="float-left" style="margin-left:140px !important"> <a href="#" class="button-left"><span class="fa fa-fw fa-bars "></span></a> </div>
         <div class="collapse navbar-collapse flex-row-reverse" id="navbarNavDropdown">
             <ul class="navbar-nav">
                 <li class="nav-item dropdown messages-menu">

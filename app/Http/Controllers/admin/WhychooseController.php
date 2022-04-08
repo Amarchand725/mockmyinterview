@@ -29,11 +29,11 @@ class WhychooseController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $whychooses = $query->paginate(1);
+            $whychooses = $query->paginate(10);
             return (string) view('admin.why_choose.search', compact('whychooses'));
         }
         $page_title = 'All Why Choose Us';
-        $whychooses = Whychoose::orderby('id', 'desc')->paginate(1);
+        $whychooses = Whychoose::orderby('id', 'desc')->paginate(10);
         return View('admin.why_choose.index', compact("whychooses","page_title"));
     }
 

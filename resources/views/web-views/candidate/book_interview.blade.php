@@ -89,7 +89,7 @@
                             <div class="row">
                                 <div class="col-md-2">
                                     <div class="form-check">
-                                        <input type="radio" name="interview_type" class="form-check-input" id="hr" @if(empty(Auth::user()->hasUserQualification)) disabled @endif>
+                                        <input type="radio" name="interview_type" class="form-check-input" id="hr" checked @if(empty(Auth::user()->hasUserQualification)) disabled @endif>
                                         <label class="form-check-label" for="hr">
                                         HR
                                     </label>

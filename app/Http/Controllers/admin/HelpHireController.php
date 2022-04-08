@@ -34,11 +34,11 @@ class HelpHireController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $models = $query->paginate(5);
+            $models = $query->paginate(10);
             return (string) view('admin.help.search', compact('models'));
         }
         $page_title = 'All Hiring Helps';
-        $models = HelpHire::orderby('id', 'desc')->paginate(5);
+        $models = HelpHire::orderby('id', 'desc')->paginate(10);
         return View('admin.help.index', compact("models", "page_title"));
     }
 

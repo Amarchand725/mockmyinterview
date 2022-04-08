@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title> @yield('title') - Dashboard</title>
+    <title> @yield('title')</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -31,7 +31,14 @@
     <script src="{{ asset('public/web/assets/js/jquery-3.2.1.slim.min.js') }}"></script>
     <script src="{{ asset('public/web/assets/js/popper.min.js') }}"></script>
     <script src="{{ asset('public/web/assets/js/bootstrap.min.js') }}"></script>
-
+    <style>
+        .logged-in {
+            color: green;
+        }
+        .logged-out {
+            color: red;
+        }
+    </style>
     @stack('css')
 </head>
 

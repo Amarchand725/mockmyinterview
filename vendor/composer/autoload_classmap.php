@@ -69,6 +69,7 @@ return array(
     'App\\Models\\ExperienceDetail' => $baseDir . '/app/Models/ExperienceDetail.php',
     'App\\Models\\HelpHire' => $baseDir . '/app/Models/HelpHire.php',
     'App\\Models\\HowWork' => $baseDir . '/app/Models/HowWork.php',
+    'App\\Models\\InterviewType' => $baseDir . '/app/Models/InterviewType.php',
     'App\\Models\\Language' => $baseDir . '/app/Models/Language.php',
     'App\\Models\\Package' => $baseDir . '/app/Models/Package.php',
     'App\\Models\\Page' => $baseDir . '/app/Models/Page.php',

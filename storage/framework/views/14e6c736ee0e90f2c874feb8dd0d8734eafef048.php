@@ -93,12 +93,12 @@
                     </div>
                     <div class="col-md-10">
                         <label class="radio-inline">
-                            <input type="radio" name="sessiontype" id="createBulkInterviews" style="height:20px; width:20px;" value="1"> &nbsp;&nbsp;Create
+                            <input type="radio" name="sessiontype" id="createBulkInterviews" value="1" checked style="height:20px; width:20px;"> &nbsp;&nbsp;Create
                         </label>
                     </div>
                     <div class="col-md-10">
                         <label class="radio-inline">
-                            <input type="radio" name="sessiontype" id="cancelBulkInterviews" style="height:20px; width:20px;" value="2">&nbsp;&nbsp;Cancel 
+                            <input type="radio" name="sessiontype" id="cancelBulkInterviews" value="2" style="height:20px; width:20px;">&nbsp;&nbsp;Cancel 
                         </label>
                     </div>
                 </div>

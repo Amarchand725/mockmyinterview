@@ -35,11 +35,11 @@ class DegreeController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $degrees = $query->paginate(5);
+            $degrees = $query->paginate(0);
             return (string) view('admin.degree.search', compact('degrees'));
         }
         $page_title = 'All Degrees';
-        $degrees = Degree::orderBy('id','DESC')->paginate(5);
+        $degrees = Degree::orderBy('id','DESC')->paginate(0);
         return view('admin.degree.index',compact('page_title', 'degrees'));
     }
 

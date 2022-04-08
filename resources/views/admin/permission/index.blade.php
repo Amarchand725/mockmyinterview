@@ -6,11 +6,11 @@
     <div class="content-header-left">
         <h1>All Permissions</h1>
     </div>
-    @can('permission-create')
+    {{-- @can('permission-create')
     <div class="content-header-right">
         <a href="{{ route('permission.create') }}" class="btn btn-primary btn-sm">Add New</a>
     </div>
-    @endcan
+    @endcan --}}
 </section>
 
 <section class="content">
@@ -35,7 +35,7 @@
                             <tr>
                                 <th>SL</th>
                                 <th>Name</th>
-                                <th>Guard Name</th>
+                                <th>Permission</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -43,15 +43,15 @@
                             @foreach($permissions as $key=>$permission)
                                 <tr id="id-{{ $permission->id }}">
                                     <td>{{  $permissions->firstItem()+$key }}.</td>
-                                    <td>{{$permission->name}}</td>
+                                    <td>{{ Str::ucfirst($permission->name) }}</td>
                                     <td>{{$permission->guard_name}}</td>
                                     <td>
                                         @can('permission-edit')
                                             <a href="{{ route('permission.edit', $permission->id) }}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
                                         @endcan
-                                        @can('permission-delete')
+                                        {{-- @can('permission-delete')
                                             <button class="btn btn-danger btn-xs delete" data-slug="{{ $permission->id }}" data-del-url="{{ url('permission', $permission->id) }}"><i class="fa fa-trash"></i> Delete</button>
-                                        @endcan
+                                        @endcan --}}
                                     </td>
                                 </tr>
                             @endforeach

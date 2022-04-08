@@ -35,11 +35,11 @@ class PackageController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $models = $query->paginate(1);
+            $models = $query->paginate(10);
             return (string) view('admin.package.search', compact('models'));
         }
         $page_title = 'All Packages';
-        $models = Package::orderby('id', 'desc')->paginate(1);
+        $models = Package::orderby('id', 'desc')->paginate(10);
         return View('admin.package.index', compact("models", "page_title"));
     }
 

@@ -1,8 +1,9 @@
 @extends('layouts.admin.app')
+@section('title', $page_title)
 @section('content')
 <section class="content-header">
 	<div class="content-header-left">
-		<h1><strong>{{ $model->title }}</strong></h1>
+		<h1><strong>{{ $page_title }}</strong></h1>
 	</div>
 	<div class="content-header-right">
 		<a href="{{ route('page.index') }}" class="btn btn-primary btn-sm">View All</a>

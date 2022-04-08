@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PageSetting;
 use DateTime;
+use Auth;
 
 class InterviewerController extends Controller
 {
@@ -14,22 +15,22 @@ class InterviewerController extends Controller
     }
     public function scheduleInterview()
     {
-        $page_title = 'Schedule Interview';
+        $page_title = 'Schedule Interview - '.Auth::user()->roles->pluck('name')[0];
         return view('web-views.interviewer.schedule-interview', compact('page_title'));
     }
     public function resources()
     {
-        $page_title = 'Resources';
+        $page_title = 'Resources - '.Auth::user()->roles->pluck('name')[0];
         return view('web-views.interviewer.resources', compact('page_title'));
     }
     public function buyCredits()
     {
-        $page_title = 'Buy & Credits';
+        $page_title = 'Buy & Credits - '.Auth::user()->roles->pluck('name')[0];
         return view('web-views.interviewer.buy_credits', compact('page_title'));
     }
     public function referAndEarn()
     {
-        $page_title = 'Refer & Earn';
+        $page_title = 'Refer & Earn - '.Auth::user()->roles->pluck('name')[0];
         return view('web-views.interviewer.refer_earn', compact('page_title'));
     }
     public function getSlots(Request $request)

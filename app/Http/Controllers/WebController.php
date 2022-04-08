@@ -46,7 +46,7 @@ class WebController extends Controller
     //my profile
     public function myProfile()
     {
-        $page_title = 'My Profile';
+        $page_title = 'My Profile - '.Auth::user()->roles->pluck('name')[0];
         $languages = Language::where('status', 1)->get();
         $degrees = Degree::where('status', 1)->get(['slug', 'title']);
         if(Auth::check() && Auth::user()->hasRole('Candidate')){
@@ -409,11 +409,14 @@ class WebController extends Controller
         do{
             $user_id = rand(1000, 9999);
         }while(User::where('user_id', $user_id)->first());
-
+        
         $input = $request->all();
+        unset($input['role']);
+        unset($input['confirm-password']);
         $input['user_id'] = $user_id;
         $input['verify_token'] = $verify_token;
         $input['password'] = Hash::make($input['password']);
+        
         $user = User::create($input);
         $user->assignRole($request->input('role'));
 

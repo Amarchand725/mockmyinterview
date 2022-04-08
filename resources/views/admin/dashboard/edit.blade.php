@@ -6,7 +6,7 @@
 		<h1>Edit Profile</h1>
 	</div>
 	<div class="content-header-right">
-		<a href="{{ route('admin.dashboard') }}" class="btn btn-primary btn-sm">Dashboard</a>
+		<a href="{{ route('dashboard') }}" class="btn btn-primary btn-sm">Dashboard</a>
 	</div>
 </section>
 

@@ -36,11 +36,11 @@ class BlogController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $models = $query->paginate(1);
+            $models = $query->paginate(10);
             return (string) view('admin.blog.search', compact('models'));
         }
         $page_title = 'All Blogs';
-        $models = Blog::orderby('id', 'desc')->paginate(1);
+        $models = Blog::orderby('id', 'desc')->paginate(10);
         return View('admin.blog.index', compact("models", "page_title"));
     }
 

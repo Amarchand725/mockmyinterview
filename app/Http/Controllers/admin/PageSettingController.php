@@ -102,6 +102,7 @@ class PageSettingController extends Controller
      */
     public function show($slug)
     {
+        $page_title = ucfirst($slug).' - Setting';
         $model = Page::where('slug', $slug)->first(); 
         $page_settings = PageSetting::where('parent_slug', $slug)->get(['key', 'value']);
         $page_data = [];
@@ -110,17 +111,19 @@ class PageSettingController extends Controller
         }
 
         if($slug=='home'){
-            return View('admin.page_setting.home', compact("model", "page_data"));
+            return View('admin.page_setting.home', compact("model", "page_data", "page_title"));
         }elseif($slug=='about'){
-            return View('admin.page_setting.about', compact("model", "page_data"));
+            return View('admin.page_setting.about', compact("model", "page_data", "page_title"));
         }elseif($slug=='service'){
-            return View('admin.page_setting.service', compact("model", "page_data"));
+            return View('admin.page_setting.service', compact("model", "page_data", "page_title"));
         }elseif($slug=='contact'){
-            return View('admin.page_setting.contact', compact("model", "page_data"));
+            return View('admin.page_setting.contact', compact("model", "page_data", "page_title"));
         }elseif($slug=='header'){
-            return view('admin.page_setting.header', compact("model", "page_data"));
+            return view('admin.page_setting.header', compact("model", "page_data", "page_title"));
         }elseif($slug=='footer'){
-            return view('admin.page_setting.footer', compact("model", "page_data"));
+            return view('admin.page_setting.footer', compact("model", "page_data", "page_title"));
+        }else{
+            return redirect()->back()->with('error', 'Your page is missing.');
         }
     }
 

@@ -39,11 +39,11 @@ class BookingTypeController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $booking_types = $query->paginate(5);
+            $booking_types = $query->paginate(10);
             return (string) view('admin.booking_types.search', compact('booking_types'));
         }
         $page_title = 'All Booking Types';
-        $booking_types = BookingType::orderBy('id','DESC')->paginate(5);
+        $booking_types = BookingType::orderBy('id','DESC')->paginate(10);
         return view('admin.booking_types.index',compact('page_title', 'booking_types'));
         
 

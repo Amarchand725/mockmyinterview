@@ -29,11 +29,11 @@ class TestimonialController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $testimonials = $query->paginate(1);
+            $testimonials = $query->paginate(10);
             return (string) view('admin.testimonial.search', compact('testimonials'));
         }
         $page_title = 'All Testimonials';
-        $testimonials = Testimonial::orderby('id', 'desc')->paginate(1);
+        $testimonials = Testimonial::orderby('id', 'desc')->paginate(10);
         return View('admin.testimonial.index', compact("testimonials", "page_title"));
     }
 

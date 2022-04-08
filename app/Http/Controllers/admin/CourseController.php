@@ -36,11 +36,11 @@ class CourseController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $courses = $query->paginate(5);
+            $courses = $query->paginate(10);
             return (string) view('admin.course.search', compact('courses'));
         }
         $page_title = 'All Courses';
-        $courses = Course::orderBy('id','DESC')->paginate(5);
+        $courses = Course::orderBy('id','DESC')->paginate(10);
         return view('admin.course.index',compact('page_title', 'courses'));
     }
 
