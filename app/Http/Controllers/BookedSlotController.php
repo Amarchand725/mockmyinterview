@@ -11,6 +11,7 @@ class BookedSlotController extends Controller
 {
     public function nextPreDate(Request $request)
     {
+        // $this->authorize('report-list', User::class);
         $current_date = $request->current_date;
         $type = $request->type;
 

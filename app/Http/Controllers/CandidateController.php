@@ -10,14 +10,16 @@ use Auth;
 
 class CandidateController extends Controller
 {
-    function __construct()
+    /* function __construct()
     {
         $this->middleware('permission:schedule interview-list|report-list|test setup-list|notifications-list|book interview-list', 
             ['only' =>['scheduleInterview', 'report', 'testSetup', 'notifications','bookInterview']]
         );
-    }
+    } */
+
     public function bookInterview()
     {
+        $this->authorize('book interview-list', User::class);
         $page_title = 'Book Interview - '.Auth::user()->roles->pluck('name')[0];
         $booking_types = BookingType::where('status', 1)->get();
 
@@ -78,16 +80,19 @@ class CandidateController extends Controller
 
     public function report()
     {
+        $this->authorize('report-list', User::class);
         $page_title = 'Report - '.Auth::user()->roles->pluck('name')[0];
         return view('web-views.candidate.report', compact('page_title'));
     }
     public function testSetup()
     {
+        $this->authorize('test setup-list', User::class);
         $page_title = 'Test Setup - '.Auth::user()->roles->pluck('name')[0];
         return view('web-views.candidate.test-setup', compact('page_title'));
     }
     public function notifications()
     {
+        $this->authorize('notifications-list', User::class);
         $page_title = 'Notifications - '.Auth::user()->roles->pluck('name')[0];
         return view('web-views.candidate.notifications', compact('page_title'));
     }

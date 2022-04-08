@@ -9,27 +9,32 @@ use Auth;
 
 class InterviewerController extends Controller
 {
-    function __construct()
+    /* function __construct()
     {
         $this->middleware('permission:schedule interview-list|resources-list|buy & credits-list|refer & earn-list', ['only' => ['scheduleInterview','resources','buyCredits','referAndEarn']]);
-    }
+    } */
+
     public function scheduleInterview()
     {
+        $this->authorize('schedule interview-list', User::class);
         $page_title = 'Schedule Interview - '.Auth::user()->roles->pluck('name')[0];
         return view('web-views.interviewer.schedule-interview', compact('page_title'));
     }
     public function resources()
     {
+        $this->authorize('resources-list', User::class);
         $page_title = 'Resources - '.Auth::user()->roles->pluck('name')[0];
         return view('web-views.interviewer.resources', compact('page_title'));
     }
     public function buyCredits()
     {
+        $this->authorize('buy & credits-list', User::class);
         $page_title = 'Buy & Credits - '.Auth::user()->roles->pluck('name')[0];
         return view('web-views.interviewer.buy_credits', compact('page_title'));
     }
     public function referAndEarn()
     {
+        $this->authorize('refer & earn-list', User::class);
         $page_title = 'Refer & Earn - '.Auth::user()->roles->pluck('name')[0];
         return view('web-views.interviewer.refer_earn', compact('page_title'));
     }
