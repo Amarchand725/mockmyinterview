@@ -72,9 +72,17 @@ class BlogController extends Controller
         $model = new Blog();
 
         if (isset($request->post)) {
+            $mime = mime_content_type($file);
+            if(strstr($mime, "video/")){
+                $mime = 'video';
+            }else if(strstr($mime, "image/")){
+                $mime = 'image';
+            }
+
             $post = date('d-m-Y-His').'.'.$request->file('post')->getClientOriginalExtension();
             $request->post->move(public_path('/admin/assets/posts'), $post);
             $model->post = $post;
+            $model->mime_type = $mime;
         }
 
         $model->created_by = Auth::user()->id;
@@ -82,7 +90,7 @@ class BlogController extends Controller
         $model->title = $request->title;
         $model->slug = \Str::slug($request->title);
         $model->description = $request->description;
-        $model->paid_free = $request->paid_free;
+        $model->is_paid = $request->paid_free;
         $model->save();
 
         return redirect()->route('blog.index')->with('message', 'blog Added Successfully !');
@@ -130,16 +138,24 @@ class BlogController extends Controller
         $model = Blog::where('slug', $slug)->first();
 
         if (isset($request->post)) {
+            $mime = mime_content_type($file);
+            if(strstr($mime, "video/")){
+                $mime = 'video';
+            }else if(strstr($mime, "image/")){
+                $mime = 'image';
+            }
+
             $post = date('d-m-Y-His').'.'.$request->file('post')->getClientOriginalExtension();
             $request->post->move(public_path('/admin/assets/posts'), $post);
             $model->post = $post;
+            $model->mime_type = $mime;
         }
 
         $model->category_slug = $request->category_slug;
         $model->title = $request->title;
         $model->slug = \Str::slug($request->title);
         $model->description = $request->description;
-        $model->paid_free = $request->paid_free;
+        $model->is_paid = $request->paid_free;
         $model->status = $request->status;
         $model->save();
 

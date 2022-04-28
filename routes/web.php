@@ -68,9 +68,10 @@ Route::get('notifications', 'CandidateController@notifications')->name('notifica
 ROute::get('next_pre_date', 'BookedSlotController@nextPreDate')->name('next_pre_date');
 //Candidate
 
-//Interviewer
+//Interviewers
 Route::get('schedule-interview', 'InterviewerController@scheduleInterview')->name('schedule-interview');
 Route::get('blog-resources', 'InterviewerController@resources')->name('blog-resources');
+Route::get('blog/single/{slug}', 'InterviewerController@singleBlog')->name('blog.single');
 Route::get('buy-credits', 'InterviewerController@buyCredits')->name('buy-credits');
 Route::get('refer_and_earn', 'InterviewerController@referAndEarn')->name('refer_and_earn');
 

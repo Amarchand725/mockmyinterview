@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PageSetting;
+use App\Models\Category;
+use App\Models\Blog;
 use DateTime;
 use Auth;
 
@@ -24,7 +26,16 @@ class InterviewerController extends Controller
     {
         $this->authorize('resources-list', User::class);
         $page_title = 'Resources - '.Auth::user()->roles->pluck('name')[0];
-        return view('web-views.interviewer.resources', compact('page_title'));
+        $categories = Category::orderby('id', 'desc')->where('status', 1)->get();
+        $blogs = Blog::orderby('id', 'desc')->where('status', 1)->paginate(10);
+        return view('web-views.interviewer.resources', compact('page_title', 'categories', 'blogs'));
+    }
+    public function singleBlog($slug)
+    {
+        $this->authorize('resources-list', User::class);
+        $page_title = 'Resource - Single';
+        $blog = Blog::where('slug', $slug)->first();
+        return view('web-views.interviewer.resource-single', compact('page_title', 'blog'));
     }
     public function buyCredits()
     {

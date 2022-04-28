@@ -10,10 +10,10 @@
                 <div class="row">
                     <div class="col-sm-6 ">
                         <select class="form-select" aria-label="Default select example">
-                            <option selected>All</option>
-                            <option value="1">Carreer Management</option>
-                            <option value="2">Interview Tips</option>
-                            <option value="3">Job Search</option>
+                            <option value="All" selected>Search by category</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->slug }}">{{ $category->name }}</option>    
+                            @endforeach
                         </select>
                     </div>
                     <div class="col-sm-6">
@@ -31,72 +31,37 @@
             <div class="container pt-5">
                 <div class="row">
                     <div class="col-md-12">
-                        <table class="table table-bordered resource_tb table-responsive ">
+                        <table class="table table-bordered resource_tb">
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <b> <u><a href="#"> How to Refine Your English through Listening</a></u></b>
-                                        <br>
-                                        <span class="label  interview-tips ">Career Management </span>
-                                        <span class="label  interview-tips1 ml-2 ">paid </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td> If you’re on the lookout for ways to hone your English skills, then a safe bet would be through the process of listening. This involves listening to audio, videos, radio programs, etc <a href="#"> more...</a></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <b> <u><a href="#"> Nifty Ways to Touch Up Your Non-Verbal Communication Skills</a></u></b>
-                                        <br>
-                                        <span class="label  interview-tips ">Career Management </span>
-                                        <span class="label  interview-tips1 ml-2 ">paid </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td> What you often tend to forget is the fact that your body can speak louder than your words. Your resume may be impressive and your verbal skills even more so, but unless your body lang <a href="#">more...</a></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <b> <u><a href="#"> Typical Blunders to Evade At Job Interviews</a></u></b>
-                                        <br>
-                                        <span class="label  interview-tips ">Career Management </span>
-                                        <span class="label  interview-tips1 ml-2 ">paid </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td> It may seem self-evident that you need to convey a good first impression for your interview. If you are too stressed out though, you might end up committing any of the following blun <a href="#">more...</a></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <b> <u><a href="#"> How to Nail Your Next Interview?</a></u></b>
-                                        <br>
-                                        <span class="label  interview-tips ">Career Management </span>
-                                        <span class="label  interview-tips1 ml-2 ">paid </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td> Below are seven lessons every person should keep in mind before his or her next job interview: <a href="#">more...</a></td>
-                                </tr>
+                                @foreach ($blogs as $blog)
+                                    <tr>
+                                        <td>
+                                            <b><u><a href="{{ route('blog.single', $blog->slug) }}"> {{ $blog->title }}</a></u></b>
+                                            <br>
+                                            <span class="label interview-tips"> {{ $blog->hasCategory->name }}</span>
+                                            <span class="label interview-tips1 ml-2 ">
+                                                @if($blog->is_paid)
+                                                    Paid
+                                                @else 
+                                                    Free
+                                                @endif
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            {!! \Illuminate\Support\Str::limit($blog->description,300) !!}
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
 
-                        <div class="card-footer p-0">
-                            <nav aria-label="...">
-                                <ul class="pagination justify-content-end mt-3 mr-3">
-                                    <li class="page-item disabled">
-                                        <span class="page-link">Previous</span>
-                                    </li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item active">
-                                        <span class="page-link">2<span class="sr-only">(current)</span>
-                                        </span>
-                                    </li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">Next</a>
-                                    </li>
-                                </ul>
-                            </nav>
+                        <div class="card-footer p-3">
+                            Displying {{$blogs->firstItem()}} to {{$blogs->lastItem()}} of {{$blogs->total()}} records
+                            <div class="d-flex justify-content-right mt-3">
+                                {!! $blogs->links('pagination::bootstrap-4') !!}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -66,7 +66,7 @@
 									<td>{!! \Illuminate\Support\Str::limit($model->title,40) !!}</td>
 									<td>{!! \Illuminate\Support\Str::limit($model->description,60) !!}</td>
 									<td>
-										@if($model->paid_free)
+										@if($model->is_paid)
 											<span class="badge badge-info">Paid</span>
 										@else
 											<span class="badge badge-primary">Free</span>
