@@ -21,14 +21,21 @@
                 </div>
                 <div class="form-group has-feedback">
                     <label for="password" class="col-md-6 col-form-label text-md-end">{{ __('Password') }}</label>
-                    <input class="form-control" placeholder="Password" name="password" type="password" autocomplete="off" value="">
+                    <input class="form-control" placeholder="Password" id="input-password" name="password" type="password" autocomplete="off" value="">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="show-password">
+
+                        <label class="form-check-label" for="show-password">
+                            {{ __('Show') }}
+                        </label>
+                    </div>
                     @error('password')
                         <span class="invalid-feedback" role="alert">
                             <strong style="color:red">{{ $message }}</strong>
                         </span>
                     @enderror
                 </div>
-
+                
                 <div class="row mb-3">
                     <div class="col-md-6 offset-md-4">
                         <div class="form-check">
@@ -50,14 +57,18 @@
                         <a class="btn btn-link" href="{{ route('admin.forgot_password') }}">
                             {{ __('Forgot Your Password?') }}
                         </a>
-                        {{-- if(Route::has('password.request'))
-                            <a class="btn btn-link" href=" route('password.request') ">
-                                 __('Forgot Your Password?') 
-                            </a>
-                        endif --}}
                     </div>
                 </div>
             </form>
         </div>
     </div>
 @endsection
+@push('js')
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $('#show-password').click(function(){
+                $(this).is(':checked') ? $('#input-password').attr('type', 'text') : $('#input-password').attr('type', 'password');
+            });
+        });
+    </script>
+@endpush

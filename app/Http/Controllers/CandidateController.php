@@ -17,46 +17,6 @@ class CandidateController extends Controller
         );
     } */
 
-    public function bookInterview()
-    {
-        $this->authorize('book interview-list', User::class);
-        $page_title = 'Book Interview - '.Auth::user()->roles->pluck('name')[0];
-        $booking_types = BookingType::where('status', 1)->get();
-
-        //weekdays morning 
-        $weekdays_morning_from_time = PageSetting::where('key', 'weekdays_morning_from_time')->first()->value;
-        $weekdays_morning_to_time = PageSetting::where('key', 'weekdays_morning_to_time')->first()->value;
-
-        //weekdays evening
-        $weekdays_evening_from_time = PageSetting::where('key', 'weekdays_evening_from_time')->first()->value;
-        $weekdays_evening_to_time = PageSetting::where('key', 'weekdays_evening_to_time')->first()->value;
-
-        //weekends morning
-        $weekends_morning_from_time = PageSetting::where('key', 'weekends_morning_from_time')->first()->value;
-        $weekends_morning_to_time = PageSetting::where('key', 'weekends_morning_to_time')->first()->value;
-
-        //weekends evening
-        $weekends_evening_from_time = PageSetting::where('key', 'weekends_evening_from_time')->first()->value;
-        $weekends_evening_to_time = PageSetting::where('key', 'weekends_evening_to_time')->first()->value;
-
-        // Weekdays Morning & Evening Slots
-        $week_days_morning_slots = $this->getTimeSlot(30, $weekdays_morning_from_time, $weekdays_morning_to_time);
-        $week_days_evening_slots = $this->getTimeSlot(30, $weekdays_evening_from_time, $weekdays_evening_to_time);
-
-        //Weekends Morning & Evening Slots
-        $weekends_morning_slots = $this->getTimeSlot(30, $weekends_morning_from_time, $weekends_morning_to_time);
-        $weekends_evening_slots = $this->getTimeSlot(30, $weekends_evening_from_time, $weekends_evening_to_time);
-
-        $slots = [];
-        //Weekdays merged morning & evening slots
-        $slots['weekdays_slots'] = array_merge($week_days_morning_slots, $week_days_evening_slots);
-        
-        //Weekends merged morning & evening slots
-        $slots['weekends_slots'] = array_merge($weekends_morning_slots, $weekends_evening_slots);
-        
-        return view('web-views.candidate.book_interview', compact('page_title', 'booking_types', 'slots'));
-    }
-
     function getTimeSlot($interval, $start_time, $end_time)
     {
         $start = new DateTime($start_time);

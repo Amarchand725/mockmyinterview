@@ -50,6 +50,7 @@
 <script src="<?php echo e(asset('public/admin/assets/js/app.min.js')); ?>"></script>
 <script src="<?php echo e(asset('public/admin/assets/js/demo.js')); ?>"></script>
 <script src="<?php echo e(asset('public/admin/assets/js/toastr.min.js')); ?>"></script>
+<?php echo $__env->yieldPushContent('js'); ?>
 <script>
     <?php if(Session::has('message')): ?>
     toastr.options =

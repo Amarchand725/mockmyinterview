@@ -4,7 +4,7 @@
             <li style="border-bottom: 1px solid white;">
                 <a href="" class="">
                     <i class="fa fa-user"></i> 
-                    <span class="nav-label">Loged In: {{ Auth::user()->roles->pluck('name')[0] }} 
+                    <span class="nav-label">Logged In: {{ Auth::user()->roles->pluck('name')[0] }} 
                         @if(Auth::check())
                             <span class="logged-in">●</span>
                         @else 
@@ -20,7 +20,7 @@
             </li>
             @can('book interview-list')
             <li>
-                <a href="{{ route('book-interview') }}" class="{{ request()->is('book-interview') ? 'active' : '' }}">
+                <a href="{{ route('book_interview.create') }}" class="{{ request()->is('book_interview/*') ? 'active' : '' }}">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
                 <span class="nav-label">Book Interview</span></a>
             </li>

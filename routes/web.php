@@ -61,11 +61,11 @@ Route::get('get_courses/{slug}', 'admin\CourseController@getCourses')->name('get
 //Admin Panel
 
 //Candidate
-Route::get('book-interview', 'CandidateController@bookInterview')->name('book-interview');
+// Route::get('book-interview', 'CandidateController@bookInterview')->name('book-interview');
 Route::get('report', 'CandidateController@report')->name('report');
 Route::get('test_setup', 'CandidateController@testSetup')->name('test_setup');
 Route::get('notifications', 'CandidateController@notifications')->name('notifications');
-ROute::get('next_pre_date', 'BookedSlotController@nextPreDate')->name('next_pre_date');
+Route::get('next_pre_date', 'BookInterviewController@nextPreDate')->name('next_pre_date');
 //Candidate
 
 //Interviewers
@@ -146,3 +146,6 @@ Route::resource('booking_type', 'admin\BookingTypeController');
 
 //Interview type
 Route::resource('interview_type', 'admin\InterviewTypeController');
+
+//Book interview
+Route::resource('book_interview', 'BookInterviewController');

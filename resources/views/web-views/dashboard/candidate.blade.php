@@ -70,7 +70,7 @@
                         Get Yourself Interview Ready!
                     </h1>
 
-                    <form action="{{ route('book-interview') }}">
+                    <form action="{{ route('book_interview.create') }}">
                         <button class="col-md-4 blue-btn-large" type="submit">Schedule First Interview</button>
                     </form>
                 </center>

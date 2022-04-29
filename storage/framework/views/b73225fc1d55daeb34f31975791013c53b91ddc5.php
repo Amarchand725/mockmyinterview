@@ -4,7 +4,7 @@
             <li style="border-bottom: 1px solid white;">
                 <a href="" class="">
                     <i class="fa fa-user"></i> 
-                    <span class="nav-label">Loged In: <?php echo e(Auth::user()->roles->pluck('name')[0]); ?> 
+                    <span class="nav-label">Logged In: <?php echo e(Auth::user()->roles->pluck('name')[0]); ?> 
                         <?php if(Auth::check()): ?>
                             <span class="logged-in">●</span>
                         <?php else: ?> 
@@ -20,7 +20,7 @@
             </li>
             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('book interview-list')): ?>
             <li>
-                <a href="<?php echo e(route('book-interview')); ?>" class="<?php echo e(request()->is('book-interview') ? 'active' : ''); ?>">
+                <a href="<?php echo e(route('book_interview.create')); ?>" class="<?php echo e(request()->is('book_interview/*') ? 'active' : ''); ?>">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
                 <span class="nav-label">Book Interview</span></a>
             </li>

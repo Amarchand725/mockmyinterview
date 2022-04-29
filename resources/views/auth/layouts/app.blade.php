@@ -50,6 +50,7 @@
 <script src="{{ asset('public/admin/assets/js/app.min.js') }}"></script>
 <script src="{{ asset('public/admin/assets/js/demo.js') }}"></script>
 <script src="{{asset('public/admin/assets/js/toastr.min.js')}}"></script>
+@stack('js')
 <script>
     @if(Session::has('message'))
     toastr.options =
