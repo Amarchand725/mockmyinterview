@@ -3,11 +3,12 @@
         <ul class="list-sidebar bg-defoult">
             <li style="border-bottom: 1px solid white;">
                 <a href="" class="">
-                    <i class="fa fa-user"></i> 
-                    <span class="nav-label">Logged In: <?php echo e(Auth::user()->roles->pluck('name')[0]); ?> 
+                    <i class="fa fa-user"></i>
+                    <span class="nav-label">Logged In: <?php echo e(Auth::user()->roles->pluck('name')[0]); ?>
+
                         <?php if(Auth::check()): ?>
                             <span class="logged-in">●</span>
-                        <?php else: ?> 
+                        <?php else: ?>
                             <span class="logged-out">●</span>
                         <?php endif; ?>
                     </span>
@@ -17,6 +18,11 @@
                 <a href="<?php echo e(route('dashboard')); ?>" class="<?php echo e(request()->is('dashboard') ? 'active' : ''); ?>">
                     <i class="fa fa-th-large"></i> <span class="nav-label"> Dashboard </span>
                 </a>
+            </li>
+            <li>
+                <a href="<?php echo e(route('book_interview.index')); ?>" class="<?php echo e(request()->is('book_interview/*') ? 'active' : ''); ?>">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+                <span class="nav-label">Booked Interviews</span></a>
             </li>
             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('book interview-list')): ?>
             <li>

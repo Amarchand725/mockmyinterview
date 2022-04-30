@@ -45,7 +45,7 @@
 
         .next-btn{
             color: #0d6efd;
-            
+
         }
         .next-btn:focus, .next-btn:hover {
             color: #014c8c;
@@ -65,7 +65,7 @@
 
         .app i {
         font-size: 80px;
-        
+
         animation-duration: 3s;
         animation-name: slidein;
         animation-iteration-count: 1;
@@ -269,17 +269,17 @@
                                     </div>
                                     <div class="col-md-10">
                                         <div class="row">
-                                            @php 
+                                            @php
                                             $date = date('Y-m-d');
                                             $day = date("D", strtotime($date));
                                             @endphp
                                             @if($day == 'Sat' || $day == 'Sun')
                                                 @foreach ($slots['weekends_slots'] as $weekend_slot)
                                                     <div class="col-sm-2">
-                                                        {{-- <button type="button" class="mt-3 slot">{{ $weekday_slot }}</button> --}}
+                                                        {{-- <button type="button" class="mt-3 slot">{{ $weekend_slot }}</button> --}}
                                                         <article class="feature1 slot">
-                                                            <input type="checkbox" name="booked_slots[{{ $date }}][]" value="{{ $weekday_slot }}" id="feature1"/>
-                                                              <span>{{ $weekday_slot }}</span>
+                                                            <input type="checkbox" name="booked_slots[{{ $date }}][]" value="{{ $weekend_slot }}" id="feature1"/>
+                                                              <span>{{ $weekend_slot }}</span>
                                                         </article>
                                                     </div>
                                                 @endforeach
@@ -303,7 +303,7 @@
                                     </div>
                                     <div class="col-md-10">
                                         <div class="row">
-                                            @php 
+                                            @php
                                             $date = date('Y-m-d', strtotime("+1 day"));
                                             $day = date("D", strtotime($date));
                                             @endphp
@@ -341,11 +341,11 @@
                                             </div>
                                             @if($booking_type->title=='Tentative Booking')
                                                 <div class="col-md-7">
-                                            @else 
+                                            @else
                                                 <div class="col-md-10">
                                             @endif
                                                 <strong>
-                                                    <span class="ml-3">                                               
+                                                    <span class="ml-3">
                                                         {{ $booking_type->title }}
                                                         @if($booking_type->title!='Tentative Booking')
                                                             : {{ $booking_type->credits }} Credits

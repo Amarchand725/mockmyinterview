@@ -3,18 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\MeetingZoomTrait;
 use Illuminate\Http\Request;
 use App\Models\PageSetting;
-use App\Models\BookeInterview;
+use App\Models\BookInterview;
 use App\Models\BookingType;
 use DateTime;
 use Auth;
 
 class BookInterviewController extends Controller
 {
+    use MeetingZoomTrait;
     public function index()
     {
-        return 'list';
+        $booked_interviews = BookInterview::orderby('id', 'desc')->paginate(10);
+        $page_title = 'All Booked Interviews';
+        return view('web-views.interviews.index', compact('booked_interviews', 'page_title'));
     }
     public function create()
     {
@@ -22,7 +26,7 @@ class BookInterviewController extends Controller
         $page_title = 'Book Interview - '.Auth::user()->roles->pluck('name')[0];
         $booking_types = BookingType::where('status', 1)->get();
 
-        //weekdays morning 
+        //weekdays morning
         $weekdays_morning_from_time = PageSetting::where('key', 'weekdays_morning_from_time')->first()->value;
         $weekdays_morning_to_time = PageSetting::where('key', 'weekdays_morning_to_time')->first()->value;
 
@@ -49,30 +53,47 @@ class BookInterviewController extends Controller
         $slots = [];
         //Weekdays merged morning & evening slots
         $slots['weekdays_slots'] = array_merge($week_days_morning_slots, $week_days_evening_slots);
-        
+
         //Weekends merged morning & evening slots
         $slots['weekends_slots'] = array_merge($weekends_morning_slots, $weekends_evening_slots);
-        
+
         return view('web-views.interviews.create', compact('page_title', 'booking_types', 'slots'));
     }
 
     public function store(Request $request)
     {
-        return $request;
-        
-        /* BookeInterview::create([
-            
-        ]); */
+        try {
+            $meeting = $this->createMeeting($request);
+
+            BookInterview::create([
+                'meeting_id' => $meeting->id,
+                'interviewer_id' => '7',
+                'candidate_id' => Auth::user()->id,
+                'booking_type_slug' => 'standard-booking',
+                'interview_type' => 'hr',
+                'date' => '2022-5-1',
+                'slot' => '12',
+                'start_at' => '2022-5-1 12:00',
+                'duration' => $meeting->duration,
+                'password' => $meeting->password,
+                'start_url' => $meeting->start_url,
+                'join_url' => $meeting->join_url,
+            ]);
+
+            return redirect()->route('book_interview.index')->with('message', 'Success Created');
+        }catch(\Exception $e){
+            return redirect()->back()->with(['error' => $e->getMessage()]);
+        }
     }
 
     public function nextPreDate(Request $request)
     {
         // $this->authorize('report-list', User::class);
-        
+
         $current_date = $request->current_date;
         $type = $request->type;
 
-        //weekdays morning 
+        //weekdays morning
         $weekdays_morning_from_time = PageSetting::where('key', 'weekdays_morning_from_time')->first()->value;
         $weekdays_morning_to_time = PageSetting::where('key', 'weekdays_morning_to_time')->first()->value;
 
@@ -99,7 +120,7 @@ class BookInterviewController extends Controller
         $slots = [];
         //Weekdays merged morning & evening slots
         $slots['weekdays_slots'] = array_merge($week_days_morning_slots, $week_days_evening_slots);
-        
+
         //Weekends merged morning & evening slots
         $slots['weekends_slots'] = array_merge($weekends_morning_slots, $weekends_evening_slots);
 

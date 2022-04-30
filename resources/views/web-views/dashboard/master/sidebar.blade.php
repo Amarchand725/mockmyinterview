@@ -3,11 +3,11 @@
         <ul class="list-sidebar bg-defoult">
             <li style="border-bottom: 1px solid white;">
                 <a href="" class="">
-                    <i class="fa fa-user"></i> 
-                    <span class="nav-label">Logged In: {{ Auth::user()->roles->pluck('name')[0] }} 
+                    <i class="fa fa-user"></i>
+                    <span class="nav-label">Logged In: {{ Auth::user()->roles->pluck('name')[0] }}
                         @if(Auth::check())
                             <span class="logged-in">●</span>
-                        @else 
+                        @else
                             <span class="logged-out">●</span>
                         @endif
                     </span>
@@ -17,6 +17,11 @@
                 <a href="{{ route('dashboard') }}" class="{{ request()->is('dashboard') ? 'active' : '' }}">
                     <i class="fa fa-th-large"></i> <span class="nav-label"> Dashboard </span>
                 </a>
+            </li>
+            <li>
+                <a href="{{ route('book_interview.index') }}" class="{{ request()->is('book_interview/*') ? 'active' : '' }}">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+                <span class="nav-label">Booked Interviews</span></a>
             </li>
             @can('book interview-list')
             <li>

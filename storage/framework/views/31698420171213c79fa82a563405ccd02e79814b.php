@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('title', $page_title); ?>
 
 <?php $__env->startPush('css'); ?>
@@ -45,7 +43,7 @@
 
         .next-btn{
             color: #0d6efd;
-            
+
         }
         .next-btn:focus, .next-btn:hover {
             color: #014c8c;
@@ -65,7 +63,7 @@
 
         .app i {
         font-size: 80px;
-        
+
         animation-duration: 3s;
         animation-name: slidein;
         animation-iteration-count: 1;
@@ -269,7 +267,7 @@
                                     </div>
                                     <div class="col-md-10">
                                         <div class="row">
-                                            <?php 
+                                            <?php
                                             $date = date('Y-m-d');
                                             $day = date("D", strtotime($date));
                                             ?>
@@ -278,8 +276,8 @@
                                                     <div class="col-sm-2">
                                                         
                                                         <article class="feature1 slot">
-                                                            <input type="checkbox" name="booked_slots[<?php echo e($date); ?>][]" value="<?php echo e($weekday_slot); ?>" id="feature1"/>
-                                                              <span><?php echo e($weekday_slot); ?></span>
+                                                            <input type="checkbox" name="booked_slots[<?php echo e($date); ?>][]" value="<?php echo e($weekend_slot); ?>" id="feature1"/>
+                                                              <span><?php echo e($weekend_slot); ?></span>
                                                         </article>
                                                     </div>
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -303,7 +301,7 @@
                                     </div>
                                     <div class="col-md-10">
                                         <div class="row">
-                                            <?php 
+                                            <?php
                                             $date = date('Y-m-d', strtotime("+1 day"));
                                             $day = date("D", strtotime($date));
                                             ?>
@@ -341,11 +339,11 @@
                                             </div>
                                             <?php if($booking_type->title=='Tentative Booking'): ?>
                                                 <div class="col-md-7">
-                                            <?php else: ?> 
+                                            <?php else: ?>
                                                 <div class="col-md-10">
                                             <?php endif; ?>
                                                 <strong>
-                                                    <span class="ml-3">                                               
+                                                    <span class="ml-3">
                                                         <?php echo e($booking_type->title); ?>
 
                                                         <?php if($booking_type->title!='Tentative Booking'): ?>
@@ -427,4 +425,5 @@
         });
     </script>
 <?php $__env->stopPush(); ?>
+
 <?php echo $__env->make('web-views.dashboard.master.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/web-views/interviews/create.blade.php ENDPATH**/ ?>
