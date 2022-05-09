@@ -74,11 +74,12 @@ Route::get('blog-resources', 'InterviewerController@resources')->name('blog-reso
 Route::get('blog/single/{slug}', 'InterviewerController@singleBlog')->name('blog.single');
 Route::get('buy-credits', 'InterviewerController@buyCredits')->name('buy-credits');
 Route::get('refer_and_earn', 'InterviewerController@referAndEarn')->name('refer_and_earn');
-
-Route::get('get-slots', 'InterviewerController@getSlots')->name('get-slots');
-
-Route::post('available_slot.store', 'AvailableSlotDateController@store')->name('available_slot.store');
 //Interviewer
+
+//availableslots
+Route::post('available_slot.store', 'AvailableSlotDateController@store')->name('available_slot.store');
+Route::get('get-slots', 'AvailableSlotDateController@getSlots')->name('get-slots');
+//availableslots
 
 //Roles
 Route::resource('role', 'admin\RoleController');
@@ -141,8 +142,8 @@ Route::resource('degree', 'admin\DegreeController');
 //course
 Route::resource('course', 'admin\CourseController');
 
-//Booking type
-Route::resource('booking_type', 'admin\BookingTypeController');
+//Booking Priority
+Route::resource('booking_priority', 'admin\BookingPriorityController');
 
 //Interview type
 Route::resource('interview_type', 'admin\InterviewTypeController');

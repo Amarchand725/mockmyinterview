@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class BookingType extends Model
+class BookingPriority extends Model
 {
     use HasFactory, SoftDeletes;
 

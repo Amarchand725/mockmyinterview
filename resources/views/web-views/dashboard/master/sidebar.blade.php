@@ -19,7 +19,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('book_interview.index') }}" class="{{ request()->is('book_interview/*') ? 'active' : '' }}">
+                <a href="{{ route('book_interview.index') }}" class="{{ request()->is('book_interview') ? 'active' : '' }}">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
                 <span class="nav-label">Booked Interviews</span></a>
             </li>

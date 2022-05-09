@@ -7,13 +7,16 @@ use App\Http\Traits\MeetingZoomTrait;
 use Illuminate\Http\Request;
 use App\Models\PageSetting;
 use App\Models\BookInterview;
-use App\Models\BookingType;
+use App\Models\BookingPriority;
+use App\Models\AvailableSlotDate;
+use App\Models\Qualification;
 use DateTime;
 use Auth;
 
 class BookInterviewController extends Controller
 {
     use MeetingZoomTrait;
+
     public function index()
     {
         $booked_interviews = BookInterview::orderby('id', 'desc')->paginate(10);
@@ -24,9 +27,9 @@ class BookInterviewController extends Controller
     {
         $this->authorize('book interview-list', User::class);
         $page_title = 'Book Interview - '.Auth::user()->roles->pluck('name')[0];
-        $booking_types = BookingType::where('status', 1)->get();
+        $booking_types = BookingPriority::where('status', 1)->get();
 
-        //weekdays morning
+        /* //weekdays morning
         $weekdays_morning_from_time = PageSetting::where('key', 'weekdays_morning_from_time')->first()->value;
         $weekdays_morning_to_time = PageSetting::where('key', 'weekdays_morning_to_time')->first()->value;
 
@@ -55,7 +58,43 @@ class BookInterviewController extends Controller
         $slots['weekdays_slots'] = array_merge($week_days_morning_slots, $week_days_evening_slots);
 
         //Weekends merged morning & evening slots
-        $slots['weekends_slots'] = array_merge($weekends_morning_slots, $weekends_evening_slots);
+        $slots['weekends_slots'] = array_merge($weekends_morning_slots, $weekends_evening_slots); */
+
+        $degrees = [];
+        foreach(Auth::user()->hasUserQualification as $qualification){
+            $degrees[] = $qualification->degree_slug;
+        }
+
+        $interviewers = Qualification::whereIn('degree_slug', $degrees)->get(['user_id']);
+
+        $slots = [];
+        
+        $b_slots = AvailableSlotDate::whereIn('interviewer_id', $interviewers)->where('start_date', '>=', date('Y-m-d'))->where('end_date', '<=', date('Y-m-d'))->get();
+        if(!empty($b_slots)){
+            foreach ($b_slots as $available_slot){
+                if(!empty($available_slot->hasBookedSlot)){
+                    if($available_slot->slot_type=='weekdays'){
+                        $slots['weekdays_slots'][] = $available_slot->hasBookedSlot->slot; 
+                    }elseif($available_slot->slot_type=='weekands'){
+                        $slots['weekends_slots'][] = $available_slot->hasBookedSlot->slot; 
+                    }      
+                }
+            }
+        }
+
+        /* $next_slots = [];
+        $b_slots = AvailableSlotDate::whereIn('interviewer_id', $interviewers)->where('start_date', '>=', date('Y-m-d'))->where('end_date', '<=', date('Y-m-d'))->get();
+        if(!empty($b_slots)){
+            foreach ($b_slots as $available_slot){
+                if(!empty($available_slot->hasBookedSlot)){
+                    if($available_slot->slot_type=='weekdays'){
+                        $slots['weekdays_slots'][] = $available_slot->hasBookedSlot->slot; 
+                    }elseif($available_slot->slot_type=='weekands'){
+                        $slots['weekends_slots'][] = $available_slot->hasBookedSlot->slot; 
+                    }      
+                }
+            }
+        } */
 
         return view('web-views.interviews.create', compact('page_title', 'booking_types', 'slots'));
     }

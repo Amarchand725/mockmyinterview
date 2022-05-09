@@ -9,8 +9,10 @@
             <div class="container pt-5">
                 <div class="row">
                     <div class="col-sm-6 ">
-                        <select class="form-select" aria-label="Default select example">
-                            <option value="All" selected>Search by category</option>
+                        <select class="form-select" id="interview_type" name="interview_type" aria-label="Default select example">
+                            <option value="All" selected>Search by interview type</option>
+                            <option value="hr">HR</option>
+                            <option value="technical">TECHNICAL</option>
                         </select>
                     </div>
                     <div class="col-sm-6">
@@ -31,27 +33,29 @@
                         <table class="table table-bordered resource_tb">
                             <thead>
                                 <tr>
+                                    <th>S.No</th>
                                     <th>Condidate</th>
-                                    <th>Meeting ID</th>
-                                    <th>Type</th>
+                                    <th>Priority</th>
                                     <th>Interview Type</th>
-                                    <th>Date</th>
+                                    <th>Meeting ID</th>
                                     <th>Duration</th>
                                     <th>Join URL</th>
+                                    <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($booked_interviews as $interview)
-                                    <tr>
-                                        <td>{{ $interview->candidate_id }}</td>
+                                @foreach ($booked_interviews as $key=>$interview)
+                                    <tr id="id-{{ $interview->id }}">
+                                        <td>{{  $booked_interviews->firstItem()+$key }}.</td>
+                                        <td>{{ $interview->hasCandidate->name }}</td>
+                                        <td>{{ \Illuminate\Support\Str::upper($interview->booking_type_slug) }}</td>
+                                        <td>{{ \Illuminate\Support\Str::upper($interview->interview_type) }}</td>
                                         <td>{{ $interview->meeting_id }}</td>
-                                        <td>{{ $interview->booking_type_slug }}</td>
-                                        <td>{{ $interview->interview_type }}</td>
-                                        <td>{{ $interview->date }}</td>
-                                        <td>{{ $interview->duration }}</td>
+                                        <td>{{ $interview->duration }} Minutes</td>
                                         <td>
                                             <a href="{{ $interview->join_url }}">JOIN Meeting</a>
                                         </td>
+                                        <td>{{ date('d, F-Y', strtotime($interview->date)) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

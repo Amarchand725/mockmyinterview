@@ -12,14 +12,14 @@
     </style>
 @endpush
 @section('content')
-    <input type="hidden" id="page_url" value="{{ route('booking_type.index') }}">
+    <input type="hidden" id="page_url" value="{{ route('booking_priority.index') }}">
     <section class="content-header">
         <div class="content-header-left">
             <h1>{{ $page_title }}</h1>
         </div>
         @can('booking_type-create')
         <div class="content-header-right">
-            <a href="{{ route('booking_type.create') }}" class="btn btn-primary btn-sm">Add New Booking Type</a>
+            <a href="{{ route('booking_priority.create') }}" class="btn btn-primary btn-sm">Add New Booking Priority</a>
         </div>
         @endcan
     </section>
@@ -53,7 +53,7 @@
                                 <tr>
                                     <th>SL</th>
                                     <th>Title</th>
-                                    <th>Type</th>
+                                    <th>Priority Type</th>
                                     <th>Color</th>
                                     <th>Credits</th>
                                     <th>Price</th>
@@ -64,18 +64,18 @@
                                 </tr>
                             </thead>
                             <tbody id="body">
-                                @foreach($booking_types as $key=>$booking_type)
-                                    <tr id="id-{{ $booking_type->slug }}">
-                                        <td>{{  $booking_types->firstItem()+$key }}.</td>
-                                        <td>{!! \Illuminate\Support\Str::limit($booking_type->title,40) !!}</td>
-                                        <td>{{ Str::upper($booking_type->type) }}</td>
-                                        <td><span class="dot" style="background: {{ $booking_type->color }}"></span></td>
-                                        <td>{{ $booking_type->credits }}</td>
-                                        <td>{{ number_format($booking_type->price, 2) }}</td>
-                                        <td>{{ $booking_type->currency_code }}</td>
-                                        <td>{!! \Illuminate\Support\Str::limit($booking_type->description,60) !!}</td>
+                                @foreach($booking_priorities as $key=>$booking_priority)
+                                    <tr id="id-{{ $booking_priority->slug }}">
+                                        <td>{{  $booking_priorities->firstItem()+$key }}.</td>
+                                        <td>{!! \Illuminate\Support\Str::limit($booking_priority->title,40) !!}</td>
+                                        <td>{{ Str::upper($booking_priority->type) }}</td>
+                                        <td><span class="dot" style="background: {{ $booking_priority->color }}"></span></td>
+                                        <td>{{ $booking_priority->credits }}</td>
+                                        <td>{{ number_format($booking_priority->price, 2) }}</td>
+                                        <td>{{ $booking_priority->currency_code }}</td>
+                                        <td>{!! \Illuminate\Support\Str::limit($booking_priority->description,60) !!}</td>
                                         <td>
-                                            @if($booking_type->status)
+                                            @if($booking_priority->status)
                                                 <span class="badge badge-success">Active</span>
                                             @else
                                                 <span class="badge badge-danger">In-Active</span>
@@ -83,19 +83,19 @@
                                         </td>
                                         <td>
                                             @can('booking_type-edit')
-                                                <a class="btn btn-primary btn-xs" href="{{ route('booking_type.edit', $booking_type->slug) }}"><i class="fa fa-edit"></i> Edit</a>
+                                                <a class="btn btn-primary btn-xs" href="{{ route('booking_priority.edit', $booking_priority->slug) }}"><i class="fa fa-edit"></i> Edit</a>
                                             @endcan
                                             @can('booking_type-delete')
-                                                <button class="btn btn-danger btn-xs delete" data-slug="{{ $booking_type->slug }}" data-del-url="{{ url('booking_type', $booking_type->slug) }}"><i class="fa fa-trash"></i> Delete</button>
+                                                <button class="btn btn-danger btn-xs delete" data-slug="{{ $booking_priority->slug }}" data-del-url="{{ url('booking_priority', $booking_priority->slug) }}"><i class="fa fa-trash"></i> Delete</button>
                                             @endcan
                                         </td>
                                     </tr>
                                 @endforeach
                                 <tr>
-                                    <td colspan="6">
-                                        Displying {{$booking_types->firstItem()}} to {{$booking_types->lastItem()}} of {{$booking_types->total()}} records
+                                    <td colspan="10">
+                                        Displying {{$booking_priorities->firstItem()}} to {{$booking_priorities->lastItem()}} of {{$booking_priorities->total()}} records
                                         <div class="d-flex justify-content-center">
-                                            {!! $booking_types->links('pagination::bootstrap-4') !!}
+                                            {!! $booking_priorities->links('pagination::bootstrap-4') !!}
                                         </div>
                                     </td>
                                 </tr>

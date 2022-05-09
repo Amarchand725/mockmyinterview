@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('title', $page_title); ?>
 
 <?php $__env->startSection('content'); ?>
@@ -7,8 +9,10 @@
             <div class="container pt-5">
                 <div class="row">
                     <div class="col-sm-6 ">
-                        <select class="form-select" aria-label="Default select example">
-                            <option value="All" selected>Search by category</option>
+                        <select class="form-select" id="interview_type" name="interview_type" aria-label="Default select example">
+                            <option value="All" selected>Search by interview type</option>
+                            <option value="hr">HR</option>
+                            <option value="technical">TECHNICAL</option>
                         </select>
                     </div>
                     <div class="col-sm-6">
@@ -29,27 +33,29 @@
                         <table class="table table-bordered resource_tb">
                             <thead>
                                 <tr>
+                                    <th>S.No</th>
                                     <th>Condidate</th>
-                                    <th>Meeting ID</th>
-                                    <th>Type</th>
+                                    <th>Priority</th>
                                     <th>Interview Type</th>
-                                    <th>Date</th>
+                                    <th>Meeting ID</th>
                                     <th>Duration</th>
                                     <th>Join URL</th>
+                                    <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $__currentLoopData = $booked_interviews; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $interview): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <tr>
-                                        <td><?php echo e($interview->candidate_id); ?></td>
+                                <?php $__currentLoopData = $booked_interviews; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$interview): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <tr id="id-<?php echo e($interview->id); ?>">
+                                        <td><?php echo e($booked_interviews->firstItem()+$key); ?>.</td>
+                                        <td><?php echo e($interview->hasCandidate->name); ?></td>
+                                        <td><?php echo e(\Illuminate\Support\Str::upper($interview->booking_type_slug)); ?></td>
+                                        <td><?php echo e(\Illuminate\Support\Str::upper($interview->interview_type)); ?></td>
                                         <td><?php echo e($interview->meeting_id); ?></td>
-                                        <td><?php echo e($interview->booking_type_slug); ?></td>
-                                        <td><?php echo e($interview->interview_type); ?></td>
-                                        <td><?php echo e($interview->date); ?></td>
-                                        <td><?php echo e($interview->duration); ?></td>
+                                        <td><?php echo e($interview->duration); ?> Minutes</td>
                                         <td>
                                             <a href="<?php echo e($interview->join_url); ?>">JOIN Meeting</a>
                                         </td>
+                                        <td><?php echo e(date('d, F-Y', strtotime($interview->date))); ?></td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>

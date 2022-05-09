@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBookingTypeTable extends Migration
+class CreateBookingPriorityTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateBookingTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('booking_types', function (Blueprint $table) {
+        Schema::create('booking_priorities', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('created_by');
             $table->string('title');
@@ -37,6 +37,6 @@ class CreateBookingTypeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('booking_types');
+        Schema::dropIfExists('booking_priorities');
     }
 }

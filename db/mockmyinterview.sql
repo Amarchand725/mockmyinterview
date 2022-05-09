@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 29, 2022 at 02:53 PM
+-- Generation Time: May 09, 2022 at 10:52 AM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.4.22
 
@@ -109,7 +109,9 @@ CREATE TABLE `available_slot_dates` (
 --
 
 INSERT INTO `available_slot_dates` (`id`, `interviewer_id`, `hr_type`, `technical_type`, `start_date`, `end_date`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 7, NULL, '1', '2022-04-07', '2022-04-07', 0, NULL, '2022-04-07 02:03:05', '2022-04-07 02:03:05');
+(1, 7, NULL, '1', '2022-04-07', '2022-04-07', 0, NULL, '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
+(2, 7, NULL, '1', '2022-05-09', '2022-05-09', 0, NULL, '2022-05-09 03:37:41', '2022-05-09 03:37:41'),
+(3, 7, NULL, '1', '2022-05-09', '2022-05-09', 0, NULL, '2022-05-09 03:38:08', '2022-05-09 03:38:08');
 
 -- --------------------------------------------------------
 
@@ -145,10 +147,10 @@ INSERT INTO `blogs` (`id`, `created_by`, `category_slug`, `title`, `slug`, `desc
 -- --------------------------------------------------------
 
 --
--- Table structure for table `booking_types`
+-- Table structure for table `booking_priorities`
 --
 
-CREATE TABLE `booking_types` (
+CREATE TABLE `booking_priorities` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `created_by` bigint(20) NOT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -166,13 +168,14 @@ CREATE TABLE `booking_types` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `booking_types`
+-- Dumping data for table `booking_priorities`
 --
 
-INSERT INTO `booking_types` (`id`, `created_by`, `title`, `slug`, `color`, `credits`, `type`, `price`, `currency_code`, `description`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
+INSERT INTO `booking_priorities` (`id`, `created_by`, `title`, `slug`, `color`, `credits`, `type`, `price`, `currency_code`, `description`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
 (1, 1, 'Priority Booking', 'priority-booking', '#e64757', '1299', 'uno', 18.90, 'USD', 'Voluptatem Dolores', 1, NULL, '2022-03-31 09:04:41', '2022-03-31 09:31:00'),
 (2, 1, 'Standard Booking', 'standard-booking', '#3b8712', '2199', 'duo', 31.99, 'USD', 'Lorem ipsum', 1, NULL, '2022-03-31 09:33:34', '2022-03-31 09:33:34'),
-(3, 1, 'Tentative Booking', 'tentative-booking', '#9f9d9d', NULL, 'trio', NULL, 'USD', 'Lorem ipsum', 1, NULL, '2022-03-31 09:38:20', '2022-03-31 09:38:45');
+(3, 1, 'Tentative Booking', 'tentative-booking', '#9f9d9d', NULL, 'trio', NULL, 'USD', 'Lorem ipsum', 1, NULL, '2022-03-31 09:38:20', '2022-05-09 03:33:52'),
+(4, 1, 'Aut saepe perspiciat', 'aut-saepe-perspiciat', '#7ab731', '26', 'uno', 523.00, '233', 'Eiusmod ratione qui', 1, '2022-05-09 08:33:42', '2022-05-09 03:33:25', '2022-05-09 03:33:42');
 
 -- --------------------------------------------------------
 
@@ -198,6 +201,13 @@ CREATE TABLE `book_interviews` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `book_interviews`
+--
+
+INSERT INTO `book_interviews` (`id`, `meeting_id`, `interviewer_id`, `candidate_id`, `booking_type_slug`, `interview_type`, `date`, `slot`, `start_at`, `duration`, `password`, `start_url`, `join_url`, `status`, `created_at`, `updated_at`) VALUES
+(1, 89559144303, 7, 5, 'standard-booking', 'hr', '2022-05-01', '12', '2022-05-01 12:00:00', 30, '12345', 'https://us05web.zoom.us/s/89559144303?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5NTU5MTQ0MzAzIiwiZXhwIjoxNjUyMDkzMTgzLCJpYXQiOjE2NTIwODU5ODMsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.BUiJ2tS_sgeaee4KoGT0FaSjMaLZqpTmoDCOMRl78CY', 'https://us05web.zoom.us/j/89559144303?pwd=aGdDZUJ5ZFhrSFd5bkdZOXI0djduZz09', 0, '2022-05-09 03:46:23', '2022-05-09 03:46:23');
 
 -- --------------------------------------------------------
 
@@ -536,7 +546,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (65, '2022_03_25_103702_create_resumes_table', 44),
 (66, '2022_03_25_110315_create_skills_table', 45),
 (67, '2022_03_25_110427_create_projects_table', 46),
-(75, '2022_03_31_113222_create_booking_types_table', 47),
+(75, '2022_03_31_113222_create_booking_priorities_table', 47),
 (82, '2022_04_05_101251_create_available_slot_dates_table', 53),
 (83, '2022_04_05_101315_create_available_slots_table', 54),
 (85, '2022_04_07_072048_create_interview_types_table', 55),
@@ -1530,7 +1540,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `user_id`, `name`, `last_name`, `phone`, `promo_code`, `email`, `temprary_email`, `email_verified_at`, `password`, `remember_token`, `verify_token`, `status`, `image`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 4046, 'Hardik tested', NULL, NULL, NULL, 'admin@gmail.com', NULL, NULL, '$2y$10$TrSMTkdqZ4CkZe8zLOz/AuMG5CYt3vVpO4dHwUN.ecPMsAorlD416', NULL, NULL, 1, NULL, NULL, '2022-03-09 11:01:24', '2022-03-25 05:12:33'),
+(1, 4046, 'Hardik tested', NULL, NULL, NULL, 'admin@gmail.com', NULL, NULL, '$2y$10$TrSMTkdqZ4CkZe8zLOz/AuMG5CYt3vVpO4dHwUN.ecPMsAorlD416', '8olYyaLQfLz4h3XUzaq7PbX8PGhojhnOxLgJvDznnGYAiPrlbHz7UabjZyYK', NULL, 1, NULL, NULL, '2022-03-09 11:01:24', '2022-03-25 05:12:33'),
 (5, 5465, 'Alika Avila', NULL, NULL, NULL, 'lawukobov@mailinator.com', NULL, NULL, '$2y$10$/MR9SKwPqOJbVU0uHvd1MOzLwrsQDeUy4aiC1dM3/vnCqF5HFUBKO', NULL, NULL, 1, NULL, NULL, '2022-03-22 03:43:24', '2022-03-22 03:43:24'),
 (6, 2964, 'Yvette Glover', 'Cash', '1234567800', NULL, 'chandamar725@gmail.com', NULL, '2022-03-30 09:34:14', '$2y$10$FipZvMlM.AsqEoPvqF8PHOdl7DN43JYgAm4IZRevIZEBwZVLlV6/.', NULL, NULL, 1, '30-03-2022-112134.jpg', NULL, '2022-03-22 06:02:18', '2022-03-31 03:32:33'),
 (7, 5461, 'Sydnee Langley', 'Ratliff', '12345678', NULL, 'dudaguhu@interviewer.com', NULL, NULL, '$2y$10$0YqFHYTffC4jMVOzF9oL3.o2AFDbqifo/eWT/FSQlQxTQmI8KIZ6i', NULL, NULL, 1, NULL, NULL, '2022-03-22 06:04:59', '2022-03-31 03:39:09'),
@@ -1643,9 +1653,9 @@ ALTER TABLE `blogs`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `booking_types`
+-- Indexes for table `booking_priorities`
 --
-ALTER TABLE `booking_types`
+ALTER TABLE `booking_priorities`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1911,7 +1921,7 @@ ALTER TABLE `available_slots`
 -- AUTO_INCREMENT for table `available_slot_dates`
 --
 ALTER TABLE `available_slot_dates`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `blogs`
@@ -1920,16 +1930,16 @@ ALTER TABLE `blogs`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `booking_types`
+-- AUTO_INCREMENT for table `booking_priorities`
 --
-ALTER TABLE `booking_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `booking_priorities`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `book_interviews`
 --
 ALTER TABLE `book_interviews`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `categories`

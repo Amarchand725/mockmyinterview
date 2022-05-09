@@ -1,8 +1,8 @@
-@extends('web-views.dashboard.master.app')
 
-@section('title', $page_title)
-@push('css')
-    <link href="{{ asset('public/css/calendar/main.min.css') }}" rel="stylesheet" />
+
+<?php $__env->startSection('title', $page_title); ?>
+<?php $__env->startPush('css'); ?>
+    <link href="<?php echo e(asset('public/css/calendar/main.min.css')); ?>" rel="stylesheet" />
 
     <style>
         .slot{
@@ -31,19 +31,19 @@
             border-color: #050505f2;
         }
     </style>
-@endpush
-@section('content')
+<?php $__env->stopPush(); ?>
+<?php $__env->startSection('content'); ?>
     <div class="container-fluid py-3 ">
         <h2 class="mb-3 text-center">Interview Scheduler </h2>
         <div class="py-3">
-            <form action="{{ route('available_slot.store') }}" method="post" id="subform">
-                @csrf
+            <form action="<?php echo e(route('available_slot.store')); ?>" method="post" id="subform">
+                <?php echo csrf_field(); ?>
 
                 <div class="row mx-auto" style="border: 2px solid #eee;">
                     <div class="col-md-6">
                         <div class="form-group float-label-control">
                             <label for="start-date">Start Date</label>
-                            <input type="text" name="start_date" class="form-control datepicker" id="start-date" value="{{ date('d-m-Y') }}" placeholder="Start Date">
+                            <input type="text" name="start_date" class="form-control datepicker" id="start-date" value="<?php echo e(date('d-m-Y')); ?>" placeholder="Start Date">
                         </div>
                     </div>
 
@@ -54,20 +54,20 @@
                                     <div>
                                         <h6> Interview Type </h6>
                                     </div>
-                                    @if(Auth::user()->hasResume->technical)
+                                    <?php if(Auth::user()->hasResume->technical): ?>
                                         <input type="checkbox" name="technical_type" value="1" id="technical" class="form-check-input">
-                                    @else 
+                                    <?php else: ?> 
                                         <input type="checkbox" name="technical_type" value="1" disabled id="technical" class="form-check-input">
-                                    @endif
+                                    <?php endif; ?>
                                     <label class="form-check-label" for="technical">
                                         Technical
                                     </label>
                                     <div class="mt-3">
-                                        @if(Auth::user()->hasResume->hr)
+                                        <?php if(Auth::user()->hasResume->hr): ?>
                                             <input type="checkbox" name="hr_type" value="1" id="hr" class="form-check-input">
-                                        @else 
+                                        <?php else: ?> 
                                             <input type="checkbox" name="hr_type" value="1" disabled id="hr" class="form-check-input">
-                                        @endif
+                                        <?php endif; ?>
                                         <label class="form-check-label" for="hr">
                                             HR
                                         </label>
@@ -80,7 +80,7 @@
                     <div class="col-md-6">
                         <div class="form-group float-label-control">
                             <label for="end-date">End Date</label>
-                            <input type="text" name="end_date" class="form-control datepicker" id="end-date" value="{{ date('d-m-Y') }}" placeholder="End Date">
+                            <input type="text" name="end_date" class="form-control datepicker" id="end-date" value="<?php echo e(date('d-m-Y')); ?>" placeholder="End Date">
                         </div>
                     </div>
                 </div>
@@ -140,12 +140,12 @@
             </form>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('js')
-    <script src="{{ asset('public/js/calendar/main.min.js') }}"></script>
-    <script src="{{ asset('public/js/calendar/main.js') }}"></script>
-    <script src="{{ asset('public/js/calendar/interaction/main.js') }}"></script>
+<?php $__env->startPush('js'); ?>
+    <script src="<?php echo e(asset('public/js/calendar/main.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('public/js/calendar/main.js')); ?>"></script>
+    <script src="<?php echo e(asset('public/js/calendar/interaction/main.js')); ?>"></script>
     <script>
         $(document).on('click', '.m-slot-btn', function(){
             var slot = $(this).val();
@@ -175,7 +175,7 @@
                 }
                 
                 $.ajax({
-                    url : "{{ route('get-slots') }}",
+                    url : "<?php echo e(route('get-slots')); ?>",
                     data : {'slot_type' : slot_type},
                     success : function(response){
                         $('.slot-days').html(response);
@@ -203,7 +203,7 @@
                 }
 
                 $.ajax({
-                    url : "{{ route('get-slots') }}",
+                    url : "<?php echo e(route('get-slots')); ?>",
                     data : {'slot_type' : slot_type},
                     success : function(response){
                         $('.slot-days').html(response);
@@ -219,7 +219,7 @@
                     }
 
                     $.ajax({
-                        url : "{{ route('get-slots') }}",
+                        url : "<?php echo e(route('get-slots')); ?>",
                         data : {'slot_type' : slot_type},
                         success : function(response){
                             $('.slot-days').html(response);
@@ -292,4 +292,5 @@
             calendar.render();
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('web-views.dashboard.master.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/web-views/interviewer/schedule-interview.blade.php ENDPATH**/ ?>

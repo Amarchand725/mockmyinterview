@@ -20,7 +20,7 @@
                 </a>
             </li>
             <li>
-                <a href="<?php echo e(route('book_interview.index')); ?>" class="<?php echo e(request()->is('book_interview/*') ? 'active' : ''); ?>">
+                <a href="<?php echo e(route('book_interview.index')); ?>" class="<?php echo e(request()->is('book_interview') ? 'active' : ''); ?>">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
                 <span class="nav-label">Booked Interviews</span></a>
             </li>

@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers;
-use App\Models\BookingType;
+use App\Models\BookingPriority;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
 
-class BookingTypeController extends Controller
+class BookingPriorityController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,7 +25,7 @@ class BookingTypeController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $query = BookingType::orderby('id', 'desc')->where('id', '>', 0);
+            $query = BookingPriority::orderby('id', 'desc')->where('id', '>', 0);
             if($request['search'] != ""){
                 $query->where('title', 'like', '%'. $request['search'] .'%')
                     ->orWhere('type', 'like', '%'. $request['search'] .'%')
@@ -39,14 +39,12 @@ class BookingTypeController extends Controller
                 }
                 $query->where('status', $request['status']);
             }
-            $booking_types = $query->paginate(10);
-            return (string) view('admin.booking_types.search', compact('booking_types'));
+            $booking_priorities = $query->paginate(10);
+            return (string) view('admin.booking_priorities.search', compact('booking_priorities'));
         }
-        $page_title = 'All Booking Types';
-        $booking_types = BookingType::orderBy('id','DESC')->paginate(10);
-        return view('admin.booking_types.index',compact('page_title', 'booking_types'));
-        
-
+        $page_title = 'All Booking Priorities';
+        $booking_priorities = BookingPriority::orderBy('id','DESC')->paginate(10);
+        return view('admin.booking_priorities.index',compact('page_title', 'booking_priorities'));
     }
 
     /**
@@ -56,8 +54,8 @@ class BookingTypeController extends Controller
      */
     public function create()
     {
-        $page_title = 'Add Booking Type';
-        return view('admin.booking_types.create',compact('page_title'));
+        $page_title = 'Add Booking Priority';
+        return view('admin.booking_priorities.create',compact('page_title'));
     }
 
     /**
@@ -77,7 +75,7 @@ class BookingTypeController extends Controller
             'description' => 'max:255',
         ]);
 
-        $model = BookingType::create([
+        $model = BookingPriority::create([
             'created_by' => Auth::user()->id,
             'type' => $request->type,
             'color' => $request->color,
@@ -90,39 +88,40 @@ class BookingTypeController extends Controller
         ]);
 
         if($model){
-            return redirect()->route('booking_type.index')
-                        ->with('message','Booking type added successfully');
+            return redirect()->route('booking_priority.index')
+                        ->with('message','Booking priority added successfully');
         }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\BookingType  $bookingType
+     * @param  \App\Models\BookingPriority  $bookingPriority
      * @return \Illuminate\Http\Response
      */
-    public function show(BookingType $bookingType)
+    public function show(BookingPriority $bookingPriority)
     {
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\BookingType  $bookingType
+     * @param  \App\Models\BookingPriority  $bookingPriority
      * @return \Illuminate\Http\Response
      */
     public function edit($slug)
     {
-        $model = BookingType::where('slug', $slug)->first();
-        $page_title = 'Edit Booking Type';
-        return view('admin.booking_types.edit',compact('model', 'page_title'));
+        $model = BookingPriority::where('slug', $slug)->first();
+        $page_title = 'Edit Booking Priority';
+        return view('admin.booking_priorities.edit',compact('model', 'page_title'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\BookingType  $bookingType
+     * @param  \App\Models\BookingPriority  $bookingPriority
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $slug)
@@ -136,7 +135,7 @@ class BookingTypeController extends Controller
             'description' => 'max:255',
         ]);
 
-        $model = BookingType::where('slug', $slug)->first();
+        $model = BookingPriority::where('slug', $slug)->first();
         $model->title = $request->title;
         $model->slug = \Str::slug($request->title);
         $model->type = $request->type;
@@ -149,20 +148,20 @@ class BookingTypeController extends Controller
         $model->save();
 
         if($model){
-            return redirect()->route('booking_type.index')
-                        ->with('message','Booking type updated successfully');
+            return redirect()->route('booking_priority.index')
+                        ->with('message','Booking Priority updated successfully');
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\BookingType  $bookingType
+     * @param  \App\Models\BookingPriority  $bookingPriority
      * @return \Illuminate\Http\Response
      */
     public function destroy($slug)
     {
-        $model = BookingType::where('slug', $slug)->first();
+        $model = BookingPriority::where('slug', $slug)->first();
 
         if ($model) {
             $model->delete();
