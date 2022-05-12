@@ -64,8 +64,10 @@ Route::get('get_courses/{slug}', 'admin\CourseController@getCourses')->name('get
 // Route::get('book-interview', 'CandidateController@bookInterview')->name('book-interview');
 Route::get('report', 'CandidateController@report')->name('report');
 Route::get('test_setup', 'CandidateController@testSetup')->name('test_setup');
+Route::get('test_webcam', 'CandidateController@testWebcam')->name('test_webcam');
 Route::get('notifications', 'CandidateController@notifications')->name('notifications');
 Route::get('next_pre_date', 'BookInterviewController@nextPreDate')->name('next_pre_date');
+Route::get('get_booked_interview_ids', 'BookInterviewController@getBookedInterviewIds')->name('get_booked_interview_ids');
 //Candidate
 
 //Interviewers

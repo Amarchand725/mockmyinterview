@@ -36,32 +36,35 @@
                                 <div class="row">
                                     <div class="col-md-2">
                                         <div class="form-check">
-                                            <input type="radio" name="interview_type" value="hr" class="form-check-input" id="hr" @if(sizeof(Auth::user()->hasUserQualification) == 0) disabled @endif>
+                                            <input type="radio" name="interview_type" value="hr" class="form-check-input" id="hr" checked @if(sizeof(Auth::user()->hasUserQualification) == 0) disabled @endif>
                                             <label class="form-check-label" for="hr">
-                                            HR
-                                        </label>
+                                                HR
+                                            </label>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-check">
                                             <input type="radio" name="interview_type" value="technical" class="form-check-input" id="technical" @if(sizeof(Auth::user()->hasUserQualification) == 0) disabled @endif>
                                             <label class="form-check-label" for="technical">
-                                            Technical
-                                        </label>
+                                                Technical
+                                            </label>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-check">
                                             <input type="radio" name="interview_type" value="specialized" class="form-check-input" id="spacialized" @if(sizeof(Auth::user()->hasUserQualification) == 0) disabled @endif>
                                             <label class="form-check-label" for="spacialized">
-                                            Specialized
-                                        </label>
+                                                Specialized
+                                            </label>
                                         </div>
+                                    </div>
+                                    <div>
+                                        <span style="color: red">{{ $errors->first('interview_type') }}</span>
                                     </div>
                                 </div>
                                 <!-- date -->
                                 <div class="mt-3">
-                                    <input type="text" class="form-control datepicker" name="" value="{{ date('d/m/Y') }}" id="current-date">
+                                    <input type="text" class="form-control datepicker" name="date" value="{{ date('d/m/Y') }}" id="current-date">
                                 </div>
                             </div>
                         </div>
@@ -99,24 +102,28 @@
                                             $date = date('Y-m-d');
                                             $day = date("D", strtotime($date));
                                             @endphp
-                                            @if($day == 'Sat' || $day == 'Sun')
-                                                @foreach ($slots['weekends_slots'] as $weekend_slot)
-                                                    <div class="col-sm-2">
-                                                        <article class="feature1 slot">
-                                                            <input type="checkbox" name="booked_slots[{{ $date }}][]" value="{{ $weekend_slot }}" id="feature1"/>
-                                                              <span>{{ $weekend_slot }}</span>
-                                                        </article>
-                                                    </div>
-                                                @endforeach
-                                            @else
-                                                @foreach ($slots['weekdays_slots'] as $weekday_slot)
-                                                    <div class="col-sm-2">
-                                                        <article class="feature1 slot">
-                                                            <input type="checkbox" name="booked_slots[{{ $date }}][]" value="{{ $weekday_slot }}" id="feature1"/>
-                                                            <span>{{ $weekday_slot }}</span>
-                                                        </article>
-                                                    </div>
-                                                @endforeach
+                                            @if(sizeof($slots)>0)
+                                                @if($day == 'Sat' || $day == 'Sun')
+                                                    @foreach ($slots['weekends_slots'] as $weekend_slot)
+                                                        <div class="col-sm-2">
+                                                            <article class="feature1 slot">
+                                                                <input type="checkbox" name="booked_slots[{{ $weekend_slot['interviewer_id'] }}][]" value="{{ $weekend_slot['slot'] }}" id="feature1"/>
+                                                                <span>{{ $weekend_slot['slot'] }}</span>
+                                                            </article>
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                    @foreach ($slots['weekdays_slots'] as $weekday_slot)
+                                                        <div class="col-sm-2">
+                                                            <article class="feature1 slot">
+                                                                <input type="checkbox" name="booked_slots[{{ $weekday_slot['interviewer_id'] }}][]" value="{{ $weekday_slot['slot'] }}" id="feature1"/>
+                                                                <span>{{ $weekday_slot['slot'] }}</span>
+                                                            </article>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                            @else 
+                                                Not available slot
                                             @endif
                                         </div>
                                     </div>
@@ -132,24 +139,28 @@
                                             $date = date('Y-m-d', strtotime("+1 day"));
                                             $day = date("D", strtotime($date));
                                             @endphp
-                                            @if($day == 'Sat' || $day == 'Sun')
-                                                @foreach ($slots['weekends_slots'] as $weekend_slot)
-                                                    <div class="col-sm-2">
-                                                        <article class="feature1 slot">
-                                                            <input type="checkbox" name="booked_slots[{{ $date }}][]" value="{{ $weekend_slot }}" id="feature1"/>
-                                                            <span>{{ $weekend_slot }}</span>
-                                                        </article>
-                                                    </div>
-                                                @endforeach
-                                            @else
-                                                @foreach ($slots['weekdays_slots'] as $weekday_slot)
-                                                    <div class="col-sm-2">
-                                                        <article class="feature1 slot">
-                                                            <input type="checkbox" name="booked_slots[{{ $date }}][]" value="{{ $weekday_slot }}" id="feature1"/>
-                                                            <span>{{ $weekday_slot }}</span>
-                                                        </article>
-                                                    </div>
-                                                @endforeach
+                                            @if(sizeof($next_slots)>0)
+                                                @if($day == 'Sat' || $day == 'Sun')
+                                                    @foreach ($next_slots['weekends_slots'] as $weekend_slot)
+                                                        <div class="col-sm-2">
+                                                            <article class="feature1 slot">
+                                                                <input type="checkbox" name="booked_slots[{{ $weekend_slot['interviewer_id'] }}][]" value="{{ $weekend_slot['slot'] }}" id="feature1"/>
+                                                                <span>{{ $weekend_slot['slot'] }}</span>
+                                                            </article>
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                    @foreach ($next_slots['weekdays_slots'] as $weekday_slot)
+                                                        <div class="col-sm-2">
+                                                            <article class="feature1 slot">
+                                                                <input type="checkbox" name="booked_slots[{{ $weekday_slot['interviewer_id'] }}][]" value="{{ $weekday_slot['slot'] }}" id="feature1"/>
+                                                                <span>{{ $weekday_slot['slot'] }}</span>
+                                                            </article>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                            @else 
+                                                Not available slot
                                             @endif
                                         </div>
                                     </div>
@@ -245,6 +256,7 @@
                 type : 'GET',
                 data: {current_date:current_date, type:type},
                 success : function(response){
+                    console.log(response);
                     $('.next-slots').html(response);
                 }
             });

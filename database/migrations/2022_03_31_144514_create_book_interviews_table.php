@@ -27,7 +27,7 @@ class CreateBookInterviewsTable extends Migration
             $table->string('password')->comment('metting password');
             $table->text('start_url');
             $table->text('join_url');
-            $table->boolean('status')->default(0)->comment('0=booked, 1=confirmed');
+            $table->integer('status')->default(0)->comment('0=pending, 1=confirmed, 2=rejected');
             $table->timestamps();
         });
     }

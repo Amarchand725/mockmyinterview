@@ -14,4 +14,8 @@ class BookInterview extends Model
     {
         return $this->hasOne(User::class, 'id', 'candidate_id');
     }
+    public function hasInterviewer()
+    {
+        return $this->hasOne(User::class, 'id', 'interviewer_id');
+    }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 09, 2022 at 10:52 AM
+-- Generation Time: May 12, 2022 at 01:07 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.4.22
 
@@ -73,17 +73,59 @@ CREATE TABLE `available_slots` (
 --
 
 INSERT INTO `available_slots` (`id`, `available_date_id`, `shift`, `slot`, `created_at`, `updated_at`) VALUES
-(1, 1, 'morning', '11:00', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
-(2, 1, 'morning', '12:00', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
-(3, 1, 'morning', '12:30', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
-(4, 1, 'evening', '17:00', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
-(5, 1, 'evening', '18:00', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
-(6, 1, 'evening', '18:30', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
-(7, 1, 'evening', '19:00', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
-(8, 1, 'evening', '19:30', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
-(9, 1, 'evening', '21:30', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
-(10, 1, 'evening', '22:00', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
-(11, 1, 'evening', '22:30', '2022-04-07 02:03:05', '2022-04-07 02:03:05');
+(1, 4, 'morning', '11:00', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
+(2, 4, 'morning', '12:00', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
+(3, 4, 'morning', '12:30', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
+(4, 4, 'evening', '17:00', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
+(5, 4, 'evening', '18:00', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
+(6, 4, 'evening', '18:30', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
+(7, 4, 'evening', '19:00', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
+(8, 4, 'evening', '19:30', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
+(9, 4, 'evening', '21:30', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
+(10, 4, 'evening', '22:00', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
+(11, 4, 'evening', '22:30', '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
+(12, 4, 'morning', '11:30', '2022-05-09 05:43:34', '2022-05-09 05:43:34'),
+(13, 4, 'morning', '12:00', '2022-05-09 05:43:34', '2022-05-09 05:43:34'),
+(14, 4, 'evening', '18:00', '2022-05-09 05:43:34', '2022-05-09 05:43:34'),
+(15, 4, 'evening', '18:30', '2022-05-09 05:43:34', '2022-05-09 05:43:34'),
+(16, 4, 'evening', '19:30', '2022-05-09 05:43:34', '2022-05-09 05:43:34'),
+(17, 4, 'evening', '21:00', '2022-05-09 05:43:34', '2022-05-09 05:43:34'),
+(18, 5, 'morning', '12:00', '2022-05-09 08:31:26', '2022-05-09 08:31:26'),
+(19, 5, 'morning', '12:30', '2022-05-09 08:31:26', '2022-05-09 08:31:26'),
+(20, 5, 'morning', '15:00', '2022-05-09 08:31:26', '2022-05-09 08:31:26'),
+(21, 5, 'evening', '17:30', '2022-05-09 08:31:26', '2022-05-09 08:31:26'),
+(22, 5, 'evening', '18:30', '2022-05-09 08:31:26', '2022-05-09 08:31:26'),
+(23, 5, 'evening', '22:00', '2022-05-09 08:31:26', '2022-05-09 08:31:26'),
+(24, 5, 'evening', '22:30', '2022-05-09 08:31:26', '2022-05-09 08:31:26'),
+(25, 6, 'morning', '11:00', '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
+(26, 6, 'morning', '11:30', '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
+(27, 6, 'morning', '12:00', '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
+(28, 6, 'morning', '12:30', '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
+(29, 6, 'evening', '17:00', '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
+(30, 6, 'evening', '17:30', '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
+(31, 6, 'evening', '18:00', '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
+(32, 6, 'evening', '18:30', '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
+(33, 6, 'evening', '19:00', '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
+(34, 6, 'evening', '19:30', '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
+(35, 6, 'evening', '20:00', '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
+(36, 6, 'evening', '20:30', '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
+(37, 6, 'evening', '21:30', '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
+(38, 6, 'evening', '22:00', '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
+(39, 7, 'morning', '10:00', '2022-05-10 03:48:28', '2022-05-10 03:48:28'),
+(40, 7, 'morning', '11:00', '2022-05-10 03:48:28', '2022-05-10 03:48:28'),
+(41, 7, 'morning', '12:00', '2022-05-10 03:48:28', '2022-05-10 03:48:28'),
+(42, 7, 'morning', '12:30', '2022-05-10 03:48:28', '2022-05-10 03:48:28'),
+(43, 7, 'morning', '13:00', '2022-05-10 03:48:28', '2022-05-10 03:48:28'),
+(44, 7, 'morning', '13:30', '2022-05-10 03:48:28', '2022-05-10 03:48:28'),
+(45, 7, 'morning', '14:30', '2022-05-10 03:48:28', '2022-05-10 03:48:28'),
+(46, 7, 'morning', '15:00', '2022-05-10 03:48:28', '2022-05-10 03:48:28'),
+(47, 7, 'morning', '16:30', '2022-05-10 03:48:28', '2022-05-10 03:48:28'),
+(48, 7, 'evening', '17:30', '2022-05-10 03:48:28', '2022-05-10 03:48:28'),
+(49, 7, 'evening', '18:30', '2022-05-10 03:48:28', '2022-05-10 03:48:28'),
+(50, 7, 'evening', '19:00', '2022-05-10 03:48:28', '2022-05-10 03:48:28'),
+(51, 7, 'evening', '20:00', '2022-05-10 03:48:28', '2022-05-10 03:48:28'),
+(52, 7, 'evening', '22:00', '2022-05-10 03:48:28', '2022-05-10 03:48:28'),
+(53, 7, 'evening', '22:30', '2022-05-10 03:48:28', '2022-05-10 03:48:28');
 
 -- --------------------------------------------------------
 
@@ -94,6 +136,7 @@ INSERT INTO `available_slots` (`id`, `available_date_id`, `shift`, `slot`, `crea
 CREATE TABLE `available_slot_dates` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `interviewer_id` bigint(20) NOT NULL,
+  `slot_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `hr_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `technical_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `start_date` date NOT NULL,
@@ -108,10 +151,14 @@ CREATE TABLE `available_slot_dates` (
 -- Dumping data for table `available_slot_dates`
 --
 
-INSERT INTO `available_slot_dates` (`id`, `interviewer_id`, `hr_type`, `technical_type`, `start_date`, `end_date`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 7, NULL, '1', '2022-04-07', '2022-04-07', 0, NULL, '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
-(2, 7, NULL, '1', '2022-05-09', '2022-05-09', 0, NULL, '2022-05-09 03:37:41', '2022-05-09 03:37:41'),
-(3, 7, NULL, '1', '2022-05-09', '2022-05-09', 0, NULL, '2022-05-09 03:38:08', '2022-05-09 03:38:08');
+INSERT INTO `available_slot_dates` (`id`, `interviewer_id`, `slot_type`, `hr_type`, `technical_type`, `start_date`, `end_date`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 7, 'weekands', NULL, '1', '2022-04-07', '2022-04-07', 0, NULL, '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
+(2, 7, 'weekands', NULL, '1', '2022-05-09', '2022-05-09', 0, NULL, '2022-05-09 03:37:41', '2022-05-09 03:37:41'),
+(3, 7, 'weekdays', NULL, '1', '2022-05-09', '2022-05-09', 0, NULL, '2022-05-09 03:38:08', '2022-05-09 03:38:08'),
+(4, 7, 'weekdays', NULL, '1', '2022-05-09', '2022-05-09', 0, NULL, '2022-05-09 05:43:34', '2022-05-09 05:43:34'),
+(5, 7, 'weekands', NULL, '1', '2022-05-09', '2022-05-09', 0, NULL, '2022-05-09 08:31:26', '2022-05-09 08:31:26'),
+(6, 7, 'weekdays', NULL, '1', '2022-05-10', '2022-05-10', 0, NULL, '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
+(7, 7, 'weekands', NULL, '1', '2022-05-10', '2022-05-10', 0, NULL, '2022-05-10 03:48:28', '2022-05-10 03:48:28');
 
 -- --------------------------------------------------------
 
@@ -207,7 +254,24 @@ CREATE TABLE `book_interviews` (
 --
 
 INSERT INTO `book_interviews` (`id`, `meeting_id`, `interviewer_id`, `candidate_id`, `booking_type_slug`, `interview_type`, `date`, `slot`, `start_at`, `duration`, `password`, `start_url`, `join_url`, `status`, `created_at`, `updated_at`) VALUES
-(1, 89559144303, 7, 5, 'standard-booking', 'hr', '2022-05-01', '12', '2022-05-01 12:00:00', 30, '12345', 'https://us05web.zoom.us/s/89559144303?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5NTU5MTQ0MzAzIiwiZXhwIjoxNjUyMDkzMTgzLCJpYXQiOjE2NTIwODU5ODMsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.BUiJ2tS_sgeaee4KoGT0FaSjMaLZqpTmoDCOMRl78CY', 'https://us05web.zoom.us/j/89559144303?pwd=aGdDZUJ5ZFhrSFd5bkdZOXI0djduZz09', 0, '2022-05-09 03:46:23', '2022-05-09 03:46:23');
+(1, 89559144303, 7, 5, 'standard-booking', 'hr', '2022-05-01', '12', '2022-05-01 12:00:00', 30, '12345', 'https://us05web.zoom.us/s/89559144303?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5NTU5MTQ0MzAzIiwiZXhwIjoxNjUyMDkzMTgzLCJpYXQiOjE2NTIwODU5ODMsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.BUiJ2tS_sgeaee4KoGT0FaSjMaLZqpTmoDCOMRl78CY', 'https://us05web.zoom.us/j/89559144303?pwd=aGdDZUJ5ZFhrSFd5bkdZOXI0djduZz09', 0, '2022-05-09 03:46:23', '2022-05-09 03:46:23'),
+(2, 89153436331, 7, 5, 'standard-booking', 'hr', '2022-05-01', '12', '2022-05-01 12:00:00', 30, '12345', 'https://us05web.zoom.us/s/89153436331?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5MTUzNDM2MzMxIiwiZXhwIjoxNjUyMTc0OTgyLCJpYXQiOjE2NTIxNjc3ODIsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.ZgMI6rgIpkg5ts3giHamBzVZ6LTgJSMcNsCwGfUGqPc', 'https://us05web.zoom.us/j/89153436331?pwd=WGw1Mi9oT1B1K3AzU21pTFJBdUxrdz09', 0, '2022-05-10 02:29:41', '2022-05-10 02:29:41'),
+(3, 81438220293, 7, 5, 'standard-booking', 'hr', '2022-05-01', '12', '2022-05-01 12:00:00', 30, '12345', 'https://us05web.zoom.us/s/81438220293?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6IjgxNDM4MjIwMjkzIiwiZXhwIjoxNjUyMTc1MDEyLCJpYXQiOjE2NTIxNjc4MTIsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.3gcvm90xJ0l9CsANQs2Ulig4Vj_rSfLdDqXo3Gd7UXE', 'https://us05web.zoom.us/j/81438220293?pwd=ZGorbU1nbDRYVlU2N3FSL0w0YWV4UT09', 0, '2022-05-10 02:30:11', '2022-05-10 02:30:11'),
+(4, 81496067172, 7, 5, 'standard-booking', 'hr', '2022-05-10', '11:00', '2022-05-09 11:00:00', 30, '12345', 'https://us05web.zoom.us/s/81496067172?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6IjgxNDk2MDY3MTcyIiwiZXhwIjoxNjUyMTc4NTk5LCJpYXQiOjE2NTIxNzEzOTksImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.zr86xC7w1oGhBdZ1HqV22i7vHYo1o9i7PAPW5FsY20w', 'https://us05web.zoom.us/j/81496067172?pwd=cER6RU53RVJzVHcra3pwdFh4WEw0dz09', 0, '2022-05-10 03:29:58', '2022-05-10 03:29:58'),
+(5, 85989246568, 7, 5, 'standard-booking', 'technical', '2022-05-10', '11:00', '2022-10-05 11:00:00', 30, '12345', 'https://us05web.zoom.us/s/85989246568?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg1OTg5MjQ2NTY4IiwiZXhwIjoxNjUyMTg0MzQyLCJpYXQiOjE2NTIxNzcxNDIsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.G7FRyiHxoAD8MEDBC0sAKr1xJzjXDqdZdb138opliOQ', 'https://us05web.zoom.us/j/85989246568?pwd=M0tCWTVmUys1MGJZWXFvVllKWWxHQT09', 0, '2022-05-10 05:05:41', '2022-05-10 05:05:41'),
+(6, 89588166986, 7, 5, 'standard-booking', 'technical', '2022-05-10', '12:00', '2022-10-05 12:00:00', 30, '12345', 'https://us05web.zoom.us/s/89588166986?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5NTg4MTY2OTg2IiwiZXhwIjoxNjUyMTg0MzQ0LCJpYXQiOjE2NTIxNzcxNDQsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.WWkttYekcRaPYOmXJOxBaGby1vELN-hRwPnrWLMuXfA', 'https://us05web.zoom.us/j/89588166986?pwd=dTUzWG5STExxSlVNSlVxaUJWZDdmQT09', 0, '2022-05-10 05:05:43', '2022-05-10 05:05:43'),
+(7, 88399907474, 7, 5, 'standard-booking', 'technical', '2022-05-10', '18:00', '2022-10-05 18:00:00', 30, '12345', 'https://us05web.zoom.us/s/88399907474?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg4Mzk5OTA3NDc0IiwiZXhwIjoxNjUyMTg0MzQ2LCJpYXQiOjE2NTIxNzcxNDYsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.T41HIgSPAFhTggFRi-IJs4XTxWmED7n6y0j6ONj7dvo', 'https://us05web.zoom.us/j/88399907474?pwd=RnlCOWpIb2RFdVFqSlB1YXJzTWdnQT09', 0, '2022-05-10 05:05:45', '2022-05-10 05:05:45'),
+(8, 84564066377, 7, 5, 'standard-booking', 'technical', '2022-05-10', '18:30', '2022-10-05 18:30:00', 30, '12345', 'https://us05web.zoom.us/s/84564066377?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg0NTY0MDY2Mzc3IiwiZXhwIjoxNjUyMTg0MzQ4LCJpYXQiOjE2NTIxNzcxNDgsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.p3PNhtGhXqtyw-oj03pAltb7uw7rJGpFw1gYxT6iC-Y', 'https://us05web.zoom.us/j/84564066377?pwd=dFNsS2lUZUs4WngxOXVtNS8wVWlIZz09', 0, '2022-05-10 05:05:47', '2022-05-10 05:05:47'),
+(9, 82773986567, 7, 5, 'standard-booking', 'technical', '2022-05-10', '19:00', '2022-10-05 19:00:00', 30, '12345', 'https://us05web.zoom.us/s/82773986567?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6IjgyNzczOTg2NTY3IiwiZXhwIjoxNjUyMTg0MzQ5LCJpYXQiOjE2NTIxNzcxNDksImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.1nwE94yJKqSm6ThXU8bAq_3I2DdtRjjpFirKSIWLHoA', 'https://us05web.zoom.us/j/82773986567?pwd=dVYwYVM1Y0Vra280dGcwK2NVbUZHUT09', 0, '2022-05-10 05:05:49', '2022-05-10 05:05:49'),
+(10, 85961121168, 7, 5, 'standard-booking', 'technical', '2022-05-10', '21:30', '2022-10-05 21:30:00', 30, '12345', 'https://us05web.zoom.us/s/85961121168?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg1OTYxMTIxMTY4IiwiZXhwIjoxNjUyMTg0MzUxLCJpYXQiOjE2NTIxNzcxNTEsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.ujbjqbW2Ia8hp66YctVoRyPo_4CljhnJhce42kSEtuQ', 'https://us05web.zoom.us/j/85961121168?pwd=UzY1MHVnMnFlWTJoczBwMFV4R2thUT09', 0, '2022-05-10 05:05:51', '2022-05-10 05:05:51'),
+(11, 85125384049, 7, 5, 'standard-booking', 'technical', '2022-05-10', '11:30', '2022-05-10 11:30:00', 30, '12345', 'https://us05web.zoom.us/s/85125384049?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg1MTI1Mzg0MDQ5IiwiZXhwIjoxNjUyMTg1MTQ4LCJpYXQiOjE2NTIxNzc5NDgsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.bzlWZ2KBradUNgKytmLmrpboK1alPdKOAboNRdmdpdo', 'https://us05web.zoom.us/j/85125384049?pwd=cXlGMEh2TWRhSlpDanYvY2NVSnlkZz09', 0, '2022-05-10 05:19:08', '2022-05-10 05:19:08'),
+(12, 81210332301, 7, 5, 'standard-booking', 'technical', '2022-05-10', '18:00', '2022-05-10 18:00:00', 30, '12345', 'https://us05web.zoom.us/s/81210332301?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6IjgxMjEwMzMyMzAxIiwiZXhwIjoxNjUyMTg1MTUwLCJpYXQiOjE2NTIxNzc5NTAsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.F8Rl-xwr9CYKxyxBM-8S-m9EL0V7FHNB-vMmptyJqMc', 'https://us05web.zoom.us/j/81210332301?pwd=V0d4U2lhalJYUVJaRW9kbGo1UFlPZz09', 0, '2022-05-10 05:19:10', '2022-05-10 05:19:10'),
+(13, 89973528845, 7, 5, 'standard-booking', 'technical', '2022-05-10', '18:30', '2022-05-10 18:30:00', 30, '12345', 'https://us05web.zoom.us/s/89973528845?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5OTczNTI4ODQ1IiwiZXhwIjoxNjUyMTg1MTUyLCJpYXQiOjE2NTIxNzc5NTIsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.eH9KewobOa58nvST6gU4HjBKgXk0aLBjTI3kLZH_Jns', 'https://us05web.zoom.us/j/89973528845?pwd=RFQyL2lrMFlub3htREZzNGxGTVZGUT09', 0, '2022-05-10 05:19:11', '2022-05-10 05:19:11'),
+(14, 89961082718, 7, 5, 'standard-booking', 'technical', '2022-05-10', '19:00', '2022-05-10 19:00:00', 30, '12345', 'https://us05web.zoom.us/s/89961082718?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5OTYxMDgyNzE4IiwiZXhwIjoxNjUyMTg1MTU0LCJpYXQiOjE2NTIxNzc5NTQsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ._J11hQb7TGbkQrvY8Y_WyJKLbA9dZegVvpeNHz3nYrI', 'https://us05web.zoom.us/j/89961082718?pwd=TllWNC9pTTlHNUcwVVZqYlhvQ0FUUT09', 0, '2022-05-10 05:19:13', '2022-05-10 05:19:13'),
+(15, 85649367464, 7, 5, 'standard-booking', 'technical', '2022-05-10', '22:00', '2022-05-10 22:00:00', 30, '12345', 'https://us05web.zoom.us/s/85649367464?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg1NjQ5MzY3NDY0IiwiZXhwIjoxNjUyMTg1MTU3LCJpYXQiOjE2NTIxNzc5NTcsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.OSUJpVG_gxpwfTPasqjgRnrYYCyonxiN2GWEu4-J5CY', 'https://us05web.zoom.us/j/85649367464?pwd=d25BaytHQUZxVVVOekE2b1JNcE5vQT09', 0, '2022-05-10 05:19:16', '2022-05-10 05:19:16'),
+(16, 89324799780, 7, 5, 'standard-booking', 'hr', '2022-05-10', '11:30', '2022-10-05 11:30:00', 30, '12345', 'https://us05web.zoom.us/s/89324799780?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5MzI0Nzk5NzgwIiwiZXhwIjoxNjUyMTg1Njc2LCJpYXQiOjE2NTIxNzg0NzYsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.4opKW9QmkGwdwrK5vj7vNSskYCPXZoeHZ4sNP1Bqex4', 'https://us05web.zoom.us/j/89324799780?pwd=WWowUi9jSkxNQXFWelRNaXgwWGhaUT09', 0, '2022-05-10 05:27:55', '2022-05-10 05:27:55'),
+(17, 84838434098, 7, 5, 'standard-booking', 'hr', '2022-05-10', '18:30', '2022-10-05 18:30:00', 30, '12345', 'https://us05web.zoom.us/s/84838434098?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg0ODM4NDM0MDk4IiwiZXhwIjoxNjUyMTg1Njc3LCJpYXQiOjE2NTIxNzg0NzcsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.7KkpkFF3o3TB1SLUYMm6D_i-8EGzIYfyoUFiDSvCSNY', 'https://us05web.zoom.us/j/84838434098?pwd=UFFudnhpOEh5eUphdmc1ZXlNUU9Pdz09', 0, '2022-05-10 05:27:57', '2022-05-10 05:27:57'),
+(18, 87098383262, 7, 6, 'standard-booking', 'hr', '2022-05-11', '19:00', '2022-05-12 19:00:00', 30, '12345', 'https://us05web.zoom.us/s/87098383262?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg3MDk4MzgzMjYyIiwiZXhwIjoxNjUyMTg1Njc5LCJpYXQiOjE2NTIxNzg0NzksImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.qYHY5pMlcJs8-RRUHbLZMtPRkdL8fYqREOlfOQWwGBg', 'https://us05web.zoom.us/j/87098383262?pwd=Zk1UemVUNVhmTDNHaWhaZVN1T2VQZz09', 1, '2022-05-10 05:27:58', '2022-05-10 05:27:58');
 
 -- --------------------------------------------------------
 
@@ -1041,7 +1105,8 @@ CREATE TABLE `projects` (
 --
 
 INSERT INTO `projects` (`id`, `user_id`, `projects`, `created_at`, `updated_at`) VALUES
-(1, 6, 'My Projects', '2022-03-30 08:16:06', '2022-03-30 08:16:06');
+(1, 6, 'My Projects', '2022-03-30 08:16:06', '2022-03-30 08:16:06'),
+(2, 5, 'LMS, CRM', '2022-05-09 04:38:17', '2022-05-09 04:38:17');
 
 -- --------------------------------------------------------
 
@@ -1069,7 +1134,8 @@ INSERT INTO `qualifications` (`id`, `user_id`, `institute`, `degree_slug`, `cour
 (10, 7, 'Inventore omnis quas', 'btech', 'others', '2012', '2022-03-28 09:51:10', '2022-03-28 09:51:10'),
 (11, 7, 'testedd', 'btech', 'electronics-communication-engineering', '1994', '2022-03-28 09:51:10', '2022-03-28 09:51:10'),
 (14, 6, 'Institute 1', 'btech', 'electrical-electronics-engineering', '1994', '2022-03-30 08:16:06', '2022-03-30 08:16:06'),
-(15, 6, 'Institute 2', 'btech', 'civil-engineering', '1985', '2022-03-30 08:16:06', '2022-03-30 08:16:06');
+(15, 6, 'Institute 2', 'btech', 'civil-engineering', '1985', '2022-03-30 08:16:06', '2022-03-30 08:16:06'),
+(16, 5, 'Deleniti consequatur', 'btech', 'computer-science-engineering', '1994', '2022-05-09 04:38:17', '2022-05-09 04:38:17');
 
 -- --------------------------------------------------------
 
@@ -1375,7 +1441,8 @@ CREATE TABLE `skills` (
 --
 
 INSERT INTO `skills` (`id`, `user_id`, `skills`, `created_at`, `updated_at`) VALUES
-(1, 6, 'My Skills', '2022-03-30 08:16:06', '2022-03-30 08:16:06');
+(1, 6, 'My Skills', '2022-03-30 08:16:06', '2022-03-30 08:16:06'),
+(2, 5, 'Programming', '2022-05-09 04:38:17', '2022-05-09 04:38:17');
 
 -- --------------------------------------------------------
 
@@ -1915,13 +1982,13 @@ ALTER TABLE `advantage_mocks`
 -- AUTO_INCREMENT for table `available_slots`
 --
 ALTER TABLE `available_slots`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT for table `available_slot_dates`
 --
 ALTER TABLE `available_slot_dates`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `blogs`
@@ -1939,7 +2006,7 @@ ALTER TABLE `booking_priorities`
 -- AUTO_INCREMENT for table `book_interviews`
 --
 ALTER TABLE `book_interviews`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -2053,13 +2120,13 @@ ALTER TABLE `pricingtables`
 -- AUTO_INCREMENT for table `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `qualifications`
 --
 ALTER TABLE `qualifications`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `qualification_details`
@@ -2095,7 +2162,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `skills`
 --
 ALTER TABLE `skills`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `sliders`

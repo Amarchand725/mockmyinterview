@@ -56,4 +56,10 @@ class CandidateController extends Controller
         $page_title = 'Notifications - '.Auth::user()->roles->pluck('name')[0];
         return view('web-views.candidate.notifications', compact('page_title'));
     }
+
+    public function testWebcam()
+    {
+        $page_title = 'Notifications - '.Auth::user()->roles->pluck('name')[0];
+        return view('web-views.candidate.test-webcam', compact('page_title'));
+    }
 }

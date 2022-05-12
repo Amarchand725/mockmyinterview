@@ -52,7 +52,7 @@
             padding: 0.75rem;
             vertical-align: top;
             border-top: 0px solid #eceeef;
-            padding-left: 80px;
+            /* padding-left: 80px; */
         }
         .slot{
             border: none;
@@ -247,6 +247,7 @@
     <script src="{{ asset('public/web/assets/js/jquery-3.6.0.js') }}"></script>
     <script src="{{ asset('public/web/assets/js/jquery-ui.js') }}"></script>
     <script src="{{ asset('public/admin/assets/js/toastr.min.js') }}"></script>
+    <script src="{{asset('public/admin/assets/js/search.js')}}"></script>
 
     @stack('js')
     <script>
