@@ -68,7 +68,7 @@
             @endcan
             @can('buy & credits-list')
             <li>
-                <a href="{{ route('buy-credits') }}" class="{{ request()->is('buy-credits') ? 'active' : '' }}">
+                <a href="{{ route('wallet.create') }}" class="{{ request()->is('wallet/create') ? 'active' : '' }}">
                     <i class="fa fa-bar-chart-o"></i> <span class="nav-label">Buy Credits</span>
                 </a>
             </li>

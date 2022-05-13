@@ -122,6 +122,9 @@ class PageSettingController extends Controller
             return view('admin.page_setting.header', compact("model", "page_data", "page_title"));
         }elseif($slug=='footer'){
             return view('admin.page_setting.footer', compact("model", "page_data", "page_title"));
+        }elseif($slug=='interview-terms'){
+            $page_title = ucfirst($slug);
+            return view('admin.page_setting.interview-terms', compact("model", "page_data", "page_title"));
         }else{
             return redirect()->back()->with('error', 'Your page is missing.');
         }

@@ -1,11 +1,11 @@
-@extends('web-views.dashboard.master.app')
 
-@section('title', $page_title)
 
-@push('css')
-@endpush
+<?php $__env->startSection('title', $page_title); ?>
 
-@section('content')
+<?php $__env->startPush('css'); ?>
+<?php $__env->stopPush(); ?>
+
+<?php $__env->startSection('content'); ?>
     <div class="container py-3 ">
         <div class="row mx-auto">
             <h2 class="mb-3">Test My Setup</h2>
@@ -22,13 +22,13 @@
                     <span id="important-note"></span>
                 </div>
                 <center>
-                    <span class="band_test"><a href="{{ route('test_webcam') }}">Bandwidth Test</a></span>
+                    <span class="band_test"><a href="<?php echo e(route('test_webcam')); ?>">Bandwidth Test</a></span>
                 </center>
             </div>
         </div>
     </div>
-@endsection
-@push('js')
+<?php $__env->stopSection(); ?>
+<?php $__env->startPush('js'); ?>
 <script>
     $(document).on('click', '.microphone-test-btn', function(){
         getLocalStream();
@@ -78,4 +78,5 @@
         $('#important-note').html(" ");
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('web-views.dashboard.master.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/web-views/candidate/test-setup.blade.php ENDPATH**/ ?>

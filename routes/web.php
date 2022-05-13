@@ -74,7 +74,7 @@ Route::get('get_booked_interview_ids', 'BookInterviewController@getBookedIntervi
 Route::get('schedule-interview', 'InterviewerController@scheduleInterview')->name('schedule-interview');
 Route::get('blog-resources', 'InterviewerController@resources')->name('blog-resources');
 Route::get('blog/single/{slug}', 'InterviewerController@singleBlog')->name('blog.single');
-Route::get('buy-credits', 'InterviewerController@buyCredits')->name('buy-credits');
+// Route::get('buy-credits', 'InterviewerController@buyCredits')->name('buy-credits');
 Route::get('refer_and_earn', 'InterviewerController@referAndEarn')->name('refer_and_earn');
 //Interviewer
 
@@ -152,3 +152,6 @@ Route::resource('interview_type', 'admin\InterviewTypeController');
 
 //Book interview
 Route::resource('book_interview', 'BookInterviewController');
+
+//Book interview
+Route::resource('wallet', 'WalletController');

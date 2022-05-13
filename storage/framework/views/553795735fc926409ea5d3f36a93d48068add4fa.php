@@ -1,9 +1,9 @@
-@extends('web-views.dashboard.master.app')
 
-@section('title', $page_title)
 
-@section('content')
-    <input type="hidden" id="page_url" value="{{ route('blog-resources') }}">
+<?php $__env->startSection('title', $page_title); ?>
+
+<?php $__env->startSection('content'); ?>
+    <input type="hidden" id="page_url" value="<?php echo e(route('blog-resources')); ?>">
 
     <div class="container-fluid py-3 ">
         <div class="row mx-auto">
@@ -18,9 +18,9 @@
                     <div class="col-sm-6 ">
                         <select class="form-select" id="status" aria-label="Default select example">
                             <option value="All" selected>Search by category</option>
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->slug }}">{{ $category->name }}</option>    
-                            @endforeach
+                            <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($category->slug); ?>"><?php echo e($category->name); ?></option>    
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                 </div>
@@ -32,33 +32,35 @@
                     <div class="col-md-12">
                         <table class="table table-bordered resource_tb">
                             <tbody id="body">
-                                @foreach ($blogs as $blog)
+                                <?php $__currentLoopData = $blogs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $blog): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
                                         <td>
-                                            <b><u><a href="{{ route('blog.single', $blog->slug) }}"> {{ $blog->title }}</a></u></b>
+                                            <b><u><a href="<?php echo e(route('blog.single', $blog->slug)); ?>"> <?php echo e($blog->title); ?></a></u></b>
                                             <br>
-                                            <span class="label interview-tips"> {{ $blog->hasCategory->name }}</span>
+                                            <span class="label interview-tips"> <?php echo e($blog->hasCategory->name); ?></span>
                                             <span class="label interview-tips1 ml-2 ">
-                                                @if($blog->is_paid)
+                                                <?php if($blog->is_paid): ?>
                                                     Paid
-                                                @else 
+                                                <?php else: ?> 
                                                     Free
-                                                @endif
+                                                <?php endif; ?>
                                             </span>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            {!! \Illuminate\Support\Str::limit($blog->description,300) !!}
+                                            <?php echo \Illuminate\Support\Str::limit($blog->description,300); ?>
+
                                         </td>
                                     </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td>
                                         <div class="card-footer p-3">
-                                            Displying {{$blogs->firstItem()}} to {{$blogs->lastItem()}} of {{$blogs->total()}} records
+                                            Displying <?php echo e($blogs->firstItem()); ?> to <?php echo e($blogs->lastItem()); ?> of <?php echo e($blogs->total()); ?> records
                                             <div class="d-flex justify-content-right mt-3">
-                                                {!! $blogs->links('pagination::bootstrap-4') !!}
+                                                <?php echo $blogs->links('pagination::bootstrap-4'); ?>
+
                                             </div>
                                         </div>
                                     </td>
@@ -70,7 +72,8 @@
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
     
-@push('js')
-@endpush
+<?php $__env->startPush('js'); ?>
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('web-views.dashboard.master.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/web-views/interviewer/resources.blade.php ENDPATH**/ ?>

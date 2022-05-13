@@ -42,7 +42,8 @@ class HomeController extends Controller
             return View('admin.dashboard.dashboard', compact('page_title', 'total_team_members', 'total_categories', 'total_blogs', 'total_services', 'total_testimonials', 'total_packages'));
         }elseif(Auth::check() && Auth::user()->hasRole('Candidate')){
             $page_title = 'Dashboard - Candidate';
-            return View('web-views.dashboard.candidate', compact('page_title'));
+            $blogs = Blog::orderby('id', 'desc')->take(5)->get();
+            return View('web-views.dashboard.candidate', compact('page_title', 'blogs'));
         }elseif(Auth::check() && Auth::user()->hasRole('Interviewer')){
             $page_title = 'Dashboard - Interviewer';
             return View('web-views.dashboard.interviewer', compact('page_title'));
