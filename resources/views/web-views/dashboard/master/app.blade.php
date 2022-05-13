@@ -10,7 +10,9 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="assets/img/hero-img.png" rel="icon">
+    @if($home_page_data['header_logo'])
+        <link href="{{ asset('public/admin/assets/images/page') }}/{{ $home_page_data['header_favicon'] }}" rel="icon">
+    @endif
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -248,6 +250,7 @@
     <script src="{{ asset('public/web/assets/js/jquery-ui.js') }}"></script>
     <script src="{{ asset('public/admin/assets/js/toastr.min.js') }}"></script>
     <script src="{{asset('public/admin/assets/js/search.js')}}"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @stack('js')
     <script>

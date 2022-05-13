@@ -112,8 +112,6 @@
                 <div class="col-md-12 mt-2">
                 <a href="<?php echo e(route('blog-resources')); ?>" class="btn btn primary pull-right view_btn">View All</a>
                 </div>
-
-                
             </div>
         </div>
     </div>

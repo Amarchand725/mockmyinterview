@@ -34,6 +34,13 @@
                 </a>
             </li>
             @endcan
+            @can('coupon-list')
+            <li class="treeview">
+                <a href="{{ route('coupon.index') }}" class="{{ request()->is('coupon') || request()->is('coupon/*')? 'active' : '' }}">
+                    <i class="fa fa-gift"></i> <span>Coupons</span>
+                </a>
+            </li>
+            @endcan
             @can('booking_type-list')
             <li class="treeview">
                 <a href="{{ route('booking_priority.index') }}" class="{{ request()->is('booking_priority') || request()->is('booking_priority/*')? 'active' : '' }}">

@@ -6,11 +6,11 @@
     <div class="content-header-left">
         <h1>All Permissions</h1>
     </div>
-    {{-- @can('permission-create')
+    @can('permission-create')
     <div class="content-header-right">
         <a href="{{ route('permission.create') }}" class="btn btn-primary btn-sm">Add New</a>
     </div>
-    @endcan --}}
+    @endcan
 </section>
 
 <section class="content">

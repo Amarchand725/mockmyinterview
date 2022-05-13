@@ -111,52 +111,6 @@
                 <div class="col-md-12 mt-2">
                 <a href="{{ route('blog-resources') }}" class="btn btn primary pull-right view_btn">View All</a>
                 </div>
-
-                {{-- <div class="col-md-12">
-                    <div class="col-md-6">
-                        <span class="res_img pull-left">
-                            <img src="assets/img/Interview Tips 2.png" alt="" class="img-fluid">
-                            <span class="ml-2"><a href="#">
-                            How to Refine Your English through Listening
-                            </a> </span>
-                        </span>
-                    </div>
-                    <div class="col-md-4">
-                        <span class="carrer_man">Career Management</span>
-                        <span class="carrer ">Career </span>
-                    </div>
-                </div>
-                <div class="col-md-12 mt-2">
-                    <div class="col-md-6">
-
-                        <span class="res_img pull-left">
-                            <img src="assets/img/Interview Tips 2.png" alt="" class="img-fluid">
-                            <span class="ml-2"><a href="#">
-                            How to Refine Your English through Listening
-                            </a> </span>
-                        </span>
-                    </div>
-                    <div class="col-md-4">
-                        <span class="carrer_man">Career Management</span>
-                        <span class="carrer ">Career </span>
-                    </div>
-                </div>
-                <div class="col-md-12 mt-2">
-                    <div class="col-md-6">
-
-                        <span class="res_img pull-left">
-                            <img src="assets/img/Interview Tips 2.png" alt="" class="img-fluid">
-                            <span class="ml-2"><a href="#">
-                            How to Refine Your English through Listening
-                            </a> </span>
-                        </span>
-                    </div>
-                    <div class="col-md-4">
-                        <span class="carrer_man">Career Management</span>
-                        <span class="carrer ">Career </span>
-                    </div>
-                    <button class="btn btn primary pull-right view_btn">View All</button>
-                </div> --}}
             </div>
         </div>
     </div>

@@ -34,6 +34,13 @@
                 </a>
             </li>
             <?php endif; ?>
+            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('coupon-list')): ?>
+            <li class="treeview">
+                <a href="<?php echo e(route('coupon.index')); ?>" class="<?php echo e(request()->is('coupon') || request()->is('coupon/*')? 'active' : ''); ?>">
+                    <i class="fa fa-gift"></i> <span>Coupons</span>
+                </a>
+            </li>
+            <?php endif; ?>
             <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('booking_type-list')): ?>
             <li class="treeview">
                 <a href="<?php echo e(route('booking_priority.index')); ?>" class="<?php echo e(request()->is('booking_priority') || request()->is('booking_priority/*')? 'active' : ''); ?>">

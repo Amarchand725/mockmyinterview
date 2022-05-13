@@ -153,6 +153,13 @@
 		}
 				toastr.warning("{{ session('warning') }}");
 		@endif
+
+		$(function() {
+			$( ".datepicker" ).datepicker();
+		});
+		$(document).on("input", ".numeric", function() {
+			this.value = this.value.replace(/\D/g,'');
+		});
 	</script>
 	@stack('js')
 </html>
