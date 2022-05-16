@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Coupon;
 use Auth;
+use Session;
 
 class CouponController extends Controller
 {
@@ -173,7 +174,43 @@ class CouponController extends Controller
     }
 
     public function getCoupon(Request $request)
+    {   
+        $coupon = Coupon::where('coupon_code', $request->coupon_code)->first();
+        try{
+            if($coupon->status==0){
+                return 'in-active';
+            }elseif(date('Y-m-d') > $coupon->end_date){
+                return 'expired';
+            }else{
+                if($coupon->max_usages == count($coupon->hasUsages)){
+                    return 'max-limit';
+                }else{
+                    $used_coupon = [];
+                    if($coupon->type=='fix'){
+                        $used_coupon['coupon_code'] = $coupon->coupon_code;
+                        $used_coupon['type'] = $coupon->type;
+                        $used_coupon['sub_total'] = $request->sub_total;
+                        $used_coupon['discount'] = number_format($coupon->discount, 2);
+                    }elseif($coupon->type=='percent'){
+                        $sub_total = $request->sub_total;
+                        $discount = number_format($sub_total/100*$coupon->discount, 2);
+
+                        $used_coupon['coupon_code'] = $coupon->coupon_code;
+                        $used_coupon['type'] = $coupon->type;
+                        $used_coupon['sub_total'] = $request->sub_total;
+                        $used_coupon['discount'] = $discount;
+                    }
+                    Session::put('used_coupon', $used_coupon);
+                    return true;
+                }
+            }
+        }catch (\Exception $e) {
+            return false;
+        }
+    }
+    public function removeCoupon(Request $request)
     {
-        return $request;
+        Session::forget($request->coupon);
+        return true;
     }
 }

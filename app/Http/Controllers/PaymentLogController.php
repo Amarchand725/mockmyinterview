@@ -5,8 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use net\authorize\api\contract\v1 as AnetAPI;
 use net\authorize\api\controller as AnetController;
+use App\Models\PaymentLog;
+use App\Models\Wallet;
+use App\Models\Payment;
+use App\Models\BookingPriority;
+use App\Models\Coupon;
+use App\Models\CouponUsage;
+use Auth;
+use Session;
 
-class PaymentLogoController extends Controller {
+class PaymentLogController extends Controller {
 
     /**
      * Create a new controller instance.
@@ -77,7 +85,7 @@ class PaymentLogoController extends Controller {
                     $message_text = $tresponse->getMessages()[0]->getDescription().", Transaction ID: " . $tresponse->getTransId();
                     $msg_type = "success_msg";    
                     
-                    \App\PaymentLogs::create([                                         
+                    $model = PaymentLog::create([                                         
                         'amount' => $input['amount'],
                         'response_code' => $tresponse->getResponseCode(),
                         'transaction_id' => $tresponse->getTransId(),
@@ -86,6 +94,72 @@ class PaymentLogoController extends Controller {
                         'name_on_card' => trim($input['owner']),
                         'quantity'=>1
                     ]);
+
+                    if($model){
+                        $priority = BookingPriority::where('id', $request->priority_id)->first();
+                        $coupon_id = '';
+                        $sub_total = '';
+                        $discount = '';
+                        $grand_total = '';
+                        if(Session::has('used_coupon')){
+                            $used_coupon = Session::get('used_coupon');
+                            $coupon_id = Coupon::where('coupon_code', $used_coupon['coupon_code'])->first()->id;
+                            $sub_total = $used_coupon['sub_total'];
+                            $discount = $used_coupon['discount'];
+                            $grand_total = $used_coupon['sub_total']-$used_coupon['discount'];
+                        }else{
+                            $sub_total = $priority->price;
+                            $grand_total = $priority->price;
+                        }
+
+                        $payment = Payment::create([
+                            'candidate_id' => Auth::user()->id,
+                            'payment_log_id' => $model->id,
+                            'priority_id' => $request->priority_id,
+                            'coupon_id' => $coupon_id,
+                            'sub_total' => $sub_total,
+                            'discount' => $discount,
+                            'grand_total' => $grand_total,
+                            'date' => date('Y-m-d'),
+                        ]);
+
+                        if(!empty($coupon_id)){
+                            $coupon_used = CouponUsage::orderby('id', 'desc')->where('coupon_id', $coupon_id)->where('candidate_id', Auth::user()->id)->first();
+                            if($coupon_used){
+                                CouponUsage::create([
+                                    'candidate_id' => Auth::user()->id,
+                                    'coupon_id' => $coupon_id,
+                                    'usages' => $coupon_used->usages+1,
+                                ]);
+                            }else{
+                                CouponUsage::create([
+                                    'candidate_id' => Auth::user()->id,
+                                    'coupon_id' => $coupon_id,
+                                    'usages' => 1,
+                                ]);
+                            }
+                        }
+
+                        $wallet = Wallet::orderby('id', 'desc')->where('candidate_id', Auth::user()->id)->first();
+                        $credit_balance = $priority->credits;
+                        $last_credits = 0;
+                        if(!empty($wallet)){
+                            $last_credits = $wallet->balance_credits;
+                            $credit_balance += $wallet->balance_credits;
+                        }
+                        $inserted_wallet = Wallet::create([
+                            'candidate_id' => Auth::user()->id,
+                            'payment_id' => $payment->id,
+                            'last_added_credits' => $last_credits,
+                            'balance_credits' => $credit_balance,
+                            'date' => date('Y-m-d'),
+                        ]);
+
+                        if($inserted_wallet){
+                            Session::forget('used_coupon');
+                            return redirect()->back()->with('message', 'You have purchased credits Successfully !');
+                        }
+                    }
                 } else {
                     $message_text = 'There were some issue with the payment. Please try again later.';
                     $msg_type = "error_msg";                                    
@@ -116,5 +190,4 @@ class PaymentLogoController extends Controller {
         }
         return back()->with($msg_type, $message_text);
     }
-
 }

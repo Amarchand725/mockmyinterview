@@ -16,7 +16,7 @@ class CreateWalletsTable extends Migration
         Schema::create('wallets', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('candidate_id');
-            $table->bigInteger('priority_id');
+            $table->bigInteger('payment_id');
             $table->bigInteger('last_added_credits');
             $table->bigInteger('balance_credits');
             $table->boolean('status')->default(1);

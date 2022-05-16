@@ -16,7 +16,6 @@ class CreateCouponUsagesTable extends Migration
         Schema::create('coupon_usages', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('candidate_id');
-            $table->bigInteger('interview_id');
             $table->bigInteger('coupon_id');
             $table->integer('usages');
             $table->timestamps();

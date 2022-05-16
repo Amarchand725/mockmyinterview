@@ -80,8 +80,12 @@ Route::get('refer_and_earn', 'InterviewerController@referAndEarn')->name('refer_
 //availableslots
 Route::post('available_slot.store', 'AvailableSlotDateController@store')->name('available_slot.store');
 Route::get('get-slots', 'AvailableSlotDateController@getSlots')->name('get-slots');
-Route::get('get-coupon', 'admin\CouponController@getCoupon')->name('get-coupon');
+Route::get('get_coupon', 'admin\CouponController@getCoupon')->name('get_coupon');
+Route::get('remove-coupon', 'admin\CouponController@removeCoupon')->name('remove-coupon');
 //availableslots
+
+Route::get('/pay','PaymentLogController@pay')->name('pay');
+Route::post('/dopay/online', 'PaymentLogController@handleonlinepay')->name('dopay.online');
 
 //Roles
 Route::resource('role', 'admin\RoleController');
