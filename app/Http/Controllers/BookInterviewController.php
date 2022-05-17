@@ -10,6 +10,7 @@ use App\Models\BookInterview;
 use App\Models\BookingPriority;
 use App\Models\AvailableSlotDate;
 use App\Models\Qualification;
+use App\Models\Wallet;
 use DateTime;
 use Auth;
 
@@ -111,6 +112,12 @@ class BookInterviewController extends Controller
 
         if(empty($request->booked_slots)){
             return redirect()->back()->with('error', 'Select slot at least one.');
+        }
+        
+        $wallet = Wallet::orderby('id', 'desc')->where('candidate_id', Auth::user()->id)->first();
+        $priority = BookingPriority::where('slug', $request->booking_type)->first();
+        if(isset($wallet) && $wallet->balance_credits < $priority->credits){
+            return redirect()->route('wallet.create')->with('error', 'You have not credits in your wallet purchase from here.');
         }
         
         try {

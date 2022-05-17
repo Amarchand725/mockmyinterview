@@ -21,6 +21,7 @@ Route::get('/', 'WebController@index');
 Route::get('login', 'WebController@login')->name('login');
 Route::post('user-authenticate', 'WebController@authenticate')->name('user-authenticate');
 Route::get('signup', 'WebController@signUp')->name('signup');
+Route::get('invite/signup/{user_code}/{referral_id}', 'WebController@inviteSignUp')->name('invite.signup');
 Route::post('register/store', 'WebController@store')->name('register.store');
 Route::get('email-verification/{token}', 'WebController@verifyEmail')->name('email-verification');
 
@@ -66,15 +67,19 @@ Route::get('report', 'CandidateController@report')->name('report');
 Route::get('test_setup', 'CandidateController@testSetup')->name('test_setup');
 Route::get('test_webcam', 'CandidateController@testWebcam')->name('test_webcam');
 Route::get('notifications', 'CandidateController@notifications')->name('notifications');
+Route::get('refer_and_earn', 'CandidateController@referAndEarn')->name('refer_and_earn');
+Route::post('invite/store', 'CandidateController@inviteStore')->name('invite.store');
+
 Route::get('next_pre_date', 'BookInterviewController@nextPreDate')->name('next_pre_date');
 Route::get('get_booked_interview_ids', 'BookInterviewController@getBookedInterviewIds')->name('get_booked_interview_ids');
+
 //Candidate
 
 //Interviewers
 Route::get('schedule-interview', 'InterviewerController@scheduleInterview')->name('schedule-interview');
 Route::get('blog-resources', 'InterviewerController@resources')->name('blog-resources');
 Route::get('blog/single/{slug}', 'InterviewerController@singleBlog')->name('blog.single');
-Route::get('refer_and_earn', 'InterviewerController@referAndEarn')->name('refer_and_earn');
+
 //Interviewer
 
 //availableslots
@@ -162,3 +167,6 @@ Route::resource('wallet', 'WalletController');
 
 //Coupons
 Route::resource('coupon', 'admin\CouponController');
+
+//refferals
+Route::resource('referral', 'admin\ReferralController');

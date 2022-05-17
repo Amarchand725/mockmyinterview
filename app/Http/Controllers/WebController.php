@@ -24,6 +24,10 @@ use App\Models\ExperienceDetail;
 use App\Models\Resume;
 use App\Models\Skill;
 use App\Models\Project;
+use App\Models\Invite;
+use App\Models\InvitedUser;
+use App\Models\Wallet;
+use App\Models\Referral;
 use Auth;
 use Hash;
 
@@ -394,6 +398,13 @@ class WebController extends Controller
         $roles = Role::where('name', '!=', 'Admin')->get(['name']);
         return view('web-views.login.signup', compact('page_title', 'roles'));
     }
+    public function inviteSignUp($referral_id, $invited_user)
+    {
+        $page_title = 'Sign Up';
+        $roles = Role::where('name', '!=', 'Admin')->get(['name']);
+        $invited_user_email = InvitedUser::where('invited_user', $invited_user)->first()->email;
+        return view('web-views.login.signup', compact('page_title', 'referral_id', 'roles', 'invited_user_email'));
+    }
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -409,16 +420,59 @@ class WebController extends Controller
         do{
             $user_id = rand(1000, 9999);
         }while(User::where('user_id', $user_id)->first());
+
+        do{
+            $referral_code = $random = \Str::random(8);
+        }while(User::where('referral_code', $referral_code)->first());
         
         $input = $request->all();
         unset($input['role']);
         unset($input['confirm-password']);
         $input['user_id'] = $user_id;
+        $input['referral_code'] = $referral_code;
         $input['verify_token'] = $verify_token;
         $input['password'] = Hash::make($input['password']);
         
         $user = User::create($input);
         $user->assignRole($request->input('role'));
+
+        if(isset($request->referral_code)){
+            $referral_candidate = User::where('referral_code', $request->referral_code)->first();
+            $invite = Invite::where('candidate_id', $referral_candidate->id)->first();
+            $referral = Referral::where('id', $invite->referral_id)->first();
+            //shared with
+            Wallet::create([
+                'candidate_id' => $user->id,
+                'referral_id' => $invite->referral_id,
+                'last_added_credits' => 0,
+                'balance_credits' => $referral->offer_credits,
+            ]);
+
+            $shared_by_wallet = Wallet::where('candidate_id', $referral_candidate->id)->first();
+            if(empty($shared_by_wallet)){
+                $user_wallet = Wallet::create([
+                    'candidate_id' => $shared_by_wallet->id,
+                    'referral_id' => $invite->referral_id,
+                    'last_added_credits' => 0,
+                    'balance_credits' => $referral->offer_credits,
+                ]);
+            }else{
+                $balance_credits = 0;
+                if($shared_by_wallet->balance_credits){
+                    $balance_credits = $shared_by_wallet->balance_credits+$referral->offer_credits;
+                }
+                $shared_by_wallet->referral_id = $invite->referral_id;
+                $shared_by_wallet->last_added_credits = $shared_by_wallet->balance_credits;
+                $shared_by_wallet->balance_credits = $balance_credits;
+                $shared_by_wallet->save();
+            }
+
+            $invited_user = InvitedUser::where('email', $user->email)->first();
+            if(!empty($invited_user)){
+                $invited_user->registered = 1;
+                $invited_user->save();
+            }
+        }
 
         $details = [
             'from' => 'verify',

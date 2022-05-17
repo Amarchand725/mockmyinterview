@@ -41,6 +41,13 @@
                 </a>
             </li>
             @endcan
+            @can('referral-list')
+            <li class="treeview">
+                <a href="{{ route('referral.index') }}" class="{{ request()->is('referral') || request()->is('referral/*')? 'active' : '' }}">
+                    <i class="fa fa-gift"></i> <span>Referrals</span>
+                </a>
+            </li>
+            @endcan
             @can('booking_type-list')
             <li class="treeview">
                 <a href="{{ route('booking_priority.index') }}" class="{{ request()->is('booking_priority') || request()->is('booking_priority/*')? 'active' : '' }}">

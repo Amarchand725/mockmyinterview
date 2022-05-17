@@ -25,6 +25,9 @@
                                         <h4 class="text-center mt-4 mb-4" style="text-transform: uppercase;"></h4>
                                         <form id="condidate" method="POST" action="{{ route('register.store') }}">
                                             @csrf
+                                            @if(isset($referral_id))
+                                                <input type="hidden" name="referral_id" value="{{ $referral_id }}">
+                                            @endif
                                             <input type="hidden" name="role" value="{{ $roles[1]['name'] }}">
                                             <div class="form-row">
                                                 <div class="form-group col-md-12">
@@ -35,7 +38,11 @@
                                                     <input type="text" class="form-control" name="last_name" id="inputEmail4" placeholder="Last Name">
                                                 </div>
                                                 <div class="form-group col-md-12 mt-3">
-                                                    <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+                                                    @if(isset($referral_id))
+                                                        <input type="email" class="form-control" name="email" readonly value="{{ $invited_user_email }}" id="email" placeholder="Email">
+                                                    @else 
+                                                        <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+                                                    @endif
                                                     <span style="color:red">{{ $errors->first('email') }}</span>
                                                 </div>
                                                 <div class="form-group col-md-12 mt-3">

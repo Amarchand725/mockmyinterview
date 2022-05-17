@@ -56,10 +56,4 @@ class InterviewerController extends Controller
         $page_title = 'Buy & Credits - '.Auth::user()->roles->pluck('name')[0];
         return view('web-views.interviewer.buy_credits', compact('page_title'));
     } */
-    public function referAndEarn()
-    {
-        $this->authorize('refer & earn-list', User::class);
-        $page_title = 'Refer & Earn - '.Auth::user()->roles->pluck('name')[0];
-        return view('web-views.interviewer.refer_earn', compact('page_title'));
-    }
 }

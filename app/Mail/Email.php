@@ -34,6 +34,8 @@ class Email extends Mailable
             return $this->subject('Reset Password Notification')->view('emails.password-reset');
         }elseif($this->details['from']=='admin-password-reset'){
             return $this->subject('Reset Password Notification')->view('emails.password-reset');
+        }elseif($this->details['from']=='invite'){
+            return $this->subject('Mockmyinterview Invite')->view('emails.invite');
         }
     }
 }

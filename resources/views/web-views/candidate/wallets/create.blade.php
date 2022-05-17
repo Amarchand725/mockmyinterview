@@ -99,7 +99,7 @@
                             </span><br>
                             <div class="tool-tip">
                                 <div class="title">
-                                    <button type="button" id="proceed-btn" type="submit" class="btn btn-info">
+                                    <button type="buttonp" id="proceed-btn" type="submit" class="btn btn-info">
                                         Proceed
                                     </button>
                                 </div>
