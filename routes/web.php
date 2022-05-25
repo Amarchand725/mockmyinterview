@@ -16,12 +16,22 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+Route::get('/route-clear', function() {
+    $exitCode = Artisan::call('route:clear');
+    $exitCode = Artisan::call('view:clear');
+    $exitCode = Artisan::call('cache:clear');
+    $exitCode = Artisan::call('config:clear');
+    $exitCode = Artisan::call('config:cache');
+    $cache = 'Route cache cleared <br /> View cache cleared <br /> Cache cleared <br /> Config cleared <br /> Config cache cleared';
+    return $cache;
+});
+
 Route::get('/', 'WebController@index');
 
 Route::get('login', 'WebController@login')->name('login');
 Route::post('user-authenticate', 'WebController@authenticate')->name('user-authenticate');
 Route::get('signup', 'WebController@signUp')->name('signup');
-Route::get('invite/signup/{user_code}/{referral_id}', 'WebController@inviteSignUp')->name('invite.signup');
+Route::get('invite/signup/{referral_id}/{invited_user_token?}', 'WebController@inviteSignUp')->name('invite.signup');
 Route::post('register/store', 'WebController@store')->name('register.store');
 Route::get('email-verification/{token}', 'WebController@verifyEmail')->name('email-verification');
 
@@ -63,7 +73,7 @@ Route::get('get_courses/{slug}', 'admin\CourseController@getCourses')->name('get
 
 //Candidate
 // Route::get('book-interview', 'CandidateController@bookInterview')->name('book-interview');
-Route::get('report', 'CandidateController@report')->name('report');
+
 Route::get('test_setup', 'CandidateController@testSetup')->name('test_setup');
 Route::get('test_webcam', 'CandidateController@testWebcam')->name('test_webcam');
 Route::get('notifications', 'CandidateController@notifications')->name('notifications');
@@ -72,14 +82,16 @@ Route::post('invite/store', 'CandidateController@inviteStore')->name('invite.sto
 
 Route::get('next_pre_date', 'BookInterviewController@nextPreDate')->name('next_pre_date');
 Route::get('get_booked_interview_ids', 'BookInterviewController@getBookedInterviewIds')->name('get_booked_interview_ids');
-
+Route::get('book_interview/status', 'BookInterviewController@status')->name('book_interview.status');
+Route::get('book_interview/review', 'BookInterviewController@review')->name('book_interview.review');
 //Candidate
 
 //Interviewers
 Route::get('schedule-interview', 'InterviewerController@scheduleInterview')->name('schedule-interview');
+Route::get('report', 'InterviewerController@report')->name('report');
+Route::get('report/search', 'InterviewerController@reportSearch')->name('report.search');
 Route::get('blog-resources', 'InterviewerController@resources')->name('blog-resources');
 Route::get('blog/single/{slug}', 'InterviewerController@singleBlog')->name('blog.single');
-
 //Interviewer
 
 //availableslots

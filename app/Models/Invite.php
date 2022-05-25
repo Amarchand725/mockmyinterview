@@ -13,6 +13,11 @@ class Invite extends Model
 
     public function hasInvitedUsers()
     {
-        return $this->hasMany(InvitedUser::class, 'invite_id', 'id')->where('registered', 1);
+        return $this->hasMany(InvitedUser::class, 'invite_id', 'id')->where('registered', 1)->orderby('id', 'desc');
+    }
+
+    public function hasReferral()
+    {
+        return $this->hasOne(Referral::class, 'id', 'referral_id');
     }
 }

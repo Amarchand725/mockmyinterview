@@ -11,6 +11,8 @@ use App\Models\BookingPriority;
 use App\Models\AvailableSlotDate;
 use App\Models\Qualification;
 use App\Models\Wallet;
+use App\Models\InterviewerWallet;
+use App\Models\Log;
 use DateTime;
 use Auth;
 
@@ -54,6 +56,7 @@ class BookInterviewController extends Controller
         $page_title = 'All Booked Interviews';
         return view('web-views.interviews.index', compact('booked_interviews', 'page_title'));
     }
+
     public function create()
     {
         $this->authorize('book interview-list', User::class);
@@ -83,7 +86,6 @@ class BookInterviewController extends Controller
                 }
             }
         }
-
         $next_slots = [];
         $next_date = date('Y-m-d', strtotime("+1 day"));
         $b_slots = AvailableSlotDate::whereIn('interviewer_id', $interviewers)->where('start_date', $next_date)->get();
@@ -106,10 +108,12 @@ class BookInterviewController extends Controller
 
     public function store(Request $request)
     {
+        // return $request;
         $validator = $request->validate([
             'interview_type' => 'required',
         ]);
 
+        // return $request->booked_slot;
         if(empty($request->booked_slots)){
             return redirect()->back()->with('error', 'Select slot at least one.');
         }
@@ -119,30 +123,38 @@ class BookInterviewController extends Controller
         if(isset($wallet) && $wallet->balance_credits < $priority->credits){
             return redirect()->route('wallet.create')->with('error', 'You have not credits in your wallet purchase from here.');
         }
-        
         try {
-            foreach($request->booked_slots as $interviewer_id=>$slots){
-                foreach($slots as $slot){
-                    $meeting = $this->createMeeting($request);
+            foreach($request->booked_slots as $interviewer_id=>$slot){
+                $meeting = $this->createMeeting($request);
 
-                    BookInterview::create([
-                        'meeting_id' => $meeting->id,
-                        'interviewer_id' => $interviewer_id,
+                $booked_interview = BookInterview::create([
+                    'meeting_id' => $meeting->id,
+                    'interviewer_id' => $interviewer_id,
+                    'candidate_id' => Auth::user()->id,
+                    'booking_type_slug' => $request->booking_type,
+                    'credits' => $priority->credits,
+                    'interview_type' => $request->interview_type,
+                    'date' => date('Y-m-d'),
+                    'slot' => $slot,
+                    'start_at' => date('Y-m-d', strtotime($request->date)).' '.$slot,
+                    'duration' => $meeting->duration,
+                    'password' => $meeting->password,
+                    'start_url' => $meeting->start_url,
+                    'join_url' => $meeting->join_url,
+                ]);
+
+                if($booked_interview){
+                    Log::create([
+                        'booked_interview_id' => $booked_interview->id,
                         'candidate_id' => Auth::user()->id,
-                        'booking_type_slug' => $request->booking_type,
-                        'interview_type' => $request->interview_type,
-                        'date' => date('Y-m-d'),
-                        'slot' => $slot,
-                        'start_at' => date('Y-m-d', strtotime($request->date)).' '.$slot,
-                        'duration' => $meeting->duration,
-                        'password' => $meeting->password,
-                        'start_url' => $meeting->start_url,
-                        'join_url' => $meeting->join_url,
+                        'credits' => $priority->credits, 
+                        'type' => 'charged', 
+                        'description' => 'Charged credits from candidate wallet.', 
                     ]);
                 }
             }
 
-            return redirect()->route('book_interview.index')->with('message', 'Success Created');
+            return redirect()->route('book_interview.index')->with('message', 'Booking created successfully');
         }catch(\Exception $e){
             return redirect()->back()->with(['error' => $e->getMessage()]);
         }
@@ -260,5 +272,80 @@ class BookInterviewController extends Controller
             $booked_interviews = BookInterview::orderby('id', 'desc')->get(['id', 'start_at']);
         }
         return response()->json($booked_interviews);
+    }
+
+    public function status(Request $request)
+    {
+        $interview = BookInterview::where('id', $request->interview_id)->first();
+        $interview->status = $request->status;
+        $interview->save();
+
+        if($request->status==1){ //confirm
+            return 1;
+        }elseif($request->status==3){ //reject
+            //candidate wallet
+            $candidate_wallet = Wallet::where('candidate_id', $interview->candidate_id)->first();
+
+            //booking priority credits
+            $credits = BookingPriority::where('slug', $interview->booking_type_slug)->first();
+
+            //deduct credits from candidate wallet & update candidate wallet
+            $candidate_wallet->last_added_credits = $candidate_wallet->balance_credits??0;
+            $candidate_wallet->balance_credits = $candidate_wallet->balance_credits+$credits->credits;
+            $candidate_wallet->save();
+
+            if($candidate_wallet){
+                Log::create([
+                    'booked_interview_id' => $interview->id,
+                    'interviewer_id' => $interview->interviewer_id,
+                    'candidate_id' => Auth::user()->id,
+                    'credits' => $priority->credits, 
+                    'type' => 'returned', 
+                    'description' => 'Return credits due to rejection.', 
+                ]);
+            }
+
+            return 1;
+        }elseif($request->status==4){ //complete
+            //booking priority credits
+            $credits = BookingPriority::where('slug', $interview->booking_type_slug)->first();
+            //transfer credits to interviewer wallet.
+            $interviewer_wallet = InterviewerWallet::where('interviewer_id', $interview->interviewer_id)->first();
+            if(empty($interviewer_wallet)){
+                $interviewer_wallet = new InterviewerWallet();
+                $interviewer_wallet->interviewer_id = $interview->interviewer_id;
+                $interviewer_wallet->booking_id = $interview->id;
+                $interviewer_wallet->last_balance_credits = 0;
+                $interviewer_wallet->total_credits = $credits->credits;
+                $interviewer_wallet->save();
+            }else{
+                $interviewer_wallet->booking_id = $interview->id;
+                $interviewer_wallet->last_balance_credits = $interviewer_wallet->total_credits;
+                $interviewer_wallet->total_credits = $interviewer_wallet->total_credits+$credits->credits;
+                $interviewer_wallet->save();
+            }
+
+            if($interviewer_wallet){
+                Log::create([
+                    'booked_interview_id' => $interview->id,
+                    'interviewer_id' => $interview->interviewer_id,
+                    'candidate_id' => Auth::user()->id,
+                    'credits' => $priority->credits, 
+                    'type' => 'returned', 
+                    'description' => 'Return credits due to rejection.', 
+                ]);
+            }
+
+            return 1; //completed
+        }
+    }
+
+    public function review(Request $request)
+    {
+        $model = BookInterview::where('id', $request->interview_id)->first();
+        $model->review = $request->review;
+        $model->save();
+
+        return redirect()->route('book_interview.index')->with('message', 'You have reviewed us thanks.');
     }
 }

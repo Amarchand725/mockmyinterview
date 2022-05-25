@@ -398,11 +398,15 @@ class WebController extends Controller
         $roles = Role::where('name', '!=', 'Admin')->get(['name']);
         return view('web-views.login.signup', compact('page_title', 'roles'));
     }
-    public function inviteSignUp($referral_id, $invited_user)
+    public function inviteSignUp($referral_id, $invited_user_token=1)
     {
         $page_title = 'Sign Up';
         $roles = Role::where('name', '!=', 'Admin')->get(['name']);
-        $invited_user_email = InvitedUser::where('invited_user', $invited_user)->first()->email;
+        $invited_user_email = $invited_user_token;
+        if($invited_user_token != 1){
+            $invited_user_email = InvitedUser::where('invited_user_token', $invited_user_token)->first()->email;
+        }
+        
         return view('web-views.login.signup', compact('page_title', 'referral_id', 'roles', 'invited_user_email'));
     }
     public function store(Request $request)
@@ -428,6 +432,7 @@ class WebController extends Controller
         $input = $request->all();
         unset($input['role']);
         unset($input['confirm-password']);
+        unset($input['referral_id']);
         $input['user_id'] = $user_id;
         $input['referral_code'] = $referral_code;
         $input['verify_token'] = $verify_token;
@@ -436,8 +441,8 @@ class WebController extends Controller
         $user = User::create($input);
         $user->assignRole($request->input('role'));
 
-        if(isset($request->referral_code)){
-            $referral_candidate = User::where('referral_code', $request->referral_code)->first();
+        if(isset($request->referral_id)){
+            $referral_candidate = User::where('referral_code', $request->referral_id)->first();
             $invite = Invite::where('candidate_id', $referral_candidate->id)->first();
             $referral = Referral::where('id', $invite->referral_id)->first();
             //shared with
@@ -446,6 +451,7 @@ class WebController extends Controller
                 'referral_id' => $invite->referral_id,
                 'last_added_credits' => 0,
                 'balance_credits' => $referral->offer_credits,
+                'date' => date('Y-m-d'),
             ]);
 
             $shared_by_wallet = Wallet::where('candidate_id', $referral_candidate->id)->first();
@@ -455,6 +461,7 @@ class WebController extends Controller
                     'referral_id' => $invite->referral_id,
                     'last_added_credits' => 0,
                     'balance_credits' => $referral->offer_credits,
+                    'date' => date('Y-m-d'),
                 ]);
             }else{
                 $balance_credits = 0;
@@ -471,6 +478,17 @@ class WebController extends Controller
             if(!empty($invited_user)){
                 $invited_user->registered = 1;
                 $invited_user->save();
+            }else{
+                do{
+                    $invited_user_token = rand(1000, 9999);
+                }while(InvitedUser::where('invited_user_token', $invited_user_token)->first());
+
+                InvitedUser::create([
+                    'invite_id' => $invite->id,
+                    'invited_user_token' => $invited_user_token,
+                    'registered' => 1,
+                    'email' => $user->email,
+                ]);
             }
         }
 

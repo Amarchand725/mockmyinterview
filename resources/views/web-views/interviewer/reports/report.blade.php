@@ -6,6 +6,7 @@
 @endpush
 
 @section('content')
+    <input type="hidden" id="page_url" value="{{ route('report.search') }}">
     <div class="container-fluid py-3 ">
         <div class="row mx-auto">
             <h2 class="mb-3">Reports</h2>
@@ -28,7 +29,7 @@
                         </div>
                     </div>
                     <div class="col-md-2 mt-4">
-                        <button class="btn btn primary pull-right search-btn">Search</button>
+                        <button class="btn btn primary pull-right view_btn search-btn">Search</button>
                     </div>
                 </div>
             </div>
@@ -53,7 +54,7 @@
                             </tr>
                             <tr>
                                 <th scope="row">Total Earnings -</th>
-                                <td>${{ number_format(123,2) }}</td>
+                                <td>{{ $total_earnings }} Credits</td>
                             </tr>
                         </tbody>
                     </table>
@@ -69,16 +70,18 @@
                                 <th scope="col">Interview ID </th>
                                 <th scope="col">First</th>
                                 <th scope="col">Last</th>
+                                <th scope="col">Date</th>
                                 <th scope="col">Review</th>
                             </tr>
                         </thead>
                         <tbody id="body">
                             @foreach ($interviews as $key=>$interview)
                                 <tr>
-                                    <td>{{  $interviews->firstItem()+$key }}.</td>
+                                    <td>{{ $interviews->firstItem()+$key }}.</td>
                                     <th>{{ $interview->meeting_id }}</th>
                                     <td>{{ $interview->hasCandidate->name }}</td>
                                     <td>{{ $interview->hasCandidate->last_name }}</td>
+                                    <td>{{ date('d, F-Y', strtotime($interview->date)) }}</td>
                                     <td>{{ $interview->review }}</td>
                                 </tr>
                             @endforeach
@@ -99,5 +102,31 @@
 @endsection
 
 @push('js')
-   
+    <script>
+        $('.search-btn').on('click', function(e) {
+            var date_from = $('#date_from').val();
+            var date_end = $('#date_end').val();
+            var page = 1;
+            fetchAll(page, date_from, date_end);
+        });
+
+        $(document).on('click', '.pagination a', function(event){
+            event.preventDefault();
+            var date_from = $('#date_from').val();
+            var date_end = $('#date_end').val();
+            var page = $(this).attr('href').split('page=')[1];
+            fetchAll(page, date_from, date_end);
+        });
+
+        function fetchAll(page, date_from, date_end){
+            $.ajax({
+                url:'{{ route("report.search") }}'+'?page='+page+'&date_from='+date_from+'&date_end='+date_end,
+                type: 'get',
+                success: function(response){
+                    $('#body').html(response);
+                    console.log(response);
+                }
+            });
+        }
+    </script>
 @endpush

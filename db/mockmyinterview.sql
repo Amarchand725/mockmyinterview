@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 13, 2022 at 05:39 PM
+-- Generation Time: May 25, 2022 at 05:36 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.4.22
 
@@ -158,14 +158,14 @@ CREATE TABLE `available_slot_dates` (
 --
 
 INSERT INTO `available_slot_dates` (`id`, `interviewer_id`, `slot_type`, `hr_type`, `technical_type`, `start_date`, `end_date`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 7, 'weekands', NULL, '1', '2022-04-07', '2022-04-07', 0, NULL, '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
-(2, 7, 'weekands', NULL, '1', '2022-05-09', '2022-05-09', 0, NULL, '2022-05-09 03:37:41', '2022-05-09 03:37:41'),
-(3, 7, 'weekdays', NULL, '1', '2022-05-09', '2022-05-09', 0, NULL, '2022-05-09 03:38:08', '2022-05-09 03:38:08'),
-(4, 7, 'weekdays', NULL, '1', '2022-05-09', '2022-05-09', 0, NULL, '2022-05-09 05:43:34', '2022-05-09 05:43:34'),
+(1, 7, 'weekands', NULL, '1', '2022-05-25', '2022-05-27', 0, NULL, '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
+(2, 7, 'weekands', NULL, '1', '2022-05-25', '2022-05-27', 0, NULL, '2022-05-09 03:37:41', '2022-05-09 03:37:41'),
+(3, 7, 'weekdays', NULL, '1', '2022-05-25', '2022-05-27', 0, NULL, '2022-05-09 03:38:08', '2022-05-09 03:38:08'),
+(4, 7, 'weekdays', NULL, '1', '2022-05-25', '2022-05-09', 0, NULL, '2022-05-09 05:43:34', '2022-05-09 05:43:34'),
 (5, 7, 'weekands', NULL, '1', '2022-05-09', '2022-05-09', 0, NULL, '2022-05-09 08:31:26', '2022-05-09 08:31:26'),
 (6, 7, 'weekdays', NULL, '1', '2022-05-12', '2022-05-14', 0, NULL, '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
 (7, 7, 'weekands', NULL, '1', '2022-05-12', '2022-05-14', 0, NULL, '2022-05-10 03:48:28', '2022-05-10 03:48:28'),
-(8, 7, 'weekdays', NULL, '1', '2022-05-12', '2022-05-12', 0, NULL, '2022-05-12 10:46:21', '2022-05-12 10:46:21');
+(8, 7, 'weekdays', NULL, '1', '2022-05-16', '2022-05-20', 0, NULL, '2022-05-12 10:46:21', '2022-05-12 10:46:21');
 
 -- --------------------------------------------------------
 
@@ -243,6 +243,7 @@ CREATE TABLE `book_interviews` (
   `interviewer_id` bigint(20) NOT NULL,
   `candidate_id` bigint(20) NOT NULL,
   `booking_type_slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `credits` float DEFAULT NULL,
   `interview_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` date NOT NULL,
   `slot` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -251,36 +252,11 @@ CREATE TABLE `book_interviews` (
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'metting password',
   `start_url` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `join_url` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0=booked, 1=confirmed',
+  `review` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` int(1) NOT NULL DEFAULT 0 COMMENT '0=pending, 1=confirmed, 3:rejected, 4=completed',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `book_interviews`
---
-
-INSERT INTO `book_interviews` (`id`, `meeting_id`, `interviewer_id`, `candidate_id`, `booking_type_slug`, `interview_type`, `date`, `slot`, `start_at`, `duration`, `password`, `start_url`, `join_url`, `status`, `created_at`, `updated_at`) VALUES
-(1, 89559144303, 7, 5, 'standard-booking', 'hr', '2022-05-01', '12', '2022-05-01 12:00:00', 30, '12345', 'https://us05web.zoom.us/s/89559144303?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5NTU5MTQ0MzAzIiwiZXhwIjoxNjUyMDkzMTgzLCJpYXQiOjE2NTIwODU5ODMsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.BUiJ2tS_sgeaee4KoGT0FaSjMaLZqpTmoDCOMRl78CY', 'https://us05web.zoom.us/j/89559144303?pwd=aGdDZUJ5ZFhrSFd5bkdZOXI0djduZz09', 0, '2022-05-09 03:46:23', '2022-05-09 03:46:23'),
-(2, 89153436331, 7, 5, 'standard-booking', 'hr', '2022-05-01', '12', '2022-05-01 12:00:00', 30, '12345', 'https://us05web.zoom.us/s/89153436331?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5MTUzNDM2MzMxIiwiZXhwIjoxNjUyMTc0OTgyLCJpYXQiOjE2NTIxNjc3ODIsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.ZgMI6rgIpkg5ts3giHamBzVZ6LTgJSMcNsCwGfUGqPc', 'https://us05web.zoom.us/j/89153436331?pwd=WGw1Mi9oT1B1K3AzU21pTFJBdUxrdz09', 0, '2022-05-10 02:29:41', '2022-05-10 02:29:41'),
-(3, 81438220293, 7, 5, 'standard-booking', 'hr', '2022-05-01', '12', '2022-05-01 12:00:00', 30, '12345', 'https://us05web.zoom.us/s/81438220293?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6IjgxNDM4MjIwMjkzIiwiZXhwIjoxNjUyMTc1MDEyLCJpYXQiOjE2NTIxNjc4MTIsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.3gcvm90xJ0l9CsANQs2Ulig4Vj_rSfLdDqXo3Gd7UXE', 'https://us05web.zoom.us/j/81438220293?pwd=ZGorbU1nbDRYVlU2N3FSL0w0YWV4UT09', 0, '2022-05-10 02:30:11', '2022-05-10 02:30:11'),
-(4, 81496067172, 7, 5, 'standard-booking', 'hr', '2022-05-10', '11:00', '2022-05-09 11:00:00', 30, '12345', 'https://us05web.zoom.us/s/81496067172?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6IjgxNDk2MDY3MTcyIiwiZXhwIjoxNjUyMTc4NTk5LCJpYXQiOjE2NTIxNzEzOTksImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.zr86xC7w1oGhBdZ1HqV22i7vHYo1o9i7PAPW5FsY20w', 'https://us05web.zoom.us/j/81496067172?pwd=cER6RU53RVJzVHcra3pwdFh4WEw0dz09', 0, '2022-05-10 03:29:58', '2022-05-10 03:29:58'),
-(5, 85989246568, 7, 5, 'standard-booking', 'technical', '2022-05-10', '11:00', '2022-10-05 11:00:00', 30, '12345', 'https://us05web.zoom.us/s/85989246568?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg1OTg5MjQ2NTY4IiwiZXhwIjoxNjUyMTg0MzQyLCJpYXQiOjE2NTIxNzcxNDIsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.G7FRyiHxoAD8MEDBC0sAKr1xJzjXDqdZdb138opliOQ', 'https://us05web.zoom.us/j/85989246568?pwd=M0tCWTVmUys1MGJZWXFvVllKWWxHQT09', 0, '2022-05-10 05:05:41', '2022-05-10 05:05:41'),
-(6, 89588166986, 7, 5, 'standard-booking', 'technical', '2022-05-10', '12:00', '2022-10-05 12:00:00', 30, '12345', 'https://us05web.zoom.us/s/89588166986?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5NTg4MTY2OTg2IiwiZXhwIjoxNjUyMTg0MzQ0LCJpYXQiOjE2NTIxNzcxNDQsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.WWkttYekcRaPYOmXJOxBaGby1vELN-hRwPnrWLMuXfA', 'https://us05web.zoom.us/j/89588166986?pwd=dTUzWG5STExxSlVNSlVxaUJWZDdmQT09', 0, '2022-05-10 05:05:43', '2022-05-10 05:05:43'),
-(7, 88399907474, 7, 5, 'standard-booking', 'technical', '2022-05-10', '18:00', '2022-10-05 18:00:00', 30, '12345', 'https://us05web.zoom.us/s/88399907474?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg4Mzk5OTA3NDc0IiwiZXhwIjoxNjUyMTg0MzQ2LCJpYXQiOjE2NTIxNzcxNDYsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.T41HIgSPAFhTggFRi-IJs4XTxWmED7n6y0j6ONj7dvo', 'https://us05web.zoom.us/j/88399907474?pwd=RnlCOWpIb2RFdVFqSlB1YXJzTWdnQT09', 0, '2022-05-10 05:05:45', '2022-05-10 05:05:45'),
-(8, 84564066377, 7, 5, 'standard-booking', 'technical', '2022-05-10', '18:30', '2022-10-05 18:30:00', 30, '12345', 'https://us05web.zoom.us/s/84564066377?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg0NTY0MDY2Mzc3IiwiZXhwIjoxNjUyMTg0MzQ4LCJpYXQiOjE2NTIxNzcxNDgsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.p3PNhtGhXqtyw-oj03pAltb7uw7rJGpFw1gYxT6iC-Y', 'https://us05web.zoom.us/j/84564066377?pwd=dFNsS2lUZUs4WngxOXVtNS8wVWlIZz09', 0, '2022-05-10 05:05:47', '2022-05-10 05:05:47'),
-(9, 82773986567, 7, 5, 'standard-booking', 'technical', '2022-05-10', '19:00', '2022-10-05 19:00:00', 30, '12345', 'https://us05web.zoom.us/s/82773986567?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6IjgyNzczOTg2NTY3IiwiZXhwIjoxNjUyMTg0MzQ5LCJpYXQiOjE2NTIxNzcxNDksImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.1nwE94yJKqSm6ThXU8bAq_3I2DdtRjjpFirKSIWLHoA', 'https://us05web.zoom.us/j/82773986567?pwd=dVYwYVM1Y0Vra280dGcwK2NVbUZHUT09', 0, '2022-05-10 05:05:49', '2022-05-10 05:05:49'),
-(10, 85961121168, 7, 5, 'standard-booking', 'technical', '2022-05-10', '21:30', '2022-10-05 21:30:00', 30, '12345', 'https://us05web.zoom.us/s/85961121168?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg1OTYxMTIxMTY4IiwiZXhwIjoxNjUyMTg0MzUxLCJpYXQiOjE2NTIxNzcxNTEsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.ujbjqbW2Ia8hp66YctVoRyPo_4CljhnJhce42kSEtuQ', 'https://us05web.zoom.us/j/85961121168?pwd=UzY1MHVnMnFlWTJoczBwMFV4R2thUT09', 0, '2022-05-10 05:05:51', '2022-05-10 05:05:51'),
-(11, 85125384049, 7, 5, 'standard-booking', 'technical', '2022-05-10', '11:30', '2022-05-10 11:30:00', 30, '12345', 'https://us05web.zoom.us/s/85125384049?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg1MTI1Mzg0MDQ5IiwiZXhwIjoxNjUyMTg1MTQ4LCJpYXQiOjE2NTIxNzc5NDgsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.bzlWZ2KBradUNgKytmLmrpboK1alPdKOAboNRdmdpdo', 'https://us05web.zoom.us/j/85125384049?pwd=cXlGMEh2TWRhSlpDanYvY2NVSnlkZz09', 0, '2022-05-10 05:19:08', '2022-05-10 05:19:08'),
-(12, 81210332301, 7, 5, 'standard-booking', 'technical', '2022-05-10', '18:00', '2022-05-10 18:00:00', 30, '12345', 'https://us05web.zoom.us/s/81210332301?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6IjgxMjEwMzMyMzAxIiwiZXhwIjoxNjUyMTg1MTUwLCJpYXQiOjE2NTIxNzc5NTAsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.F8Rl-xwr9CYKxyxBM-8S-m9EL0V7FHNB-vMmptyJqMc', 'https://us05web.zoom.us/j/81210332301?pwd=V0d4U2lhalJYUVJaRW9kbGo1UFlPZz09', 0, '2022-05-10 05:19:10', '2022-05-10 05:19:10'),
-(13, 89973528845, 7, 5, 'standard-booking', 'technical', '2022-05-10', '18:30', '2022-05-10 18:30:00', 30, '12345', 'https://us05web.zoom.us/s/89973528845?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5OTczNTI4ODQ1IiwiZXhwIjoxNjUyMTg1MTUyLCJpYXQiOjE2NTIxNzc5NTIsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.eH9KewobOa58nvST6gU4HjBKgXk0aLBjTI3kLZH_Jns', 'https://us05web.zoom.us/j/89973528845?pwd=RFQyL2lrMFlub3htREZzNGxGTVZGUT09', 0, '2022-05-10 05:19:11', '2022-05-10 05:19:11'),
-(14, 89961082718, 7, 5, 'standard-booking', 'technical', '2022-05-10', '19:00', '2022-05-10 19:00:00', 30, '12345', 'https://us05web.zoom.us/s/89961082718?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5OTYxMDgyNzE4IiwiZXhwIjoxNjUyMTg1MTU0LCJpYXQiOjE2NTIxNzc5NTQsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ._J11hQb7TGbkQrvY8Y_WyJKLbA9dZegVvpeNHz3nYrI', 'https://us05web.zoom.us/j/89961082718?pwd=TllWNC9pTTlHNUcwVVZqYlhvQ0FUUT09', 0, '2022-05-10 05:19:13', '2022-05-10 05:19:13'),
-(15, 85649367464, 7, 5, 'standard-booking', 'technical', '2022-05-10', '22:00', '2022-05-10 22:00:00', 30, '12345', 'https://us05web.zoom.us/s/85649367464?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg1NjQ5MzY3NDY0IiwiZXhwIjoxNjUyMTg1MTU3LCJpYXQiOjE2NTIxNzc5NTcsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.OSUJpVG_gxpwfTPasqjgRnrYYCyonxiN2GWEu4-J5CY', 'https://us05web.zoom.us/j/85649367464?pwd=d25BaytHQUZxVVVOekE2b1JNcE5vQT09', 0, '2022-05-10 05:19:16', '2022-05-10 05:19:16'),
-(16, 89324799780, 7, 5, 'standard-booking', 'hr', '2022-05-10', '11:30', '2022-10-05 11:30:00', 30, '12345', 'https://us05web.zoom.us/s/89324799780?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5MzI0Nzk5NzgwIiwiZXhwIjoxNjUyMTg1Njc2LCJpYXQiOjE2NTIxNzg0NzYsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.4opKW9QmkGwdwrK5vj7vNSskYCPXZoeHZ4sNP1Bqex4', 'https://us05web.zoom.us/j/89324799780?pwd=WWowUi9jSkxNQXFWelRNaXgwWGhaUT09', 0, '2022-05-10 05:27:55', '2022-05-10 05:27:55'),
-(17, 84838434098, 7, 5, 'standard-booking', 'hr', '2022-05-10', '18:30', '2022-10-05 18:30:00', 30, '12345', 'https://us05web.zoom.us/s/84838434098?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg0ODM4NDM0MDk4IiwiZXhwIjoxNjUyMTg1Njc3LCJpYXQiOjE2NTIxNzg0NzcsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.7KkpkFF3o3TB1SLUYMm6D_i-8EGzIYfyoUFiDSvCSNY', 'https://us05web.zoom.us/j/84838434098?pwd=UFFudnhpOEh5eUphdmc1ZXlNUU9Pdz09', 0, '2022-05-10 05:27:57', '2022-05-10 05:27:57'),
-(18, 87098383262, 7, 6, 'standard-booking', 'hr', '2022-05-11', '19:00', '2022-05-12 19:00:00', 30, '12345', 'https://us05web.zoom.us/s/87098383262?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg3MDk4MzgzMjYyIiwiZXhwIjoxNjUyMTg1Njc5LCJpYXQiOjE2NTIxNzg0NzksImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.qYHY5pMlcJs8-RRUHbLZMtPRkdL8fYqREOlfOQWwGBg', 'https://us05web.zoom.us/j/87098383262?pwd=Zk1UemVUNVhmTDNHaWhaZVN1T2VQZz09', 1, '2022-05-10 05:27:58', '2022-05-10 05:27:58'),
-(19, 83430204528, 7, 6, 'standard-booking', 'hr', '2022-05-12', '11:00', '2022-12-05 11:00:00', 30, '12345', 'https://us05web.zoom.us/s/83430204528?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6IjgzNDMwMjA0NTI4IiwiZXhwIjoxNjUyMzc3Mzg3LCJpYXQiOjE2NTIzNzAxODcsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.c5BcU_OXFfw-qvviz22uyFZANa1011Gf4ZvKLhkSaWM', 'https://us05web.zoom.us/j/83430204528?pwd=WnBmazdXaTNVWTdPZmFZOGs2TmlNdz09', 0, '2022-05-12 10:43:06', '2022-05-12 10:43:06'),
-(20, 84211136865, 7, 6, 'standard-booking', 'hr', '2022-05-12', '11:30', '2022-12-05 11:30:00', 30, '12345', 'https://us05web.zoom.us/s/84211136865?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg0MjExMTM2ODY1IiwiZXhwIjoxNjUyMzc3Mzg5LCJpYXQiOjE2NTIzNzAxODksImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.xL6JbjXFVf-vmYT7l3_IjTQI9aX_b92PelIlXkeiFsc', 'https://us05web.zoom.us/j/84211136865?pwd=S3dNMTdYWjNJeVVJWlpRQUdxL2Jpdz09', 0, '2022-05-12 10:43:09', '2022-05-12 10:43:09');
 
 -- --------------------------------------------------------
 
@@ -362,8 +338,8 @@ CREATE TABLE `coupons` (
 --
 
 INSERT INTO `coupons` (`id`, `created_by`, `name`, `slug`, `type`, `coupon_code`, `discount`, `start_date`, `end_date`, `max_usages`, `banner`, `description`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(2, 1, 'Levi Mayo', 'levi-mayo', 'fix', 'n3XiOY', 234, '2022-05-13', '2022-05-13', 1, '13-05-2022-141229.png', 'Porro qui et do nece', 1, NULL, '2022-05-13 09:12:29', '2022-05-13 09:12:40'),
-(3, 1, 'Gil Branch', 'gil-branch', 'fix', 'Qq7L5A', 12, '2022-05-13', '2022-05-13', 1, NULL, 'Sit quam animi com', 1, NULL, '2022-05-13 09:14:33', '2022-05-13 09:18:43');
+(2, 1, 'Levi Mayo', 'levi-mayo', 'fix', 'n3XiOY', 4, '2022-05-13', '2022-05-18', 1, '13-05-2022-141229.png', 'Porro qui et do nece', 1, NULL, '2022-05-13 09:12:29', '2022-05-13 09:12:40'),
+(3, 1, 'Gil Branch', 'gil-branch', 'percent', 'Qq7L5A', 10, '2022-05-13', '2022-05-18', 1, NULL, 'Sit quam animi com', 1, NULL, '2022-05-13 09:14:33', '2022-05-13 09:18:43');
 
 -- --------------------------------------------------------
 
@@ -374,12 +350,18 @@ INSERT INTO `coupons` (`id`, `created_by`, `name`, `slug`, `type`, `coupon_code`
 CREATE TABLE `coupon_usages` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `candidate_id` bigint(20) NOT NULL,
-  `interview_id` bigint(20) NOT NULL,
   `coupon_id` bigint(20) NOT NULL,
   `usages` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `coupon_usages`
+--
+
+INSERT INTO `coupon_usages` (`id`, `candidate_id`, `coupon_id`, `usages`, `created_at`, `updated_at`) VALUES
+(1, 6, 2, 1, '2022-05-16 10:00:34', '2022-05-16 10:00:34');
 
 -- --------------------------------------------------------
 
@@ -576,6 +558,23 @@ INSERT INTO `how_works` (`id`, `created_by`, `title`, `slug`, `description`, `st
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `interviewer_wallets`
+--
+
+CREATE TABLE `interviewer_wallets` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `interviewer_id` bigint(20) NOT NULL,
+  `booking_id` bigint(20) NOT NULL,
+  `last_balance_credits` bigint(20) NOT NULL DEFAULT 0,
+  `total_credits` float NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `interview_types`
 --
 
@@ -589,6 +588,52 @@ CREATE TABLE `interview_types` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invited_users`
+--
+
+CREATE TABLE `invited_users` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `invite_id` bigint(20) NOT NULL,
+  `invited_user_token` bigint(20) NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `registered` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `invited_users`
+--
+
+INSERT INTO `invited_users` (`id`, `invite_id`, `invited_user_token`, `email`, `registered`, `created_at`, `updated_at`) VALUES
+(1, 1, 4534, 'testweb@mailinator.com', 1, '2022-05-17 10:28:50', '2022-05-17 10:28:50'),
+(2, 1, 5355, 'ligiqikuva@mailinator.com', 1, '2022-05-18 03:56:16', '2022-05-18 03:56:16'),
+(3, 1, 1025, 'chandamar725@gmail.com', 1, '2022-05-18 04:13:50', '2022-05-18 04:14:37');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invites`
+--
+
+CREATE TABLE `invites` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `candidate_id` bigint(20) NOT NULL,
+  `referral_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `invites`
+--
+
+INSERT INTO `invites` (`id`, `candidate_id`, `referral_id`, `created_at`, `updated_at`) VALUES
+(1, 6, '2', '2022-05-17 10:28:50', '2022-05-17 10:28:50');
 
 -- --------------------------------------------------------
 
@@ -621,6 +666,24 @@ INSERT INTO `languages` (`id`, `created_by`, `title`, `slug`, `code`, `descripti
 (5, 1, 'Latin', 'latin', 'la', 'Latin Language', 1, NULL, '2022-03-25 09:45:51', '2022-03-25 09:45:51'),
 (6, 1, 'Urdu', 'urdu', 'ur', 'Urdu Language', 1, NULL, '2022-03-25 09:46:43', '2022-03-25 09:46:43'),
 (7, 1, 'Arabic', 'arabic', 'ar', 'Arabic Language', 1, NULL, '2022-03-25 09:47:23', '2022-03-25 09:47:23');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `logs`
+--
+
+CREATE TABLE `logs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `booked_interview_id` bigint(20) NOT NULL,
+  `interviewer_id` bigint(20) NOT NULL COMMENT 'intervewer',
+  `candidate_id` bigint(20) NOT NULL COMMENT 'candidate id',
+  `credits` double(8,2) NOT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'charged or returned credits',
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -673,11 +736,16 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (83, '2022_04_05_101315_create_available_slots_table', 54),
 (85, '2022_04_07_072048_create_interview_types_table', 55),
 (87, '2022_03_31_144514_create_book_interviews_table', 56),
-(88, '2022_05_12_125806_create_payments_table', 57),
-(89, '2022_05_12_130148_create_wallets_table', 58),
-(90, '2022_05_13_092451_payment_logs', 59),
-(93, '2022_05_13_105833_create_coupon_usages_table', 61),
-(96, '2022_05_13_105809_create_coupons_table', 62);
+(96, '2022_05_13_105809_create_coupons_table', 62),
+(100, '2022_05_13_092451_payment_logs', 65),
+(102, '2022_05_12_125806_create_payments_table', 66),
+(103, '2022_05_12_130148_create_wallets_table', 67),
+(104, '2022_05_13_105833_create_coupon_usages_table', 68),
+(107, '2022_05_17_082929_create_referrals_table', 69),
+(113, '2022_05_17_083604_create_invites_table', 74),
+(117, '2022_05_17_084617_create_invited_users_table', 75),
+(118, '2022_05_20_145309_create_interviewer_wallets_table', 76),
+(121, '2022_05_25_080100_create_logs_table', 77);
 
 -- --------------------------------------------------------
 
@@ -738,7 +806,11 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (6, 'App\\Models\\User', 31),
 (6, 'App\\Models\\User', 32),
 (6, 'App\\Models\\User', 33),
-(6, 'App\\Models\\User', 34);
+(6, 'App\\Models\\User', 34),
+(6, 'App\\Models\\User', 37),
+(6, 'App\\Models\\User', 38),
+(6, 'App\\Models\\User', 39),
+(6, 'App\\Models\\User', 40);
 
 -- --------------------------------------------------------
 
@@ -960,10 +1032,12 @@ INSERT INTO `page_settings` (`id`, `parent_slug`, `key`, `value`, `created_at`, 
 (144, 'header', 'weekends_morning_to_time', '17:00', '2022-03-31 10:54:25', '2022-03-31 10:54:25'),
 (145, 'header', 'weekends_evening_from_time', '17:30', '2022-03-31 10:54:25', '2022-03-31 10:54:25'),
 (146, 'header', 'weekends_evening_to_time', '23:00', '2022-03-31 10:54:25', '2022-03-31 10:54:25'),
-(147, 'interview-terms', '_token', 'ZCxIAuUjbf4QtPefhZtN9SDRznoHIcMGwjwQ9wvj', '2022-05-12 10:02:02', '2022-05-12 10:02:02'),
+(147, 'interview-terms', '_token', 'YUF2p1ZOLae8A2920LS9lWI6E4283vAnGfqdw9hX', '2022-05-12 10:02:02', '2022-05-20 09:49:07'),
 (148, 'interview-terms', 'parent_slug', 'interview-terms', '2022-05-12 10:02:02', '2022-05-12 10:02:02'),
 (149, 'interview-terms', 'terms', '<ul class=\"list-styled\">\r\n<li>Number of Regular Interviews: 3</li>\r\n<li>Standard Waiting Period: 48 Hours</li>\r\n<li>Duration of Each Interview: 30 minutes</li>\r\n<li>Expert&rsquo;s Feedback: Yes</li>\r\n</ul>', '2022-05-12 10:02:02', '2022-05-12 10:02:02'),
-(150, 'interview-terms', 'form_contact', NULL, '2022-05-12 10:02:02', '2022-05-12 10:02:02');
+(150, 'interview-terms', 'form_contact', NULL, '2022-05-12 10:02:02', '2022-05-12 10:02:02'),
+(151, 'interview-terms', 'fee_percent', '20', '2022-05-20 09:49:07', '2022-05-20 09:49:07'),
+(152, 'interview-terms', 'interview_terms', '<ul class=\"list-styled\">\r\n<li>Number of Regular Interviews: 3</li>\r\n<li>Standard Waiting Period: 48 Hours</li>\r\n<li>Duration of Each Interview: 30 minutes</li>\r\n<li>Expert&rsquo;s Feedback: Yes</li>\r\n</ul>', '2022-05-20 09:49:07', '2022-05-20 09:49:07');
 
 -- --------------------------------------------------------
 
@@ -994,13 +1068,24 @@ INSERT INTO `password_resets` (`email`, `token`, `created_at`) VALUES
 CREATE TABLE `payments` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `candidate_id` bigint(20) NOT NULL,
-  `booked_interview_id` bigint(20) NOT NULL,
-  `credits` bigint(20) DEFAULT NULL,
+  `payment_log_id` bigint(20) NOT NULL,
+  `priority_id` bigint(20) NOT NULL,
+  `coupon_id` bigint(20) DEFAULT NULL,
+  `sub_total` double(8,2) DEFAULT NULL,
+  `discount` double(8,2) DEFAULT NULL,
+  `grand_total` double(8,2) DEFAULT NULL,
   `date` date NOT NULL,
   `status` int(11) NOT NULL DEFAULT 0 COMMENT '0=pending, 1=confirmed, 2=rejected',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`id`, `candidate_id`, `payment_log_id`, `priority_id`, `coupon_id`, `sub_total`, `discount`, `grand_total`, `date`, `status`, `created_at`, `updated_at`) VALUES
+(1, 6, 1, 1, 2, 18.90, 4.00, 14.90, '2022-05-16', 0, '2022-05-16 10:00:34', '2022-05-16 10:00:34');
 
 -- --------------------------------------------------------
 
@@ -1020,6 +1105,13 @@ CREATE TABLE `payment_logs` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `payment_logs`
+--
+
+INSERT INTO `payment_logs` (`id`, `amount`, `name_on_card`, `response_code`, `transaction_id`, `auth_id`, `message_code`, `quantity`, `created_at`, `updated_at`) VALUES
+(1, 14.00, 'Simon', '1', '40092419633', 'Q3TBVV', '1', 1, '2022-05-16 10:00:34', '2022-05-16 10:00:34');
 
 -- --------------------------------------------------------
 
@@ -1146,7 +1238,15 @@ INSERT INTO `permissions` (`id`, `name`, `guard_name`, `permission`, `deleted_at
 (121, 'coupon-list', 'web', 'list', NULL, '2022-05-13 06:37:11', '2022-05-13 06:37:11'),
 (122, 'coupon-create', 'web', 'create', NULL, '2022-05-13 06:37:11', '2022-05-13 06:37:11'),
 (123, 'coupon-edit', 'web', 'edit', NULL, '2022-05-13 06:37:11', '2022-05-13 06:37:11'),
-(124, 'coupon-delete', 'web', 'delete', NULL, '2022-05-13 06:37:11', '2022-05-13 06:37:11');
+(124, 'coupon-delete', 'web', 'delete', NULL, '2022-05-13 06:37:11', '2022-05-13 06:37:11'),
+(125, 'referral-list', 'web', 'list', NULL, '2022-05-17 04:05:02', '2022-05-17 04:05:02'),
+(126, 'referral-create', 'web', 'create', NULL, '2022-05-17 04:05:02', '2022-05-17 04:05:02'),
+(127, 'referral-edit', 'web', 'edit', NULL, '2022-05-17 04:05:02', '2022-05-17 04:05:02'),
+(128, 'referral-delete', 'web', 'delete', NULL, '2022-05-17 04:05:02', '2022-05-17 04:05:02'),
+(129, 'how_work-list', 'web', 'list', NULL, '2022-05-20 10:23:20', '2022-05-20 10:23:20'),
+(130, 'how_work-create', 'web', 'create', NULL, '2022-05-20 10:23:20', '2022-05-20 10:23:20'),
+(131, 'how_work-edit', 'web', 'edit', NULL, '2022-05-20 10:23:20', '2022-05-20 10:23:20'),
+(132, 'how_work-delete', 'web', 'delete', NULL, '2022-05-20 10:23:20', '2022-05-20 10:23:20');
 
 -- --------------------------------------------------------
 
@@ -1268,6 +1368,31 @@ CREATE TABLE `qualification_details` (
 INSERT INTO `qualification_details` (`id`, `user_id`, `achievements`, `awards`, `additional_data`, `created_at`, `updated_at`) VALUES
 (1, 7, 'achievements update', 'Award update', 'Additional update', '2022-03-28 09:05:26', '2022-03-28 09:50:48'),
 (2, 6, NULL, NULL, NULL, '2022-03-30 08:06:55', '2022-03-30 08:06:55');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `referrals`
+--
+
+CREATE TABLE `referrals` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `created_by` bigint(20) NOT NULL,
+  `offer_credits` bigint(20) NOT NULL,
+  `offer_message` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `offer_credits_both` tinyint(1) NOT NULL DEFAULT 0,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `deleted_at` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `referrals`
+--
+
+INSERT INTO `referrals` (`id`, `created_by`, `offer_credits`, `offer_message`, `offer_credits_both`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(2, 1, 100, 'When a friend of you joins through your invite and books first interview, both of you will get 100 Credits.', 1, 1, NULL, '2022-05-17 05:02:14', '2022-05-17 05:02:47');
 
 -- --------------------------------------------------------
 
@@ -1434,7 +1559,15 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (121, 1),
 (122, 1),
 (123, 1),
-(124, 1);
+(124, 1),
+(125, 1),
+(126, 1),
+(127, 1),
+(128, 1),
+(129, 1),
+(130, 1),
+(131, 1),
+(132, 1);
 
 -- --------------------------------------------------------
 
@@ -1697,6 +1830,7 @@ INSERT INTO `testimonials` (`id`, `name`, `slug`, `designation`, `image`, `comme
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` int(11) NOT NULL,
+  `referral_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -1718,16 +1852,18 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `user_id`, `name`, `last_name`, `phone`, `promo_code`, `email`, `temprary_email`, `email_verified_at`, `password`, `remember_token`, `verify_token`, `status`, `image`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 4046, 'Hardik tested', NULL, NULL, NULL, 'admin@gmail.com', NULL, NULL, '$2y$10$TrSMTkdqZ4CkZe8zLOz/AuMG5CYt3vVpO4dHwUN.ecPMsAorlD416', 'aemdOuZdS64i7PNYY0CwLgLFnl7Dq2awec8SFaFdwU44cSkFdDnuHm8ztvrv', NULL, 1, NULL, NULL, '2022-03-09 11:01:24', '2022-03-25 05:12:33'),
-(5, 5465, 'Alika Avila', NULL, NULL, NULL, 'lawukobov@mailinator.com', NULL, NULL, '$2y$10$/MR9SKwPqOJbVU0uHvd1MOzLwrsQDeUy4aiC1dM3/vnCqF5HFUBKO', NULL, NULL, 1, NULL, NULL, '2022-03-22 03:43:24', '2022-03-22 03:43:24'),
-(6, 2964, 'Yvette Glover', 'Cash', '1234567800', NULL, 'chandamar725@gmail.com', 'chandamar725@gmail.com', '2022-03-30 09:34:14', '$2y$10$FipZvMlM.AsqEoPvqF8PHOdl7DN43JYgAm4IZRevIZEBwZVLlV6/.', NULL, '627e13ffd2356', 1, '30-03-2022-112134.jpg', NULL, '2022-03-22 06:02:18', '2022-05-13 03:17:03'),
-(7, 5461, 'Sydnee Langley', 'Ratliff', '12345678', NULL, 'dudaguhu@interviewer.com', NULL, NULL, '$2y$10$0YqFHYTffC4jMVOzF9oL3.o2AFDbqifo/eWT/FSQlQxTQmI8KIZ6i', NULL, NULL, 1, NULL, NULL, '2022-03-22 06:04:59', '2022-03-31 03:39:09'),
-(8, 8002, 'Quail Spence', 'Foley', '12345678', NULL, 'xytudip@mailinator.com', NULL, NULL, '$2y$10$QnJbTYfCsFklwp3sSS9njue.6Z0dZhofmCOh8JUSRps2gGPq8gArG', NULL, '623c97c42c7c5', 1, NULL, NULL, '2022-03-24 05:11:51', '2022-03-25 02:18:42'),
-(9, 8261, 'Kibo Bryan', 'Martinez', '3333333', NULL, 'xanytabaki@mailinator.com', NULL, NULL, '$2y$10$NqsSaD8g/gS.dUG1ld3jXeocINr2AACWC0KzWkMlp49XVR7DEFp2m', NULL, NULL, 1, NULL, NULL, '2022-03-24 06:29:39', '2022-03-24 06:29:39'),
-(10, 7074, 'Reuben Barry', 'Torres', '34343343', NULL, 'viqytujehy@mailinator.com', NULL, NULL, '$2y$10$YfFUjBeeyy0Zos/laTDfR.As6L8Ks4NOsV2XDNhGEDGladKGgKP8q', NULL, '623c568702ce1', 1, NULL, NULL, '2022-03-24 06:31:19', '2022-03-24 06:31:19'),
-(11, 1410, 'Georgia Brock', 'Rutledge', '2222222', NULL, 'cesyxi@mailinator.com', NULL, NULL, '$2y$10$lCMuQ1gcYGzuJ7wzR9Ijwu1JExN7Of.oI8Y/9bSQd7PmuUUP6rpme', NULL, '623c5719ceffa', 1, NULL, NULL, '2022-03-24 06:33:45', '2022-03-24 10:04:19'),
-(34, 5362, 'Farhan', NULL, NULL, NULL, 'farhandigtandigtal@gmail.com', NULL, NULL, '$2y$10$/Y1cOHddN8DyfpYxMBtaKOEaGHspmUeo7j4RpEBY2C.IYuVV6djxy', NULL, NULL, 1, NULL, NULL, '2022-03-24 09:18:22', '2022-03-25 04:28:38');
+INSERT INTO `users` (`id`, `user_id`, `referral_code`, `name`, `last_name`, `phone`, `promo_code`, `email`, `temprary_email`, `email_verified_at`, `password`, `remember_token`, `verify_token`, `status`, `image`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 4046, 'BG7kf4qV', 'Hardik tested', NULL, NULL, NULL, 'admin@gmail.com', NULL, NULL, '$2y$10$TrSMTkdqZ4CkZe8zLOz/AuMG5CYt3vVpO4dHwUN.ecPMsAorlD416', '9D90o1AUOpkkCIGyOhlaUmLLa4U9rQLOSm3QnfDN4UGfxEmwQzuLfiapEYT9', NULL, 1, NULL, NULL, '2022-03-09 11:01:24', '2022-03-25 05:12:33'),
+(5, 5465, 'RnnJ5saS', 'Alika Avila', NULL, NULL, NULL, 'lawukobov@mailinator.com', NULL, NULL, '$2y$10$/MR9SKwPqOJbVU0uHvd1MOzLwrsQDeUy4aiC1dM3/vnCqF5HFUBKO', NULL, NULL, 1, NULL, NULL, '2022-03-22 03:43:24', '2022-03-22 03:43:24'),
+(6, 2964, 'DeSDyqsv', 'Yvette Glover', 'Cash', '1234567800', NULL, 'testweb@mailinator.com', 'chandamar725@gmail.com', '2022-03-30 09:34:14', '$2y$10$FipZvMlM.AsqEoPvqF8PHOdl7DN43JYgAm4IZRevIZEBwZVLlV6/.', NULL, '627e13ffd2356', 1, '30-03-2022-112134.jpg', NULL, '2022-03-22 06:02:18', '2022-05-13 03:17:03'),
+(7, 5461, 'BuaUhPzS', 'Sydnee Langley', 'Ratliff', '12345678', NULL, 'dudaguhu@interviewer.com', NULL, NULL, '$2y$10$0YqFHYTffC4jMVOzF9oL3.o2AFDbqifo/eWT/FSQlQxTQmI8KIZ6i', NULL, NULL, 1, NULL, NULL, '2022-03-22 06:04:59', '2022-03-31 03:39:09'),
+(8, 8002, 'gzejzmGB', 'Quail Spence', 'Foley', '12345678', NULL, 'xytudip@mailinator.com', NULL, NULL, '$2y$10$QnJbTYfCsFklwp3sSS9njue.6Z0dZhofmCOh8JUSRps2gGPq8gArG', NULL, '623c97c42c7c5', 1, NULL, NULL, '2022-03-24 05:11:51', '2022-03-25 02:18:42'),
+(9, 8261, 'rHkpKl0y', 'Kibo Bryan', 'Martinez', '3333333', NULL, 'xanytabaki@mailinator.com', NULL, NULL, '$2y$10$NqsSaD8g/gS.dUG1ld3jXeocINr2AACWC0KzWkMlp49XVR7DEFp2m', NULL, NULL, 1, NULL, NULL, '2022-03-24 06:29:39', '2022-03-24 06:29:39'),
+(10, 7074, 'MglQUbN3', 'Reuben Barry', 'Torres', '34343343', NULL, 'viqytujehy@mailinator.com', NULL, NULL, '$2y$10$YfFUjBeeyy0Zos/laTDfR.As6L8Ks4NOsV2XDNhGEDGladKGgKP8q', NULL, '623c568702ce1', 1, NULL, NULL, '2022-03-24 06:31:19', '2022-03-24 06:31:19'),
+(11, 1410, 'Hx0p7sC6', 'Georgia Brock', 'Rutledge', '2222222', NULL, 'cesyxi@mailinator.com', NULL, NULL, '$2y$10$lCMuQ1gcYGzuJ7wzR9Ijwu1JExN7Of.oI8Y/9bSQd7PmuUUP6rpme', NULL, '623c5719ceffa', 1, NULL, NULL, '2022-03-24 06:33:45', '2022-03-24 10:04:19'),
+(34, 5362, '0A6kEVNc', 'Farhan', NULL, NULL, NULL, 'farhandigtandigtal@gmail.com', NULL, NULL, '$2y$10$/Y1cOHddN8DyfpYxMBtaKOEaGHspmUeo7j4RpEBY2C.IYuVV6djxy', NULL, NULL, 1, NULL, NULL, '2022-03-24 09:18:22', '2022-03-25 04:28:38'),
+(39, 5589, '7CKPWJFk', 'Aphrodite Joseph', 'Wooten', 'sizulyz@mailinator.com', 'Enim non sint archi', 'ligiqikuva@mailinator.com', NULL, NULL, '$2y$10$1G.KGmgWm8vBAFRgjsoSRe83E15EBvLzOHTvkPIp12xUcsGufkIg6', NULL, '6284b4b09f1f5', 0, NULL, NULL, '2022-05-18 03:56:16', '2022-05-18 03:56:16'),
+(40, 4688, 'xCO9r47d', 'Amar', 'Tester', '123456', NULL, 'chandamar725@gmail.com', NULL, NULL, '$2y$10$0YqFHYTffC4jMVOzF9oL3.o2AFDbqifo/eWT/FSQlQxTQmI8KIZ6i', NULL, NULL, 1, NULL, NULL, '2022-05-18 04:14:37', '2022-05-18 04:14:37');
 
 -- --------------------------------------------------------
 
@@ -1779,7 +1915,8 @@ CREATE TABLE `user_know_languages` (
 CREATE TABLE `wallets` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `candidate_id` bigint(20) NOT NULL,
-  `priority_id` bigint(20) NOT NULL,
+  `payment_id` bigint(20) DEFAULT NULL,
+  `referral_id` bigint(20) DEFAULT NULL,
   `last_added_credits` bigint(20) NOT NULL,
   `balance_credits` bigint(20) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1,
@@ -1787,6 +1924,15 @@ CREATE TABLE `wallets` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `wallets`
+--
+
+INSERT INTO `wallets` (`id`, `candidate_id`, `payment_id`, `referral_id`, `last_added_credits`, `balance_credits`, `status`, `date`, `created_at`, `updated_at`) VALUES
+(1, 6, 1, 2, 389, 1800, 1, '2022-05-16', '2022-05-16 10:00:34', '2022-05-25 04:12:27'),
+(3, 39, NULL, 2, 0, 100, 1, '2022-05-18', '2022-05-18 03:56:16', '2022-05-18 03:56:16'),
+(4, 40, NULL, 2, 0, 100, 1, '2022-05-18', '2022-05-18 04:14:37', '2022-05-18 04:14:37');
 
 -- --------------------------------------------------------
 
@@ -1929,15 +2075,39 @@ ALTER TABLE `how_works`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `interviewer_wallets`
+--
+ALTER TABLE `interviewer_wallets`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `interview_types`
 --
 ALTER TABLE `interview_types`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `invited_users`
+--
+ALTER TABLE `invited_users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `invites`
+--
+ALTER TABLE `invites`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `languages`
 --
 ALTER TABLE `languages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `logs`
+--
+ALTER TABLE `logs`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2033,6 +2203,12 @@ ALTER TABLE `qualifications`
 -- Indexes for table `qualification_details`
 --
 ALTER TABLE `qualification_details`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `referrals`
+--
+ALTER TABLE `referrals`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2166,7 +2342,7 @@ ALTER TABLE `booking_priorities`
 -- AUTO_INCREMENT for table `book_interviews`
 --
 ALTER TABLE `book_interviews`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -2190,7 +2366,7 @@ ALTER TABLE `coupons`
 -- AUTO_INCREMENT for table `coupon_usages`
 --
 ALTER TABLE `coupon_usages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `courses`
@@ -2235,10 +2411,28 @@ ALTER TABLE `how_works`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `interviewer_wallets`
+--
+ALTER TABLE `interviewer_wallets`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `interview_types`
 --
 ALTER TABLE `interview_types`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `invited_users`
+--
+ALTER TABLE `invited_users`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `invites`
+--
+ALTER TABLE `invites`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `languages`
@@ -2247,10 +2441,16 @@ ALTER TABLE `languages`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT for table `logs`
+--
+ALTER TABLE `logs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
 
 --
 -- AUTO_INCREMENT for table `packages`
@@ -2268,25 +2468,25 @@ ALTER TABLE `pages`
 -- AUTO_INCREMENT for table `page_settings`
 --
 ALTER TABLE `page_settings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=151;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `payment_logs`
 --
 ALTER TABLE `payment_logs`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -2316,6 +2516,12 @@ ALTER TABLE `qualifications`
 -- AUTO_INCREMENT for table `qualification_details`
 --
 ALTER TABLE `qualification_details`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `referrals`
+--
+ALTER TABLE `referrals`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
@@ -2376,7 +2582,7 @@ ALTER TABLE `testimonials`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `user_details`
@@ -2394,7 +2600,7 @@ ALTER TABLE `user_know_languages`
 -- AUTO_INCREMENT for table `wallets`
 --
 ALTER TABLE `wallets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `whychooses`

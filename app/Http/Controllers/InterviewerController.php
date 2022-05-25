@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\PageSetting;
 use App\Models\Category;
 use App\Models\Blog;
+use App\Models\BookInterview;
 use DateTime;
 use Auth;
 
@@ -50,10 +51,33 @@ class InterviewerController extends Controller
         $blog = Blog::where('slug', $slug)->first();
         return view('web-views.interviewer.resource-single', compact('page_title', 'blog'));
     }
-    /* public function buyCredits()
+    public function report()
     {
-        $this->authorize('buy & credits-list', User::class);
-        $page_title = 'Buy & Credits - '.Auth::user()->roles->pluck('name')[0];
-        return view('web-views.interviewer.buy_credits', compact('page_title'));
-    } */
+        $this->authorize('report-list', User::class);
+        $page_title = 'Report - '.Auth::user()->roles->pluck('name')[0];
+
+        $schedule_interviews = BookInterview::where('interviewer_id', Auth::user()->id)->get();
+        $total_earnings = BookInterview::where('interviewer_id', Auth::user()->id)->where('status', 4)->sum('credits');
+        $total_schedule_interviews = count($schedule_interviews);
+        $total_successfull_interviews = 0;
+        $total_failed_interviews = 0;
+        foreach($schedule_interviews as $interview){
+            if($interview->status==1){
+                $total_successfull_interviews += 1;
+            }elseif($interview->status==0){
+                $total_failed_interviews += 1;
+            }
+        }
+        $interviews = BookInterview::where('interviewer_id', Auth::user()->id)->paginate(10);
+        return view('web-views.interviewer.reports.report', compact('page_title', 'interviews', 'total_schedule_interviews', 'total_successfull_interviews', 'total_failed_interviews', 'total_earnings'));
+    }
+    public function reportSearch(Request $request)
+    {
+        $query = BookInterview::orderby('id', 'desc')->where('interviewer_id', Auth::user()->id)->where('id', '>', 0);
+        if($request['date_from'] != "" && $request['date_end'] != ""){
+            $query->whereBetween('date', [date('Y-m-d', strtotime($request['date_from'])), date('Y-m-d', strtotime($request['date_end']))]);
+        }
+        $interviews = $query->paginate(10);
+        return (string) view('web-views.interviewer.reports.search', compact('interviews'));
+    }
 }

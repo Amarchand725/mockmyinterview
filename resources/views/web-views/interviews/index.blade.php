@@ -39,12 +39,13 @@
                                         <th>Interviewer</th>
                                     @endif
                                     <th>Priority</th>
-                                    <th>Interview Type</th>
+                                    <th>Type</th>
                                     <th>Meeting ID</th>
                                     <th>Duration</th>
-                                    <th>Status</th>
+                                    <th class="col-sm-1">Status</th>
                                     <th>Join URL</th>
-                                    <th>Date</th>
+                                    <th class="col-sm-1">Date</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody id="body">
@@ -63,7 +64,7 @@
                                         <td>{{ \Illuminate\Support\Str::upper($interview->booking_type_slug) }}</td>
                                         <td>{{ \Illuminate\Support\Str::upper($interview->interview_type) }}</td>
                                         <td>{{ $interview->meeting_id }}</td>
-                                        <td>{{ $interview->duration }} Minutes</td>
+                                        <td>{{ $interview->duration }} Mins</td>
                                         <td>
                                             @if($interview->status==1)
                                                 <span class="badge badge-info">Confirmed</span>
@@ -71,10 +72,12 @@
                                                 @if($interview->date<date('Y-m-d'))
                                                     <span class="badge badge-warning">Expired</span>
                                                 @endif
-                                            @elseif($interview->status==2)
+                                            @elseif($interview->status==3)
                                                 <span class="badge badge-danger">Rejected</span>
                                             @elseif($interview->status==0)
                                                 <span class="badge badge-primary">Pending</span>
+                                            @elseif($interview->status==4)
+                                                <span class="badge badge-success">Completed</span>
                                             @endif
                                         </td>
                                         <td>
@@ -92,9 +95,47 @@
                                                 @endif
                                             @elseif($interview->status==0)
                                                 <span class="badge badge-info">Pending</span>
+                                            @elseif($interview->status==3)
+                                                <span class="badge badge-danger">Rejected</span>
+                                            @elseif($interview->status==4)
+                                                <span class="badge badge-success">Completed</span>
                                             @endif
                                         </td>
                                         <td>{{ date('d, F-Y', strtotime($interview->date)) }}</td>
+                                        <td>
+                                            @if(Auth::user()->hasRole('Candidate'))
+                                                <select name="" id="booking-status" data-interview-id="{{ $interview->id }}" class="form-control" id="">
+                                                    @if($interview->status==0)
+                                                        <option value="0" disabled {{ $interview->status==0?'selected':'' }}>Pending</option>
+                                                        <option value="3" {{ $interview->status==3?'selected':'' }}>Reject</option>
+                                                    @elseif($interview->status==1)
+                                                        <option value="1" disabled {{ $interview->status==1?'selected':'' }}>Confirme</option>
+                                                    @elseif($interview->status==3)
+                                                        <option value="3" disabled {{ $interview->status==3?'selected':'' }}>Reject</option>
+                                                    @elseif($interview->status==4)
+                                                        <option value="4" disabled {{ $interview->status==4?'selected':'' }}>Complete</option>
+                                                    @endif
+                                                </select>
+                                                @if($interview->status==4)
+                                                    <button class="btn btn-info mt-2 review-btn" data-interview-id="{{ $interview->id }}" data-toggle="tooltip" data-placement="top" title="Review"><i class="fa fa-star"></i> Review</button>
+                                                @endif
+                                            @else 
+                                                <select name="" id="booking-status" data-interview-id="{{ $interview->id }}" class="form-control" id="">
+                                                    <option value="" selected>Status</option>
+                                                    @if($interview->status==0)
+                                                        <option value="0" disabled {{ $interview->status==0?'selected':'' }}>Pending</option>
+                                                        <option value="1" {{ $interview->status==1?'selected':'' }}>Confirm</option>
+                                                        <option value="3" {{ $interview->status==3?'selected':'' }}>Reject</option>
+                                                    @elseif($interview->status==1)
+                                                        <option value="4" {{ $interview->status==4?'selected':'' }}>Complete</option>
+                                                    @elseif($interview->status==3)
+                                                        <option value="3" disabled {{ $interview->status==3?'selected':'' }}>Reject</option>
+                                                    @elseif($interview->status==4)
+                                                        <option value="4" disabled {{ $interview->status==4?'selected':'' }}>Complete</option>
+                                                    @endif
+                                                </select>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                                 <tr>
@@ -112,10 +153,80 @@
             </div>
         </div>
     </div>
+
+    <!-- Review Modal -->
+    <div class="modal fade" id="review-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-star"></i> Review Interview</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('book_interview.review') }}">
+                <div class="modal-body">
+                    <input type="hidden" name="interview_id" id="interview-id">
+                    <div class="form-group">
+                        <label for="review" class="control-label">Review Interview <span style='color:red'>*</span></label>
+                        <textarea name="review" class="form-control" id="" cols="30" rows="5" maxlength="255" placeholder="Enter review here..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+        </div>
+    </div>
 @endsection
 
 @push('js')
-<script>
+    <script>
+        $(document).on('click', '.review-btn', function(){
+            var interview_id = $(this).attr('data-interview-id');
+            $('#interview-id').val(interview_id);
+            $('#review-modal').modal('show');
+        });
+        $(document).on('change', '#booking-status', function(){
+            var status = $(this).val();
+            var interview_id = $(this).attr('data-interview-id');
+            if(status!=''){
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Do you want to save changes.!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, save it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url : "{{ route('book_interview.status') }}",
+                            data : {'status' : status, 'interview_id' : interview_id},
+                            type : 'GET',
+                            success : function(response){
+                                if(response){
+                                    Swal.fire(
+                                        'Saved!',
+                                        'You changes have been saved.',
+                                        'success'
+                                    )
+                                }else{
+                                    Swal.fire(
+                                        'Sorry!',
+                                        'Something went wrong.',
+                                        'danger'
+                                    )
+                                }
+                            }
+                        });
+                    }
+                })
+            }
+        });
+
         $(document).ready(function(){
             $.ajax({
                 url : "{{ route('get_booked_interview_ids') }}",

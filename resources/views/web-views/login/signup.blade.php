@@ -38,7 +38,7 @@
                                                     <input type="text" class="form-control" name="last_name" id="inputEmail4" placeholder="Last Name">
                                                 </div>
                                                 <div class="form-group col-md-12 mt-3">
-                                                    @if(isset($referral_id))
+                                                    @if(isset($referral_id) && $invited_user_email != 1)
                                                         <input type="email" class="form-control" name="email" readonly value="{{ $invited_user_email }}" id="email" placeholder="Email">
                                                     @else 
                                                         <input type="email" class="form-control" name="email" id="email" placeholder="Email">

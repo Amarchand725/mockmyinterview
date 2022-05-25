@@ -16,7 +16,7 @@ class CreateInvitedUsersTable extends Migration
         Schema::create('invited_users', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('invite_id');
-            $table->bigInteger('invited_user');
+            $table->bigInteger('invited_user_token')->nullable();
             $table->string('email');
             $table->boolean('registered')->default(0);
             $table->timestamps();

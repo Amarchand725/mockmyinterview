@@ -15,8 +15,8 @@
                             <h3 class="font-thin m-t-none m-b text-muted">Getting Started</h3>
                             <div class="row">
                                 <div class="col-xs-12 font-thin">
-                                    <h4>Welcome to InterviewBuddy™</h4>
-                                    <p>Hey Buddy! Complete the steps below to start InterviewBuddy™.</p>
+                                    <h4>Welcome to Mockmyinterview</h4>
+                                    <p>Hey Buddy! Complete the steps below to start Mockmyinterview.</p>
                                 </div>
                             </div>
                             <div class="row">
@@ -30,7 +30,7 @@
                                             Email Id
                                             </label>
                                             </div>
-                                            <!--                            <span class="tool-tip-text">Click to verify your email ID</span> -->
+                                            <!--<span class="tool-tip-text">Click to verify your email ID</span> -->
                                         </a>
                                     </div>
                                 </div>

@@ -39,12 +39,6 @@ class CandidateController extends Controller
         return $time;
     }
 
-    public function report()
-    {
-        $this->authorize('report-list', User::class);
-        $page_title = 'Report - '.Auth::user()->roles->pluck('name')[0];
-        return view('web-views.candidate.report', compact('page_title'));
-    }
     public function testSetup()
     {
         $this->authorize('test setup-list', User::class);
@@ -65,17 +59,17 @@ class CandidateController extends Controller
     }
     public function referAndEarn()
     {
-        // return Auth::user()->referral_code;
         $this->authorize('refer & earn-list', User::class);
         $page_title = 'Refer & Earn - '.Auth::user()->roles->pluck('name')[0];
 
         $referral = Referral::orderby('id', 'desc')->where('status', 1)->first();
-        $invite = Invite::with('hasInvitedUsers')->where('candidate_id', Auth::user()->id)->where('referral_id', $referral->id)->first();
+        $invite = Invite::where('candidate_id', Auth::user()->id)->where('referral_id', $referral->id)->first();
         return view('web-views.interviewer.refer_earn', compact('page_title', 'referral', 'invite'));
     }
     
     public function inviteStore(Request $request)
     {
+        $this->validate($request, ['emails'=>'required|max:255']);
         $emails = explode(',', $request->emails);
         
         try{
@@ -93,12 +87,12 @@ class CandidateController extends Controller
 
                     if(empty($ifempty)){
                         do{
-                            $invited_user = rand(1000, 9999);
-                        }while(InvitedUser::where('invited_user', $invited_user)->first());
+                            $invited_user_token = rand(1000, 9999);
+                        }while(InvitedUser::where('invited_user_token', $invited_user_token)->first());
 
                         $inserted = InvitedUser::create([
                             'invite_id' => $invite->id,
-                            'invited_user' => $invited_user,
+                            'invited_user_token' => $invited_user_token,
                             'email' => $email,
                         ]);
 
@@ -109,7 +103,7 @@ class CandidateController extends Controller
                                 'title' => "You are welcome. You need to register yourself. Just press the button below.",
                                 'body' => "If you have any questions, just reply to this email—we're always happy to help out.",
                                 'referral_code' => Auth::user()->referral_code,
-                                'invited_user' => $invited_user,
+                                'invited_user_token' => $invited_user_token,
                             ];
                     
                             \Mail::to($email)->send(new \App\Mail\Email($details));

@@ -19,6 +19,7 @@ class CreateBookInterviewsTable extends Migration
             $table->bigInteger('interviewer_id');
             $table->bigInteger('candidate_id');
             $table->string('booking_type_slug');
+            $table->float('credits');
             $table->string('interview_type');
             $table->date('date');
             $table->string('slot');
@@ -27,7 +28,8 @@ class CreateBookInterviewsTable extends Migration
             $table->string('password')->comment('metting password');
             $table->text('start_url');
             $table->text('join_url');
-            $table->integer('status')->default(0)->comment('0=pending, 1=confirmed, 2=rejected');
+            $table->string('review')->nullable();
+            $table->integer('status')->default(0)->comment('0=pending, 1=confirmed, 3=rejected, 4=completed');
             $table->timestamps();
         });
     }

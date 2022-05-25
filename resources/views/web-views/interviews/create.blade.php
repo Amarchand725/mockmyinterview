@@ -97,7 +97,7 @@
                                         <span id="first_date">{{ date('d M Y') }}</span>
                                     </div>
                                     <div class="col-md-10">
-                                        <div class="row">
+                                        <div class="row parent">
                                             @php
                                             $date = date('Y-m-d');
                                             $day = date("D", strtotime($date));
@@ -107,7 +107,7 @@
                                                     @foreach ($slots['weekends_slots'] as $weekend_slot)
                                                         <div class="col-sm-2">
                                                             <article class="feature1 slot">
-                                                                <input type="checkbox" name="booked_slots[{{ $weekend_slot['interviewer_id'] }}][]" value="{{ $weekend_slot['slot'] }}" id="feature1"/>
+                                                                <input type="radio" name="booked_slots[{{ $weekend_slot['interviewer_id'] }}]" value="{{ $weekend_slot['slot'] }}" id="feature1"/>
                                                                 <span>{{ $weekend_slot['slot'] }}</span>
                                                             </article>
                                                         </div>
@@ -116,7 +116,7 @@
                                                     @foreach ($slots['weekdays_slots'] as $weekday_slot)
                                                         <div class="col-sm-2">
                                                             <article class="feature1 slot">
-                                                                <input type="checkbox" name="booked_slots[{{ $weekday_slot['interviewer_id'] }}][]" value="{{ $weekday_slot['slot'] }}" id="feature1"/>
+                                                                <input type="radio" name="booked_slots[{{ $weekday_slot['interviewer_id'] }}]" value="{{ $weekday_slot['slot'] }}" id="feature1"/>
                                                                 <span>{{ $weekday_slot['slot'] }}</span>
                                                             </article>
                                                         </div>
@@ -134,7 +134,7 @@
                                         <span id="second_date">{{ date('d M Y', strtotime("+1 day")) }}</span>
                                     </div>
                                     <div class="col-md-10">
-                                        <div class="row">
+                                        <div class="row parent">
                                             @php
                                             $date = date('Y-m-d', strtotime("+1 day"));
                                             $day = date("D", strtotime($date));
@@ -144,7 +144,7 @@
                                                     @foreach ($next_slots['weekends_slots'] as $weekend_slot)
                                                         <div class="col-sm-2">
                                                             <article class="feature1 slot">
-                                                                <input type="checkbox" name="booked_slots[{{ $weekend_slot['interviewer_id'] }}][]" value="{{ $weekend_slot['slot'] }}" id="feature1"/>
+                                                                <input type="radio" name="booked_slots[{{ $weekend_slot['interviewer_id'] }}]" value="{{ $weekend_slot['slot'] }}" id="feature1"/>
                                                                 <span>{{ $weekend_slot['slot'] }}</span>
                                                             </article>
                                                         </div>
@@ -153,7 +153,7 @@
                                                     @foreach ($next_slots['weekdays_slots'] as $weekday_slot)
                                                         <div class="col-sm-2">
                                                             <article class="feature1 slot">
-                                                                <input type="checkbox" name="booked_slots[{{ $weekday_slot['interviewer_id'] }}][]" value="{{ $weekday_slot['slot'] }}" id="feature1"/>
+                                                                <input type="radio" name="booked_slots[{{ $weekday_slot['interviewer_id'] }}]" value="{{ $weekday_slot['slot'] }}" id="feature1"/>
                                                                 <span>{{ $weekday_slot['slot'] }}</span>
                                                             </article>
                                                         </div>
@@ -217,6 +217,7 @@
             }
         });
         $(document).on('click', '.slot', function(){
+            $('.parent').find('.slot-selected').removeClass("slot-selected")
             if($(this).hasClass('slot-selected')){
                 $(this).removeClass('slot-selected');
             }else{
