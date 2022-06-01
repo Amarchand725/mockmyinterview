@@ -1,6 +1,9 @@
 <?php 
 use App\Models\PageSetting;
 use App\Models\Course;
+use App\Models\Notification;
+use App\Models\Blog;
+use App\Models\BookInterview;
 
 function globalData()
 {
@@ -15,4 +18,27 @@ function globalData()
 function courses($degree)
 {
     return $courses = Course::where('degree_slug', $degree)->get(['degree_slug', 'title', 'slug']);
+}
+
+function notification($created_by, $notify_id, $type, $message){
+    Notification::create([
+        'created_by' => $created_by,
+        'notify_id' => $notify_id,
+        'notify_type' => $type,
+        'message' => $message,
+    ]);
+}
+
+function getNotifications()
+{
+    return Notification::with('hasReadNotification')->orderby('id', 'desc')->get();
+}
+
+function getNotify($notify_id, $notify_type)
+{
+    if($notify_type=='blog'){
+        return Blog::where('id', $notify_id)->first();
+    }elseif($notify_type=='book_interview'){
+        return BookInterview::where('id', $notify_id)->first();
+    }
 }

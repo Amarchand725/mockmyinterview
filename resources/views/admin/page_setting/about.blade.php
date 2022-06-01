@@ -49,9 +49,15 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Content </label>
+							<label for="" class="col-sm-2 control-label">Left About Content </label>
 							<div class="col-sm-9">
-								<textarea name="about_content" class="form-control texteditor" cols="30" rows="10" placeholder="Enter content">{!! isset($page_data['about_content'])?$page_data['about_content']:'' !!}</textarea>
+								<textarea name="about_left_content" class="form-control texteditor" cols="30" rows="10" placeholder="Enter left content">{!! isset($page_data['about_left_content'])?$page_data['about_left_content']:'' !!}</textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">Right About Content </label>
+							<div class="col-sm-9">
+								<textarea name="right_left_content" class="form-control texteditor" cols="30" rows="10" placeholder="Enter right content">{!! isset($page_data['right_left_content'])?$page_data['right_left_content']:'' !!}</textarea>
 							</div>
 						</div>
 						<div class="form-group">

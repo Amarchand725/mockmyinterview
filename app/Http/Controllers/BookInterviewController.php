@@ -108,12 +108,10 @@ class BookInterviewController extends Controller
 
     public function store(Request $request)
     {
-        // return $request;
         $validator = $request->validate([
             'interview_type' => 'required',
         ]);
 
-        // return $request->booked_slot;
         if(empty($request->booked_slots)){
             return redirect()->back()->with('error', 'Select slot at least one.');
         }
@@ -151,6 +149,9 @@ class BookInterviewController extends Controller
                         'type' => 'charged', 
                         'description' => 'Charged credits from candidate wallet.', 
                     ]);
+
+                    // $message = 'Scheduled new interview';
+                    // notification(Auth::user()->id, $booked_interview->id, 'book_interview', $message);
                 }
             }
 
@@ -281,6 +282,8 @@ class BookInterviewController extends Controller
         $interview->save();
 
         if($request->status==1){ //confirm
+            // $message = 'Scheduled interview is confirmed';
+            // notification(Auth::user()->id, $booked_interview->id, 'book_interview', $message);
             return 1;
         }elseif($request->status==3){ //reject
             //candidate wallet
@@ -303,6 +306,9 @@ class BookInterviewController extends Controller
                     'type' => 'returned', 
                     'description' => 'Return credits due to rejection.', 
                 ]);
+
+                // $message = 'Scheduled interview is rejected';
+                // notification(Auth::user()->id, $booked_interview->id, 'book_interview', $message);
             }
 
             return 1;
@@ -334,6 +340,9 @@ class BookInterviewController extends Controller
                     'type' => 'returned', 
                     'description' => 'Return credits due to rejection.', 
                 ]);
+
+                // $message = 'Scheduled interview has been completed & closed.';
+                // notification(Auth::user()->id, $booked_interview->id, 'book_interview', $message);
             }
 
             return 1; //completed

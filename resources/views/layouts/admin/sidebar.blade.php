@@ -160,13 +160,6 @@
                 </a>
             </li>
             @endcan
-            @can('social media-list')
-            <li class="treeview">
-                <a href="{{ route('social_media.index') }}" class="{{ request()->is('social_media') || request()->is('social_media/create') || request()->is('social_media/edit/*') ? 'active' : '' }}">
-                    <i class="fa fa-address-book"></i> <span>Social Media</span>
-                </a>
-            </li>
-            @endcan
         </ul>
     </section>
 </aside>

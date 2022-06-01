@@ -53,6 +53,18 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">Currency </label>
+							<div class="col-sm-9">
+								<input type="text" name="header_currency" value="{{ isset($page_data['header_currency'])?$page_data['header_currency']:'' }}" class="form-control" placeholder="Enter currency">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">Symbol </label>
+							<div class="col-sm-9">
+								<input type="text" name="header_currency_symbol" value="{{ isset($page_data['header_currency_symbol'])?$page_data['header_currency_symbol']:'' }}" class="form-control" placeholder="Enter currency symbol">
+							</div>
+						</div>
+						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Email </label>
 							<div class="col-sm-9">
 								<input type="email" name="header_email" class="form-control" value="{{ isset($page_data['header_email'])?$page_data['header_email']:'' }}" placeholder="Enter email address">

@@ -24,24 +24,44 @@ class BlogController extends Controller
     }
     public function index(Request $request)
     {
-        if($request->ajax()){
-            $query = Blog::orderby('id', 'desc')->where('id', '>', 0);
-            if($request['search'] != ""){
-                $query->where('title', 'like', '%'. $request['search'] .'%')
-                    ->orWhere('category_slug', 'like', '%'. $request['search'] .'%');
-            }
-            if($request['status']!="All"){
-                if($request['status']==2){
-                    $request['status'] = 0;
+        if(Auth::user()->hasRole('Admin')){
+            if($request->ajax()){
+                $query = Blog::orderby('id', 'desc')->where('id', '>', 0);
+                if($request['search'] != ""){
+                    $query->where('title', 'like', '%'. $request['search'] .'%')
+                        ->orWhere('category_slug', 'like', '%'. $request['search'] .'%');
                 }
-                $query->where('status', $request['status']);
+                if($request['status']!="All"){
+                    if($request['status']==2){
+                        $request['status'] = 0;
+                    }
+                    $query->where('status', $request['status']);
+                }
+                $models = $query->paginate(10);
+                return (string) view('admin.blog.search', compact('models'));
             }
-            $models = $query->paginate(10);
-            return (string) view('admin.blog.search', compact('models'));
+            $page_title = 'All Blogs';
+            $models = Blog::orderby('id', 'desc')->paginate(10);
+            return View('admin.blog.index', compact("models", "page_title"));
+        }elseif(Auth::user()->hasRole('Candidate')){
+            if($request->ajax()){
+                $query = Blog::orderby('id', 'desc')->where('id', '>', 0);
+                if($request['search'] != ""){
+                    $query->where('title', 'like', '%'. $request['search'] .'%')
+                        ->orWhere('category_slug', 'like', '%'. $request['search'] .'%');
+                }
+                if($request['status']!="All"){
+                    $query->where('category_slug', $request['status']);
+                }
+                $blogs = $query->paginate(10);
+                return (string) view('web-views.interviewer.resources-search', compact('blogs'));
+            }
+    
+            $page_title = 'Resources - '.Auth::user()->roles->pluck('name')[0];
+            $categories = Category::orderby('id', 'desc')->where('status', 1)->get();
+            $blogs = Blog::orderby('id', 'desc')->where('status', 1)->paginate(10);
+            return view('web-views.interviewer.resources', compact('page_title', 'categories', 'blogs'));
         }
-        $page_title = 'All Blogs';
-        $models = Blog::orderby('id', 'desc')->paginate(10);
-        return View('admin.blog.index', compact("models", "page_title"));
     }
 
     /**
@@ -93,6 +113,9 @@ class BlogController extends Controller
         $model->is_paid = $request->paid_free;
         $model->save();
 
+        $message = 'Published new blog.';
+        notification(Auth::user()->id, $booked_interview->id, 'blog', $message);
+
         return redirect()->route('blog.index')->with('message', 'blog Added Successfully !');
     }
 
@@ -102,9 +125,13 @@ class BlogController extends Controller
      * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function show(Blog $blog)
+    public function show($slug)
     {
-        //
+        if(Auth::user()->hasRole('Candidate')){
+            $page_title = 'Resource - Single';
+            $blog = Blog::where('slug', $slug)->first();
+            return view('web-views.interviewer.resource-single', compact('page_title', 'blog'));
+        }
     }
 
     /**
@@ -158,6 +185,9 @@ class BlogController extends Controller
         $model->is_paid = $request->paid_free;
         $model->status = $request->status;
         $model->save();
+
+        $message = 'Published blog edited.';
+        notification(Auth::user()->id, $booked_interview->id, 'updated', $message);
 
         return redirect()->route('blog.index')->with('message', 'blog updated Successfully !');
     }

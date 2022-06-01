@@ -44,7 +44,7 @@
                                 <tr id="id-{{ $permission->id }}">
                                     <td>{{  $permissions->firstItem()+$key }}.</td>
                                     <td>{{ Str::ucfirst($permission->name) }}</td>
-                                    <td>{{$permission->guard_name}}</td>
+                                    <td>{{$permission->permission}}</td>
                                     <td>
                                         @can('permission-edit')
                                             <a href="{{ route('permission.edit', $permission->id) }}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>

@@ -77,11 +77,6 @@ class PaymentLogController extends Controller {
                 $tresponse = $response->getTransactionResponse();
 
                 if ($tresponse != null && $tresponse->getMessages() != null) {
-//                    echo " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
-//                    echo " Transaction Response Code: " . $tresponse->getResponseCode() . "\n";
-//                    echo " Message Code: " . $tresponse->getMessages()[0]->getCode() . "\n";
-//                    echo " Auth Code: " . $tresponse->getAuthCode() . "\n";
-//                    echo " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";
                     $message_text = $tresponse->getMessages()[0]->getDescription().", Transaction ID: " . $tresponse->getTransId();
                     $msg_type = "success_msg";    
                     
@@ -154,6 +149,9 @@ class PaymentLogController extends Controller {
                             'balance_credits' => $credit_balance,
                             'date' => date('Y-m-d'),
                         ]);
+
+                        $message = 'Credits purchased.';
+                        notification(Auth::user()->id, $booked_interview->id, 'new', $message);
 
                         if($inserted_wallet){
                             Session::forget('used_coupon');

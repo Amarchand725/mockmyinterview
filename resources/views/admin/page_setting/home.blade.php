@@ -21,6 +21,87 @@
 			
 			<div class="box box-info">
 				<div class="box-body">
+					<h3 class="sec_title">Home Section</h3>
+					<form action="{{ route('page_setting.store') }}" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+						@csrf
+						<input type="hidden" name="parent_slug" id="" value="{{ $model->slug }}">
+						
+						@if(isset($page_data['home_background_image']))
+							<div class="form-group">
+								<label for="" class="col-sm-2 control-label">Existing Image</label>
+								<div class="col-sm-6" style="padding-top:6px;">
+									<img src="{{ asset('/public/admin/assets/images/page/'.$page_data['home_background_image']) }}" class="existing-photo" style="height:180px;">
+								</div>
+							</div>
+						@endif
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">Background Image </label>
+							<div class="col-sm-6">
+								<input type="file" name="home_background_image" class="form-control">
+							</div>
+						</div>
+						
+						<fieldset>
+							<legend>Left Section</legend>
+							<div class="form-group">
+								<label for="" class="col-sm-2 control-label">Left Top Heading </label>
+								<div class="col-sm-6">
+									<input type="text" name="home_left_heading" class="form-control" value="{{ isset($page_data['home_left_heading'])?$page_data['home_left_heading']:'' }}" placeholder="Enter banner heading">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="col-sm-2 control-label">Left Top Description </label>
+								<div class="col-sm-6">
+									<textarea name="home_left_description" class="form-control" id="" cols="30" rows="5" placeholder="Enter left top description">{{ isset($page_data['home_left_description'])?$page_data['home_left_description']:'' }}</textarea>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="col-sm-2 control-label">Left Bottom Label </label>
+								<div class="col-sm-6">
+									<textarea name="home_left_bottom_label" class="form-control" id="" cols="30" rows="2" placeholder="Enter left bottom label">{{ isset($page_data['home_left_bottom_label'])?$page_data['home_left_bottom_label']:'' }}</textarea>
+								</div>
+							</div>
+						</fieldset>
+						<fieldset>
+							<legend>Right Section</legend>
+							<div class="form-group">
+								<label for="" class="col-sm-2 control-label">Right Top Title </label>
+								<div class="col-sm-6">
+									<input type="text" name="home_right_title" class="form-control" value="{{ isset($page_data['home_right_title'])?$page_data['home_right_title']:'' }}" placeholder="Enter banner heading">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="col-sm-2 control-label">Right Sub Title </label>
+								<div class="col-sm-6">
+									<input type="text" name="home_right_sub_title" class="form-control" value="{{ isset($page_data['home_right_sub_title'])?$page_data['home_right_sub_title']:'' }}" placeholder="Enter banner heading">
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="home_right_video" class="col-sm-2 control-label">Video URL  </label>
+								<div class="col-sm-6">
+									<input type="text" id="home_right_video" name="home_right_video" class="form-control" value="{{ isset($page_data['home_right_video'])?$page_data['home_right_video']:'' }}" placeholder="https://www.youtube.com/watch?v=jDDaplaOz7Q">
+								</div>
+							</div>
+						</fieldset>
+						
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">Show on Home? </label>
+							<div class="col-sm-2">
+								<select name="home_section" class="form-control select2 select2-accessible" style="width:auto;" tabindex="-1" aria-hidden="true">
+									<option value="1" {{ (isset($page_data['home_section'])?($page_data['home_section']==1?'selected':''):'') }}>Show</option>
+									<option value="0" {{ (isset($page_data['home_section'])?($page_data['home_section']==0?'selected':''):'') }}>Hide</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label"></label>
+							<div class="col-sm-6">
+								<button type="submit" class="btn btn-success pull-left" name="form_home_blog">Submit</button>
+							</div>
+						</div>
+					</form>
+
 					<h3 class="sec_title">Banner Section</h3>
 					<form action="{{ route('page_setting.store') }}" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
 						@csrf

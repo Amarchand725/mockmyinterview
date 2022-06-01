@@ -3,7 +3,7 @@
 @section('title', $page_title)
 
 @section('content')
-    <input type="hidden" id="page_url" value="{{ route('blog-resources') }}">
+    <input type="hidden" id="page_url" value="{{ route('blog.index') }}">
 
     <div class="container-fluid py-3 ">
         <div class="row mx-auto">
@@ -35,7 +35,7 @@
                                 @foreach ($blogs as $blog)
                                     <tr>
                                         <td>
-                                            <b><u><a href="{{ route('blog.single', $blog->slug) }}"> {{ $blog->title }}</a></u></b>
+                                            <b><u><a href="{{ route('blog.show', $blog->slug) }}"> {{ $blog->title }}</a></u></b>
                                             <br>
                                             <span class="label interview-tips"> {{ $blog->hasCategory->name }}</span>
                                             <span class="label interview-tips1 ml-2 ">

@@ -61,7 +61,7 @@
             @endcan
             @can('resources-list')
             <li>
-                <a href="{{ route('blog-resources') }}" class="{{ request()->is('blog-resources') ? 'active' : '' }}">
+                <a href="{{ route('blog.index') }}" class="{{ request()->is('blog') ? 'active' : '' }}">
                     <i class="fa fa-bar-chart-o"></i> <span class="nav-label">Resources</span>
                 </a>
             </li>

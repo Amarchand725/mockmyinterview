@@ -5,7 +5,7 @@
 @section('content')
     <div class="container-fluid py-3 ">
         <div class="row mx-auto">
-            <h2 class="mb-3">Resource - Single - Blog  <span><a href="{{ route('blog-resources') }}" class="btn btn-primary btn-sm">Back to List</a></span></h2>
+            <h2 class="mb-3">Resource - Single - Blog  <span><a href="{{ route('blog.index') }}" class="btn btn-primary btn-sm">Back to List</a></span></h2>
             
             <div class="container pt-5">
                 <div class="row">

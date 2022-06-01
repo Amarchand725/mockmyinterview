@@ -17,11 +17,11 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/route-clear', function() {
-    $exitCode = Artisan::call('route:clear');
-    $exitCode = Artisan::call('view:clear');
-    $exitCode = Artisan::call('cache:clear');
-    $exitCode = Artisan::call('config:clear');
-    $exitCode = Artisan::call('config:cache');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('config:cache');
     $cache = 'Route cache cleared <br /> View cache cleared <br /> Cache cleared <br /> Config cleared <br /> Config cache cleared';
     return $cache;
 });
@@ -72,8 +72,6 @@ Route::get('get_courses/{slug}', 'admin\CourseController@getCourses')->name('get
 //Admin Panel
 
 //Candidate
-// Route::get('book-interview', 'CandidateController@bookInterview')->name('book-interview');
-
 Route::get('test_setup', 'CandidateController@testSetup')->name('test_setup');
 Route::get('test_webcam', 'CandidateController@testWebcam')->name('test_webcam');
 Route::get('notifications', 'CandidateController@notifications')->name('notifications');
@@ -90,8 +88,6 @@ Route::get('book_interview/review', 'BookInterviewController@review')->name('boo
 Route::get('schedule-interview', 'InterviewerController@scheduleInterview')->name('schedule-interview');
 Route::get('report', 'InterviewerController@report')->name('report');
 Route::get('report/search', 'InterviewerController@reportSearch')->name('report.search');
-Route::get('blog-resources', 'InterviewerController@resources')->name('blog-resources');
-Route::get('blog/single/{slug}', 'InterviewerController@singleBlog')->name('blog.single');
 //Interviewer
 
 //availableslots

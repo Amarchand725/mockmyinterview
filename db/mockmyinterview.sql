@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 25, 2022 at 05:36 PM
+-- Generation Time: May 31, 2022 at 11:11 AM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.4.22
 
@@ -161,7 +161,7 @@ INSERT INTO `available_slot_dates` (`id`, `interviewer_id`, `slot_type`, `hr_typ
 (1, 7, 'weekands', NULL, '1', '2022-05-25', '2022-05-27', 0, NULL, '2022-04-07 02:03:05', '2022-04-07 02:03:05'),
 (2, 7, 'weekands', NULL, '1', '2022-05-25', '2022-05-27', 0, NULL, '2022-05-09 03:37:41', '2022-05-09 03:37:41'),
 (3, 7, 'weekdays', NULL, '1', '2022-05-25', '2022-05-27', 0, NULL, '2022-05-09 03:38:08', '2022-05-09 03:38:08'),
-(4, 7, 'weekdays', NULL, '1', '2022-05-25', '2022-05-09', 0, NULL, '2022-05-09 05:43:34', '2022-05-09 05:43:34'),
+(4, 7, 'weekdays', NULL, '1', '2022-05-26', '2022-05-09', 0, NULL, '2022-05-09 05:43:34', '2022-05-09 05:43:34'),
 (5, 7, 'weekands', NULL, '1', '2022-05-09', '2022-05-09', 0, NULL, '2022-05-09 08:31:26', '2022-05-09 08:31:26'),
 (6, 7, 'weekdays', NULL, '1', '2022-05-12', '2022-05-14', 0, NULL, '2022-05-10 03:47:47', '2022-05-10 03:47:47'),
 (7, 7, 'weekands', NULL, '1', '2022-05-12', '2022-05-14', 0, NULL, '2022-05-10 03:48:28', '2022-05-10 03:48:28'),
@@ -745,7 +745,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (113, '2022_05_17_083604_create_invites_table', 74),
 (117, '2022_05_17_084617_create_invited_users_table', 75),
 (118, '2022_05_20_145309_create_interviewer_wallets_table', 76),
-(121, '2022_05_25_080100_create_logs_table', 77);
+(121, '2022_05_25_080100_create_logs_table', 77),
+(123, '2022_05_26_103941_create_read_notifications_table', 79),
+(124, '2022_05_26_103403_create_notifications_table', 80);
 
 -- --------------------------------------------------------
 
@@ -811,6 +813,29 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (6, 'App\\Models\\User', 38),
 (6, 'App\\Models\\User', 39),
 (6, 'App\\Models\\User', 40);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `created_by` bigint(20) NOT NULL,
+  `notify_id` bigint(20) NOT NULL,
+  `notify_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'inserted, updated',
+  `message` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `created_by`, `notify_id`, `notify_type`, `message`, `created_at`, `updated_at`) VALUES
+(1, 1, 2, 'blog', 'Published new blog.', '2022-05-26 11:38:47', '2022-05-26 11:38:47');
 
 -- --------------------------------------------------------
 
@@ -896,7 +921,7 @@ CREATE TABLE `page_settings` (
 --
 
 INSERT INTO `page_settings` (`id`, `parent_slug`, `key`, `value`, `created_at`, `updated_at`) VALUES
-(1, 'home', '_token', '9I64zkdwB3n0l4djkzvJWdKXbebFl2wVMuYLuqBx', '2022-03-15 10:52:44', '2022-03-21 03:14:33'),
+(1, 'home', '_token', 'M7J1SE9QPLm0Q6vau3sqsWMsk0lru95rhFeD7Ecv', '2022-03-15 10:52:44', '2022-05-26 04:26:14'),
 (2, 'home', 'parent_slug', 'home', '2022-03-15 10:52:44', '2022-03-15 10:52:44'),
 (3, 'home', 'home_meta', 'Home meta', '2022-03-15 10:52:44', '2022-03-15 10:52:44'),
 (4, 'home', 'home_meta_keyword', 'Home meta keyword', '2022-03-15 10:52:44', '2022-03-15 10:52:44'),
@@ -960,13 +985,13 @@ INSERT INTO `page_settings` (`id`, `parent_slug`, `key`, `value`, `created_at`, 
 (62, 'home', 'top_sec_image', '15032022160152.png', '2022-03-15 10:52:44', '2022-03-15 11:01:52'),
 (63, 'home', 'middle_sec_image', '15032022160221.png', '2022-03-15 10:52:44', '2022-03-15 11:02:21'),
 (64, 'home', 'bottom_sec_image', '15032022155244.png', '2022-03-15 10:52:44', '2022-03-15 10:52:44'),
-(65, 'about', '_token', '9I64zkdwB3n0l4djkzvJWdKXbebFl2wVMuYLuqBx', '2022-03-16 02:43:59', '2022-03-21 03:09:20'),
+(65, 'about', '_token', 'M7J1SE9QPLm0Q6vau3sqsWMsk0lru95rhFeD7Ecv', '2022-03-16 02:43:59', '2022-05-26 04:41:47'),
 (66, 'about', 'parent_slug', 'about', '2022-03-16 02:43:59', '2022-03-16 02:43:59'),
 (67, 'about', 'mt_about', 'Quibusdam omnis aper updated', '2022-03-16 02:43:59', '2022-03-16 03:03:16'),
 (68, 'about', 'mk_about', 'Et excepteur aut quo updated', '2022-03-16 02:43:59', '2022-03-16 03:03:16'),
 (69, 'about', 'md_about', 'Corporis veritatis o updated', '2022-03-16 02:43:59', '2022-03-16 03:03:16'),
 (70, 'about', 'about_heading', 'ABOUT MOCK MY INTERVIEW TM', '2022-03-16 02:43:59', '2022-03-16 03:22:52'),
-(71, 'about', 'about_content', '<h1><span style=\"background-color: #008000;\"><strong>hello brother</strong></span></h1>', '2022-03-16 02:43:59', '2022-03-16 10:30:12'),
+(71, 'about', 'about_content', '<div class=\"col-lg-6 pt-4 pt-lg-0 content\">\r\n<p class=\"fst-italic\">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>\r\n<ul>\r\n<li>&nbsp;Ullamco laboris nisi ut aliquip ex ea commodo consequat</li>\r\n<li>&nbsp;Duis aute irure dolor in reprehenderit in voluptate velit</li>\r\n<li>&nbsp;Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda</li>\r\n</ul>\r\n<p>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>\r\n</div>\r\n<div class=\"col-lg-6 pt-4 pt-lg-0 content\">\r\n<p class=\"fst-italic\">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>\r\n<ul>\r\n<li>&nbsp;Ullamco laboris nisi ut aliquip ex ea commodo consequat</li>\r\n<li>&nbsp;Duis aute irure dolor in reprehenderit in voluptate velit</li>\r\n<li>&nbsp;Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda</li>\r\n</ul>\r\n<p>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>\r\n</div>', '2022-03-16 02:43:59', '2022-05-26 04:41:47'),
 (72, 'about', 'form_about', NULL, '2022-03-16 02:43:59', '2022-03-16 02:43:59'),
 (73, 'service', '_token', 'AtObO55a1FfbWgNUtyhBGdyh0v5B0EV7ERjnU56C', '2022-03-16 03:07:22', '2022-03-16 03:07:22'),
 (74, 'service', 'parent_slug', 'service', '2022-03-16 03:07:22', '2022-03-16 03:07:22'),
@@ -1017,7 +1042,7 @@ INSERT INTO `page_settings` (`id`, `parent_slug`, `key`, `value`, `created_at`, 
 (119, 'footer', 'footer_description', '<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s</p>', '2022-03-21 06:36:49', '2022-03-21 06:36:49'),
 (120, 'footer', 'form_blog', NULL, '2022-03-21 06:36:49', '2022-03-21 06:36:49'),
 (121, 'footer', 'footer_app_image', '21032022113649.png', '2022-03-21 06:36:49', '2022-03-21 06:36:49'),
-(122, 'header', '_token', 'wh7riChaXAC2NZ2qSeO3Y933vw5EulCDtVrQKRKh', '2022-03-21 06:53:09', '2022-03-31 10:48:46'),
+(122, 'header', '_token', 'M7J1SE9QPLm0Q6vau3sqsWMsk0lru95rhFeD7Ecv', '2022-03-21 06:53:09', '2022-05-26 04:55:52'),
 (123, 'header', 'parent_slug', 'header', '2022-03-21 06:53:09', '2022-03-21 06:53:09'),
 (124, 'header', 'header_email', 'info@example.com', '2022-03-21 06:53:09', '2022-03-21 06:53:09'),
 (125, 'header', 'header_phone', '+91-9999878398', '2022-03-21 06:53:09', '2022-03-21 06:53:09'),
@@ -1037,7 +1062,19 @@ INSERT INTO `page_settings` (`id`, `parent_slug`, `key`, `value`, `created_at`, 
 (149, 'interview-terms', 'terms', '<ul class=\"list-styled\">\r\n<li>Number of Regular Interviews: 3</li>\r\n<li>Standard Waiting Period: 48 Hours</li>\r\n<li>Duration of Each Interview: 30 minutes</li>\r\n<li>Expert&rsquo;s Feedback: Yes</li>\r\n</ul>', '2022-05-12 10:02:02', '2022-05-12 10:02:02'),
 (150, 'interview-terms', 'form_contact', NULL, '2022-05-12 10:02:02', '2022-05-12 10:02:02'),
 (151, 'interview-terms', 'fee_percent', '20', '2022-05-20 09:49:07', '2022-05-20 09:49:07'),
-(152, 'interview-terms', 'interview_terms', '<ul class=\"list-styled\">\r\n<li>Number of Regular Interviews: 3</li>\r\n<li>Standard Waiting Period: 48 Hours</li>\r\n<li>Duration of Each Interview: 30 minutes</li>\r\n<li>Expert&rsquo;s Feedback: Yes</li>\r\n</ul>', '2022-05-20 09:49:07', '2022-05-20 09:49:07');
+(152, 'interview-terms', 'interview_terms', '<ul class=\"list-styled\">\r\n<li>Number of Regular Interviews: 3</li>\r\n<li>Standard Waiting Period: 48 Hours</li>\r\n<li>Duration of Each Interview: 30 minutes</li>\r\n<li>Expert&rsquo;s Feedback: Yes</li>\r\n</ul>', '2022-05-20 09:49:07', '2022-05-20 09:49:07'),
+(153, 'home', 'home_left_heading', 'Compare Interviewers including their fees', '2022-05-26 04:26:14', '2022-05-26 04:26:14'),
+(154, 'home', 'home_left_description', 'leading comparison service and the only place you can compare Interviewers/candidates fees side-by-side.', '2022-05-26 04:26:14', '2022-05-26 04:26:14'),
+(155, 'home', 'home_left_bottom_label', 'Be confident. Compare Interviewers.', '2022-05-26 04:26:14', '2022-05-26 04:26:14'),
+(156, 'home', 'home_right_title', 'Virtual Face-to-Face Mock Interviews with industry Experts', '2022-05-26 04:26:14', '2022-05-26 04:26:14'),
+(157, 'home', 'home_right_sub_title', 'Live | On-demand | Anywhere', '2022-05-26 04:26:14', '2022-05-26 04:26:14'),
+(158, 'home', 'home_right_video', 'https://www.youtube.com/watch?v=jDDaplaOz7Q', '2022-05-26 04:26:14', '2022-05-26 04:26:14'),
+(159, 'home', 'home_section', '1', '2022-05-26 04:26:14', '2022-05-26 04:26:14'),
+(160, 'home', 'home_background_image', '26052022092614.jpg', '2022-05-26 04:26:14', '2022-05-26 04:26:14'),
+(161, 'about', 'about_left_content', '<p><em>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</em></p>\r\n<ul style=\"list-style-type: circle;\">\r\n<li>Ullamco laboris nisi ut aliquip ex ea commodo consequat</li>\r\n<li>&nbsp;Duis aute irure dolor in reprehenderit in voluptate velit</li>\r\n<li>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda</li>\r\n</ul>\r\n<p>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>', '2022-05-26 04:49:20', '2022-05-26 04:49:20'),
+(162, 'about', 'right_left_content', '<p><em>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</em></p>\r\n<ul style=\"list-style-type: circle;\">\r\n<li>&nbsp;Ullamco laboris nisi ut aliquip ex ea commodo consequat</li>\r\n<li>&nbsp;Duis aute irure dolor in reprehenderit in voluptate velit</li>\r\n<li><em>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda</em></li>\r\n</ul>\r\n<p><em>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</em></p>', '2022-05-26 04:49:20', '2022-05-26 04:49:20'),
+(163, 'header', 'header_currency', 'Euro', '2022-05-26 04:55:52', '2022-05-26 04:55:52'),
+(164, 'header', 'header_currency_symbol', '€', '2022-05-26 04:55:52', '2022-05-26 04:58:24');
 
 -- --------------------------------------------------------
 
@@ -1372,6 +1409,21 @@ INSERT INTO `qualification_details` (`id`, `user_id`, `achievements`, `awards`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `read_notifications`
+--
+
+CREATE TABLE `read_notifications` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `notification_id` bigint(20) NOT NULL,
+  `read_by` bigint(20) NOT NULL,
+  `is_read` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `referrals`
 --
 
@@ -1505,6 +1557,7 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (57, 1),
 (58, 1),
 (59, 1),
+(59, 6),
 (60, 1),
 (61, 1),
 (62, 1),
@@ -1853,7 +1906,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `user_id`, `referral_code`, `name`, `last_name`, `phone`, `promo_code`, `email`, `temprary_email`, `email_verified_at`, `password`, `remember_token`, `verify_token`, `status`, `image`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 4046, 'BG7kf4qV', 'Hardik tested', NULL, NULL, NULL, 'admin@gmail.com', NULL, NULL, '$2y$10$TrSMTkdqZ4CkZe8zLOz/AuMG5CYt3vVpO4dHwUN.ecPMsAorlD416', '9D90o1AUOpkkCIGyOhlaUmLLa4U9rQLOSm3QnfDN4UGfxEmwQzuLfiapEYT9', NULL, 1, NULL, NULL, '2022-03-09 11:01:24', '2022-03-25 05:12:33'),
+(1, 4046, 'BG7kf4qV', 'Hardik tested', NULL, NULL, NULL, 'admin@gmail.com', NULL, NULL, '$2y$10$TrSMTkdqZ4CkZe8zLOz/AuMG5CYt3vVpO4dHwUN.ecPMsAorlD416', 'nWJ1XUsdlOBAcSHCFFAA5g9o5bodbs1PkWj8bBcfAP6jnSlRysKQgH5T9mtP', NULL, 1, NULL, NULL, '2022-03-09 11:01:24', '2022-03-25 05:12:33'),
 (5, 5465, 'RnnJ5saS', 'Alika Avila', NULL, NULL, NULL, 'lawukobov@mailinator.com', NULL, NULL, '$2y$10$/MR9SKwPqOJbVU0uHvd1MOzLwrsQDeUy4aiC1dM3/vnCqF5HFUBKO', NULL, NULL, 1, NULL, NULL, '2022-03-22 03:43:24', '2022-03-22 03:43:24'),
 (6, 2964, 'DeSDyqsv', 'Yvette Glover', 'Cash', '1234567800', NULL, 'testweb@mailinator.com', 'chandamar725@gmail.com', '2022-03-30 09:34:14', '$2y$10$FipZvMlM.AsqEoPvqF8PHOdl7DN43JYgAm4IZRevIZEBwZVLlV6/.', NULL, '627e13ffd2356', 1, '30-03-2022-112134.jpg', NULL, '2022-03-22 06:02:18', '2022-05-13 03:17:03'),
 (7, 5461, 'BuaUhPzS', 'Sydnee Langley', 'Ratliff', '12345678', NULL, 'dudaguhu@interviewer.com', NULL, NULL, '$2y$10$0YqFHYTffC4jMVOzF9oL3.o2AFDbqifo/eWT/FSQlQxTQmI8KIZ6i', NULL, NULL, 1, NULL, NULL, '2022-03-22 06:04:59', '2022-03-31 03:39:09'),
@@ -2131,6 +2184,12 @@ ALTER TABLE `model_has_roles`
   ADD KEY `model_has_roles_model_id_model_type_index` (`model_id`,`model_type`);
 
 --
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `packages`
 --
 ALTER TABLE `packages`
@@ -2203,6 +2262,12 @@ ALTER TABLE `qualifications`
 -- Indexes for table `qualification_details`
 --
 ALTER TABLE `qualification_details`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `read_notifications`
+--
+ALTER TABLE `read_notifications`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -2450,7 +2515,13 @@ ALTER TABLE `logs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
+
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `packages`
@@ -2468,7 +2539,7 @@ ALTER TABLE `pages`
 -- AUTO_INCREMENT for table `page_settings`
 --
 ALTER TABLE `page_settings`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
 
 --
 -- AUTO_INCREMENT for table `payments`
@@ -2517,6 +2588,12 @@ ALTER TABLE `qualifications`
 --
 ALTER TABLE `qualification_details`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `read_notifications`
+--
+ALTER TABLE `read_notifications`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `referrals`

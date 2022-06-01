@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Referral;
 use App\Models\Invite;
 use App\Models\InvitedUser;
+use App\Models\Notification;
 use DateTime;
 use Auth;
+use DB;
 
 class CandidateController extends Controller
 {
