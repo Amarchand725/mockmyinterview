@@ -81,24 +81,28 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if($interview->status==1)
-                                                @if($interview->date >= date('Y-m-d'))
-                                                    <div class="time-slot">
-                                                        <div id="countdown">
-                                                            <span class="badge badge-primary p-2" id="timer-{{ $interview->id }}">--</span>
+                                            @if($interview->date < date('Y-m-d'))
+                                                <span class="badge badge-warning">Expired</span>
+                                            @else 
+                                                @if($interview->status==1)
+                                                    @if($interview->date > date('Y-m-d'))
+                                                        <div class="time-slot">
+                                                            <div id="countdown">
+                                                                <span class="badge badge-primary p-2" id="timer-{{ $interview->id }}">--</span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                @elseif($interview->date == date('Y-m-d'))
-                                                    <a href="{{ $interview->join_url }}">JOIN MEETING</a>
-                                                @else 
-                                                    <span class="badge badge-warning">Expired</span>
+                                                    @elseif($interview->date == date('Y-m-d'))
+                                                        <a href="{{ $interview->join_url }}">JOIN MEETING</a>
+                                                    @else 
+                                                        <span class="badge badge-warning">Expired</span>
+                                                    @endif
+                                                @elseif($interview->status==0)
+                                                    <span class="badge badge-info">Pending</span>
+                                                @elseif($interview->status==3)
+                                                    <span class="badge badge-danger">Rejected</span>
+                                                @elseif($interview->status==4)
+                                                    <span class="badge badge-success">Completed</span>
                                                 @endif
-                                            @elseif($interview->status==0)
-                                                <span class="badge badge-info">Pending</span>
-                                            @elseif($interview->status==3)
-                                                <span class="badge badge-danger">Rejected</span>
-                                            @elseif($interview->status==4)
-                                                <span class="badge badge-success">Completed</span>
                                             @endif
                                         </td>
                                         <td>{{ date('d, F-Y', strtotime($interview->date)) }}</td>
@@ -134,6 +138,9 @@
                                                         <option value="4" disabled {{ $interview->status==4?'selected':'' }}>Complete</option>
                                                     @endif
                                                 </select>
+                                                @if($interview->status==4)
+                                                    <a href="{{ route('book_interview.show', $interview->meeting_id) }}" class="btn btn-success mt-2" data-toggle="tooltip" data-placement="top" title="Meeting Recordings">Meeting Recordings</a>
+                                                @endif
                                             @endif
                                         </td>
                                     </tr>
@@ -213,6 +220,7 @@
                                         'You changes have been saved.',
                                         'success'
                                     )
+                                    window.location.reload();
                                 }else{
                                     Swal.fire(
                                         'Sorry!',

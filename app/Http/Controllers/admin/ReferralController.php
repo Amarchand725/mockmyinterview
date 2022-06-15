@@ -14,7 +14,7 @@ class ReferralController extends Controller
         if($request->ajax()){
             $query = Referral::orderby('id', 'desc')->where('id', '>', 0);
             if($request['search'] != ""){
-                $query->where('referral_code', 'like', '%'. $request['search'] .'%')
+                $query->where('offer_message', 'like', '%'. $request['search'] .'%')
                 ->orWhere('offer_credits', 'like', '%'. $request['search'] .'%')
                 ->orWhere('offer_credits_both', 'like', '%'. $request['search'] .'%');
             }

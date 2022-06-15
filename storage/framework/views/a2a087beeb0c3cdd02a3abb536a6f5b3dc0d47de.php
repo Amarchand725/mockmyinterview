@@ -81,24 +81,28 @@
                                             <?php endif; ?>
                                         </td>
                                         <td>
-                                            <?php if($interview->status==1): ?>
-                                                <?php if($interview->date >= date('Y-m-d')): ?>
-                                                    <div class="time-slot">
-                                                        <div id="countdown">
-                                                            <span class="badge badge-primary p-2" id="timer-<?php echo e($interview->id); ?>">--</span>
+                                            <?php if($interview->date < date('Y-m-d')): ?>
+                                                <span class="badge badge-warning">Expired</span>
+                                            <?php else: ?> 
+                                                <?php if($interview->status==1): ?>
+                                                    <?php if($interview->date > date('Y-m-d')): ?>
+                                                        <div class="time-slot">
+                                                            <div id="countdown">
+                                                                <span class="badge badge-primary p-2" id="timer-<?php echo e($interview->id); ?>">--</span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                <?php elseif($interview->date == date('Y-m-d')): ?>
-                                                    <a href="<?php echo e($interview->join_url); ?>">JOIN MEETING</a>
-                                                <?php else: ?> 
-                                                    <span class="badge badge-warning">Expired</span>
+                                                    <?php elseif($interview->date == date('Y-m-d')): ?>
+                                                        <a href="<?php echo e($interview->join_url); ?>">JOIN MEETING</a>
+                                                    <?php else: ?> 
+                                                        <span class="badge badge-warning">Expired</span>
+                                                    <?php endif; ?>
+                                                <?php elseif($interview->status==0): ?>
+                                                    <span class="badge badge-info">Pending</span>
+                                                <?php elseif($interview->status==3): ?>
+                                                    <span class="badge badge-danger">Rejected</span>
+                                                <?php elseif($interview->status==4): ?>
+                                                    <span class="badge badge-success">Completed</span>
                                                 <?php endif; ?>
-                                            <?php elseif($interview->status==0): ?>
-                                                <span class="badge badge-info">Pending</span>
-                                            <?php elseif($interview->status==3): ?>
-                                                <span class="badge badge-danger">Rejected</span>
-                                            <?php elseif($interview->status==4): ?>
-                                                <span class="badge badge-success">Completed</span>
                                             <?php endif; ?>
                                         </td>
                                         <td><?php echo e(date('d, F-Y', strtotime($interview->date))); ?></td>
@@ -134,6 +138,9 @@
                                                         <option value="4" disabled <?php echo e($interview->status==4?'selected':''); ?>>Complete</option>
                                                     <?php endif; ?>
                                                 </select>
+                                                <?php if($interview->status==4): ?>
+                                                    <a href="<?php echo e(route('book_interview.show', $interview->meeting_id)); ?>" class="btn btn-success mt-2" data-toggle="tooltip" data-placement="top" title="Meeting Recordings">Meeting Recordings</a>
+                                                <?php endif; ?>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -214,6 +221,7 @@
                                         'You changes have been saved.',
                                         'success'
                                     )
+                                    window.location.reload();
                                 }else{
                                     Swal.fire(
                                         'Sorry!',

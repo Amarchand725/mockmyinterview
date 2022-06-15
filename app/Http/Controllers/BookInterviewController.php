@@ -15,6 +15,7 @@ use App\Models\InterviewerWallet;
 use App\Models\Log;
 use DateTime;
 use Auth;
+use Http;
 
 class BookInterviewController extends Controller
 {
@@ -144,6 +145,7 @@ class BookInterviewController extends Controller
                 if($booked_interview){
                     Log::create([
                         'booked_interview_id' => $booked_interview->id,
+                        'interviewer_id' => $interviewer_id,
                         'candidate_id' => Auth::user()->id,
                         'credits' => $priority->credits, 
                         'type' => 'charged', 
@@ -159,6 +161,14 @@ class BookInterviewController extends Controller
         }catch(\Exception $e){
             return redirect()->back()->with(['error' => $e->getMessage()]);
         }
+    }
+
+    public function show($meeting_id)
+    {
+        // return $meeting_id;
+        $response = Http::get('https://api.zoom.us/v2/meetings/'.$meeting_id.'/recordings');
+        $data = json_decode($response->body(), true);
+        dd($data);
     }
 
     public function nextPreDate(Request $request)
@@ -336,7 +346,7 @@ class BookInterviewController extends Controller
                     'booked_interview_id' => $interview->id,
                     'interviewer_id' => $interview->interviewer_id,
                     'candidate_id' => Auth::user()->id,
-                    'credits' => $priority->credits, 
+                    'credits' => $credits->credits, 
                     'type' => 'returned', 
                     'description' => 'Return credits due to rejection.', 
                 ]);
