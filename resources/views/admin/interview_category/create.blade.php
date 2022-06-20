@@ -6,24 +6,24 @@
 		<h1>{{ $page_title }}</h1>
 	</div>
 	<div class="content-header-right">
-		<a href="{{ route('interview_type.index') }}" class="btn btn-primary btn-sm">View All</a>
+		<a href="{{ route('interview_category.index') }}" class="btn btn-primary btn-sm">View All</a>
 	</div>
 </section>
 
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			<form action="{{ route('interview_type.store') }}" id="regform" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+			<form action="{{ route('interview_category.store') }}" id="regform" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
 				@csrf
 				<div class="box box-info">
 					<div class="box-body">
 						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Parent Interview Types</label>
+							<label for="" class="col-sm-2 control-label">Parent Categories</label>
 							<div class="col-sm-9">
 								<select name="parent_id" id="" class="form-control">
-									<option value="" selected>Select parent type</option>
-									@foreach ($parent_interview_types as $type)
-										<option value="{{ $type->id }}">{{ $type->name }}</option>
+									<option value="" selected>Select parent category</option>
+									@foreach ($parent_categories as $parent_category)
+										<option value="{{ $parent_category->id }}">{{ $parent_category->name }}</option>
 									@endforeach
 								</select>
 								<span style="color: red">{{ $errors->first('parent_id') }}</span>

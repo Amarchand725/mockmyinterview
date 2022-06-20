@@ -28,6 +28,7 @@ use App\Models\Invite;
 use App\Models\InvitedUser;
 use App\Models\Wallet;
 use App\Models\Referral;
+use App\Models\InterviewType;
 use Auth;
 use Hash;
 
@@ -607,5 +608,16 @@ class WebController extends Controller
         \Mail::to($request->email)->send(new \App\Mail\Email($details));
 
         return redirect()->back()->with('message', 'We have sent verification email. Click on link and get activation');
+    }
+
+    public function getChildInterviewTypes(Request $request)
+    {
+        $child_interview_types = InterviewType::where('parent_id', $request->parent_id)->get();
+        return response()->json(['child_interview_types' => $child_interview_types]);
+    }
+
+    public function getInterviewers(Request $request)
+    {
+        // return $request;
     }
 }

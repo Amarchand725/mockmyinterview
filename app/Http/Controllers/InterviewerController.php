@@ -7,6 +7,7 @@ use App\Models\PageSetting;
 use App\Models\Category;
 use App\Models\Blog;
 use App\Models\BookInterview;
+use App\Models\InterviewType;
 use DateTime;
 use Auth;
 
@@ -21,7 +22,8 @@ class InterviewerController extends Controller
     {
         $this->authorize('schedule interview-list', User::class);
         $page_title = 'Schedule Interview - '.Auth::user()->roles->pluck('name')[0];
-        return view('web-views.interviewer.schedule-interview', compact('page_title'));
+        $parent_interview_types = InterviewType::where('status', 1)->where('parent_id', null)->get();
+        return view('web-views.interviewer.schedule-interview', compact('page_title', 'parent_interview_types'));
     }
     public function resources(Request $request)
     {

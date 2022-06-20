@@ -13,6 +13,7 @@ use App\Models\Qualification;
 use App\Models\Wallet;
 use App\Models\InterviewerWallet;
 use App\Models\Log;
+use App\Models\InterviewType;
 use DateTime;
 use Auth;
 use Http;
@@ -64,6 +65,8 @@ class BookInterviewController extends Controller
         $page_title = 'Book Interview - '.Auth::user()->roles->pluck('name')[0];
         $booking_types = BookingPriority::where('status', 1)->get();
 
+        $parent_interview_types = InterviewType::where('parent_id', null)->where('status', 1)->get();
+
         $degrees = [];
         foreach(Auth::user()->hasUserQualification as $qualification){
             $degrees[] = $qualification->degree_slug;
@@ -104,7 +107,9 @@ class BookInterviewController extends Controller
             }
         }
 
-        return view('web-views.interviews.create', compact('page_title', 'booking_types', 'slots', 'next_slots'));
+        // return $next_slots;
+
+        return view('web-views.interviews.create', compact('page_title', 'parent_interview_types', 'booking_types', 'slots', 'next_slots'));
     }
 
     public function store(Request $request)

@@ -44,6 +44,9 @@ Route::post('my_profile/resume', 'WebController@resume')->name('my_profile.resum
 Route::post('my_profile/interview', 'WebController@interview')->name('my_profile.interview');
 Route::post('my_profile/password', 'WebController@password')->name('my_profile.password');
 
+Route::get('get-child-interview-types', 'WebController@getChildInterviewTypes')->name('get-child-interview-types');
+Route::get('get-interviewers', 'WebController@getInterviewers')->name('get-interviewers');
+
 //change email with verify
 Route::post('send_email', 'WebController@sendEmail')->name('send_email');
 
@@ -178,3 +181,6 @@ Route::resource('coupon', 'admin\CouponController');
 
 //refferals
 Route::resource('referral', 'admin\ReferralController');
+
+//Interview Category
+Route::resource('interview_category', 'admin\InterviewCategoryController');

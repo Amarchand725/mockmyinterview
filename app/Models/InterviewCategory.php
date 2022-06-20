@@ -6,18 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class InterviewType extends Model
+class InterviewCategory extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $guarded = [];
+    protected $guard = [];
 
     public function hasCreatedBy()
     {
         return $this->hasOne(User::class, 'id', 'created_by');
     }
+
     public function hasParent()
     {
-        return $this->hasOne(InterviewType::class, 'id', 'parent_id');
+        return $this->hasOne(InterviewCategory::class, 'id', 'parent_id');
     }
 }

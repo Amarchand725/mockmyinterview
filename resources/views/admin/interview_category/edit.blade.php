@@ -7,25 +7,25 @@
 		<h1>{{ $page_title }}</h1>
 	</div>
 	<div class="content-header-right">
-		<a href="{{ route('interview_type.index') }}" class="btn btn-primary btn-sm">View All</a>
+		<a href="{{ route('interview_category.index') }}" class="btn btn-primary btn-sm">View All</a>
 	</div>
 </section>
 
 <section class="content">
 	<div class="row">
 		<div class="col-md-12">
-			<form action="{{ route('interview_type.update', $model->slug) }}" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
+			<form action="{{ route('interview_category.update', $model->slug) }}" class="form-horizontal" enctype="multipart/form-data" method="post" accept-charset="utf-8">
 				@csrf
 				{{ method_field('PATCH') }}
 				<div class="box box-info">
 					<div class="box-body">
 						<div class="form-group">
-							<label for="" class="col-sm-2 control-label">Parent Types</label>
+							<label for="" class="col-sm-2 control-label">Parent Categories</label>
 							<div class="col-sm-9">
 								<select name="parent_id" id="" class="form-control">
 									<option value="" selected>Select parent category</option>
-									@foreach ($parent_interview_types as $interview_type)
-										<option value="{{ $interview_type->id }}" {{ $interview_type->id==$model->parent_id?'selected':'' }}>{{ $interview_type->name }}</option>
+									@foreach ($parent_categories as $parent_category)
+										<option value="{{ $parent_category->id }}" {{ $model->parent_id==$parent_category->id?'selected':'' }}>{{ $parent_category->name }}</option>
 									@endforeach
 								</select>
 								<span style="color: red">{{ $errors->first('parent_id') }}</span>

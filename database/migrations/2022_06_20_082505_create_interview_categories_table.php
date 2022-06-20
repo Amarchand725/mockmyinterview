@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInterviewTypesTable extends Migration
+class CreateInterviewCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateInterviewTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('interview_types', function (Blueprint $table) {
+        Schema::create('interview_categories', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('created_by');
             $table->bigInteger('parent_id')->nullable();
             $table->string('name');
             $table->string('slug');
             $table->string('description')->nullable();
-            $table->string('deleted_at')->nullable();
             $table->boolean('status')->default(1);
+            $table->string('deleted_at')->nullable();
             $table->timestamps();
         });
     }
@@ -33,6 +33,6 @@ class CreateInterviewTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('interview_types');
+        Schema::dropIfExists('interview_categories');
     }
 }

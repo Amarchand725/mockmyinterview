@@ -48,6 +48,13 @@
                 </a>
             </li>
             @endcan
+            {{-- @can('interview-category-list')
+            <li class="treeview">
+                <a href="{{ route('interview_category.index') }}" class="{{ request()->is('interview_category') || request()->is('interview_category/*')? 'active' : '' }}">
+                    <i class="fa fa-gift"></i> <span>Interview Category</span>
+                </a>
+            </li>
+            @endcan --}}
             @can('booking_type-list')
             <li class="treeview">
                 <a href="{{ route('booking_priority.index') }}" class="{{ request()->is('booking_priority') || request()->is('booking_priority/*')? 'active' : '' }}">
@@ -55,7 +62,7 @@
                 </a>
             </li>
             @endcan
-            @can('interview_type-list')
+            @can('interview-type-list')
             <li class="treeview">
                 <a href="{{ route('interview_type.index') }}" class="{{ request()->is('interview_type') || request()->is('interview_type/*')? 'active' : '' }}">
                     <i class="fa fa-info"></i> <span>Interview Types</span>
@@ -100,7 +107,7 @@
             @can('category-list')
             <li class="treeview">
                 <a href="{{ route('category.index') }}" class="{{ request()->is('category') || request()->is('category/create') || request()->is('category/*/edit') ? 'active' : '' }}">
-                    <i class="fa fa-list-alt"></i> <span>Category</span>
+                    <i class="fa fa-list-alt"></i> <span>Blog Category</span>
                 </a>
             </li>
             @endcan

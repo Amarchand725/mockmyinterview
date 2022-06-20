@@ -1,14 +1,14 @@
 @extends('layouts.admin.app')
 @section('title', $page_title)
 @section('content')
-<input type="hidden" id="page_url" value="{{ route('interview_type.index') }}">
+<input type="hidden" id="page_url" value="{{ route('category.index') }}">
 <section class="content-header">
 	<div class="content-header-left">
 		<h1>{{ $page_title }}</h1>
 	</div>
-	@can('interview-type-create')
+	@can('interview-category-create')
 	<div class="content-header-right">
-		<a href="{{ route('interview_type.create') }}" class="btn btn-primary btn-sm">Add Interview Type</a>
+		<a href="{{ route('interview_category.create') }}" class="btn btn-primary btn-sm">Add Interview Category</a>
 	</div>
 	@endcan
 </section>
@@ -56,7 +56,6 @@
 									<td>{{\Illuminate\Support\Str::limit(isset($model->hasParent)?$model->hasParent->name:'N/A',40)}}</td>
 									<td>{{\Illuminate\Support\Str::limit($model->name,40)}}</td>
 									<td>{{\Illuminate\Support\Str::limit($model->description,60)}}</td>
-									<td>{{isset($model->hasCreatedBy)?$model->hasCreatedBy->name:'N/A'}}</td>
 									<td>
 										@if($model->status)
 											<span class="label label-success">Active</span>
@@ -64,12 +63,13 @@
 											<span class="label label-danger">In-Active</span>
 										@endif
 									</td>
+									<td>{{isset($model->hasCreatedBy)?$model->hasCreatedBy->name:'N/A'}}</td>
 									<td width="250px">
-										@can('interview-type-edit')
-											<a href="{{route('interview_type.edit', $model->slug)}}" data-toggle="tooltip" data-placement="top" title="Edit type" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
+										@can('interview-category-edit')
+											<a href="{{route('interview_category.edit', $model->slug)}}" data-toggle="tooltip" data-placement="top" title="Edit category" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
 										@endcan
-										@can('interview-type-delete')
-                                            <button class="btn btn-danger btn-xs delete" data-slug="{{ $model->slug }}" data-del-url="{{ route('interview_type.destroy', $model->slug) }}"><i class="fa fa-trash"></i> Delete</button>
+										@can('interview-category-delete')
+                                            <button class="btn btn-danger btn-xs delete" data-slug="{{ $model->slug }}" data-del-url="{{ route('interview_category.destroy', $model->slug) }}"><i class="fa fa-trash"></i> Delete</button>
 										@endcan
 									</td>
 								</tr>

@@ -14,9 +14,16 @@ class AvailableSlotDateController extends Controller
 {
     public function store(Request $request)
     {
-        if(empty($request->hr_type) && empty($request->technical_type)){
+        // return $request;
+        $validator = $request->validate([
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'parent_id' => 'required',
+        ]);
+
+        /* if(empty($request->hr_type) && empty($request->technical_type)){
             return redirect()->back()->with('error', 'Select interview type hr or technical!');
-        }
+        } */
 
         if(sizeof($request->mornings)==0 && sizeof($request->evenings) == 0){
             return redirect()->back()->with('error', 'Choose slot.!');
@@ -26,8 +33,7 @@ class AvailableSlotDateController extends Controller
             $model = AvailableSlotDate::create([
                 'interviewer_id' => Auth::user()->id,
                 'slot_type' => $request->slot_type,
-                'hr_type' => $request->hr_type,
-                'technical_type' => $request->technical_type,
+                'interview_type' => $request->child_interview_type_id,
                 'start_date' => date('Y-m-d', strtotime($request->start_date)),
                 'end_date' => date('Y-m-d', strtotime($request->end_date)),
             ]);

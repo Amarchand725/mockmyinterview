@@ -16,9 +16,8 @@ class CreateAvailableSlotDatesTable extends Migration
         Schema::create('available_slot_dates', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('interviewer_id');
+            $table->bigInteger('interview_type')->nullable();
             $table->string('slot_type')->nullable();
-            $table->string('hr_type')->nullable();
-            $table->string('technical_type')->nullable();
             $table->date('start_date');
             $table->date('end_date');
             $table->boolean('status')->default(0);

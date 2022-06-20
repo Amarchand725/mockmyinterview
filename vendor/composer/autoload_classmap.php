@@ -78,6 +78,7 @@ return array(
     'App\\Models\\ExperienceDetail' => $baseDir . '/app/Models/ExperienceDetail.php',
     'App\\Models\\HelpHire' => $baseDir . '/app/Models/HelpHire.php',
     'App\\Models\\HowWork' => $baseDir . '/app/Models/HowWork.php',
+    'App\\Models\\InterviewCategory' => $baseDir . '/app/Models/InterviewCategory.php',
     'App\\Models\\InterviewType' => $baseDir . '/app/Models/InterviewType.php',
     'App\\Models\\InterviewerWallet' => $baseDir . '/app/Models/InterviewerWallet.php',
     'App\\Models\\Invite' => $baseDir . '/app/Models/Invite.php',

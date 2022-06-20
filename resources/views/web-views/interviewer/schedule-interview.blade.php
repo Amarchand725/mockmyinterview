@@ -43,44 +43,33 @@
                     <div class="col-md-6">
                         <div class="form-group float-label-control">
                             <label for="start-date">Start Date</label>
-                            <input type="text" name="start_date" class="form-control datepicker" id="start-date" value="{{ date('d-m-Y') }}" placeholder="Start Date">
+                            <input type="text" name="start_date" class="form-control datepicker" id="start-date" value="{{ old('start_date') }}" placeholder="Start Date">
+                            <span style="color: red">{{ $errors->first('start_date') }}</span>
                         </div>
                     </div>
 
                     <div class="col-md-6">
-                        <div class="form-check">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div>
-                                        <h6> Interview Type </h6>
-                                    </div>
-                                    @if(Auth::user()->hasResume->technical)
-                                        <input type="checkbox" name="technical_type" value="1" id="technical" class="form-check-input">
-                                    @else 
-                                        <input type="checkbox" name="technical_type" value="1" disabled id="technical" class="form-check-input">
-                                    @endif
-                                    <label class="form-check-label" for="technical">
-                                        Technical
-                                    </label>
-                                    <div class="mt-3">
-                                        @if(Auth::user()->hasResume->hr)
-                                            <input type="checkbox" name="hr_type" value="1" id="hr" class="form-check-input">
-                                        @else 
-                                            <input type="checkbox" name="hr_type" value="1" disabled id="hr" class="form-check-input">
-                                        @endif
-                                        <label class="form-check-label" for="hr">
-                                            HR
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <label for="start-date">Parent Interview Type</label>
+                        <select name="parent_id" id="" class="form-control parent-type">
+                            <option value="" selected>Select parent</option>
+                            @foreach ($parent_interview_types as $type)
+                                <option value="{{ $type->id }}">{{ $type->name }}</option>
+                            @endforeach
+                        </select>
+                        <span style="color: red">{{ $errors->first('parent_id') }}</span>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group float-label-control">
                             <label for="end-date">End Date</label>
-                            <input type="text" name="end_date" class="form-control datepicker" id="end-date" value="{{ date('d-m-Y') }}" placeholder="End Date">
+                            <input type="text" name="end_date" class="form-control datepicker" id="end-date" value="{{ old('end_date') }}" placeholder="End Date">
+                            <span style="color: red">{{ $errors->first('end_date') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group float-label-control">
+                            <label for="start-date">Child Interview Type</label>
+                            <select name="child_interview_type_id" id="child_interview_type_id" class="form-control"></select>
                         </div>
                     </div>
                 </div>
@@ -147,6 +136,22 @@
     <script src="{{ asset('public/js/calendar/main.js') }}"></script>
     <script src="{{ asset('public/js/calendar/interaction/main.js') }}"></script>
     <script>
+        $(document).on('change', '.parent-type', function(){
+            var parent_id = $(this).val();
+            $.ajax({
+                url : "{{ route('get-child-interview-types') }}",
+                data : {'parent_id' : parent_id},
+                success : function(response){
+                    var html = '<option value="" selected>Select child interview type</option>';
+                    $.each(response.child_interview_types , function(index, val) { 
+                       html += '<option value="'+val.id+'">'+val.name+'</option>';
+                    });
+
+                    $('#child_interview_type_id').html(html);
+                }
+            });
+        });
+
         $(document).on('click', '.m-slot-btn', function(){
             var slot = $(this).val();
             var index = $(this).attr('data-index');
@@ -248,7 +253,7 @@
         });
 
         // calander scripts
-        var eventsArray = [{
+        /* var eventsArray = [{
             title: 'event1',
             start: '2019-07-20'
         }, {
@@ -261,7 +266,21 @@
         }, {
             title: 'event3',
             start: '2019-10-05'
-        }];
+        }]; */
+
+        var dateToday = new Date();
+        var dates = $("#start-date, #end-date").datepicker({
+            defaultDate: "+2d",
+            changeMonth: true,
+            numberOfMonths: 1,
+            minDate: "+2d",
+            onSelect: function(selectedDate) {
+                var option = this.id == "start-date" ? "minDate" : "maxDate",
+                    instance = $(this).data("datepicker"),
+                    date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+                dates.not(this).datepicker("option", option, date);
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');

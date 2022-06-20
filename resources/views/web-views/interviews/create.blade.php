@@ -27,43 +27,26 @@
                     <div class="bg-white ">
                         <span class="side-heading-font">Schedule an Interview </span>
                         <div class="row">
-                            <div class="col-md-3">
-                                <b>Select Interview Type:</b>
-                                <br> <br>
-                                <span class="mt-4">Select Date </span>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <div class="form-check">
-                                            <input type="radio" name="interview_type" value="hr" class="form-check-input" id="hr" checked @if(sizeof(Auth::user()->hasUserQualification) == 0) disabled @endif>
-                                            <label class="form-check-label" for="hr">
-                                                HR
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-check">
-                                            <input type="radio" name="interview_type" value="technical" class="form-check-input" id="technical" @if(sizeof(Auth::user()->hasUserQualification) == 0) disabled @endif>
-                                            <label class="form-check-label" for="technical">
-                                                Technical
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-check">
-                                            <input type="radio" name="interview_type" value="specialized" class="form-check-input" id="spacialized" @if(sizeof(Auth::user()->hasUserQualification) == 0) disabled @endif>
-                                            <label class="form-check-label" for="spacialized">
-                                                Specialized
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <span style="color: red">{{ $errors->first('interview_type') }}</span>
-                                    </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Parent Interview Type</label>
+                                    <select name="parent_id" id="parent-interview-type" class="form-control parent-interview-type">
+                                        <option value="" selected>Select parent interview type</option>
+                                        @foreach ($parent_interview_types as $interview_type)
+                                            <option value="{{ $interview_type->id }}">{{ $interview_type->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                <!-- date -->
-                                <div class="mt-3">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Child Interview Type</label>
+                                    <select name="child_interview_type_id" id="child_interview_type_id" class="form-control"></select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="">Date</label>
                                     <input type="text" class="form-control datepicker" name="date" value="{{ date('d/m/Y') }}" id="current-date">
                                 </div>
                             </div>
@@ -73,131 +56,31 @@
 
                 <!-- Booking interview -->
                 <main class="container-fluid pt-5">
-                    <div class="col-md-12 well bg-white avilable-slots" ng-hide="showSpecialForm" aria-hidden="false">
-                        <div class="row m-l-none">
-                            <b>
-                                <center>
-                                <span ng-show="isError" class="text-danger ng-binding ng-hide" aria-hidden="true"></span>
-                                </center>
-                            </b>
-                        </div>
-                        <span class="side-heading-font">
-                            Available Slots <span style="font-size:12px !important;font-weight:400 !important;color:inherit; ">&nbsp;&nbsp;<small>(All time slots listed are in IST)</small></span>
-                        </span>
-                        <div class="col-md-12 text-right">
-                            <span class="prev-day next-btn" >< Previous Day</span>
-                            &nbsp;&nbsp;&nbsp;
-                            <span class="next-day next-btn" >Next Day ></span>
-                        </div>
-                        <!-- iterate here -->
-                        <div class="card-block p-0 ">
-                            <div class="col-md-12 block-rows next-slots">
-                                <div class="row" id="slotsInDate">
-                                    <div class="col-md-2 available-date ng-binding" id="slotDate">
-                                        <span id="first_date">{{ date('d M Y') }}</span>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <div class="row parent">
-                                            @php
-                                            $date = date('Y-m-d');
-                                            $day = date("D", strtotime($date));
-                                            @endphp
-                                            @if(sizeof($slots)>0)
-                                                @if($day == 'Sat' || $day == 'Sun')
-                                                    @foreach ($slots['weekends_slots'] as $weekend_slot)
-                                                        <div class="col-sm-2">
-                                                            <article class="feature1 slot">
-                                                                <input type="radio" name="booked_slots[{{ $weekend_slot['interviewer_id'] }}]" value="{{ $weekend_slot['slot'] }}" id="feature1"/>
-                                                                <span>{{ $weekend_slot['slot'] }}</span>
-                                                            </article>
-                                                        </div>
-                                                    @endforeach
-                                                @else
-                                                    @foreach ($slots['weekdays_slots'] as $weekday_slot)
-                                                        <div class="col-sm-2">
-                                                            <article class="feature1 slot">
-                                                                <input type="radio" name="booked_slots[{{ $weekday_slot['interviewer_id'] }}]" value="{{ $weekday_slot['slot'] }}" id="feature1"/>
-                                                                <span>{{ $weekday_slot['slot'] }}</span>
-                                                            </article>
-                                                        </div>
-                                                    @endforeach
-                                                @endif
-                                            @else 
-                                                Not available slot
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr />
-                                <div class="row" id="slotsInDate">
-                                    <div class="col-md-2 available-date ng-binding" id="slotDate">
-                                        <span id="second_date">{{ date('d M Y', strtotime("+1 day")) }}</span>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <div class="row parent">
-                                            @php
-                                            $date = date('Y-m-d', strtotime("+1 day"));
-                                            $day = date("D", strtotime($date));
-                                            @endphp
-                                            @if(sizeof($next_slots)>0)
-                                                @if($day == 'Sat' || $day == 'Sun')
-                                                    @foreach ($next_slots['weekends_slots'] as $weekend_slot)
-                                                        <div class="col-sm-2">
-                                                            <article class="feature1 slot">
-                                                                <input type="radio" name="booked_slots[{{ $weekend_slot['interviewer_id'] }}]" value="{{ $weekend_slot['slot'] }}" id="feature1"/>
-                                                                <span>{{ $weekend_slot['slot'] }}</span>
-                                                            </article>
-                                                        </div>
-                                                    @endforeach
-                                                @else
-                                                    @foreach ($next_slots['weekdays_slots'] as $weekday_slot)
-                                                        <div class="col-sm-2">
-                                                            <article class="feature1 slot">
-                                                                <input type="radio" name="booked_slots[{{ $weekday_slot['interviewer_id'] }}]" value="{{ $weekday_slot['slot'] }}" id="feature1"/>
-                                                                <span>{{ $weekday_slot['slot'] }}</span>
-                                                            </article>
-                                                        </div>
-                                                    @endforeach
-                                                @endif
-                                            @else 
-                                                Not available slot
-                                            @endif
-                                        </div>
-                                    </div>
+                    <span class="side-heading-font">
+                        Available Interviewer <span style="font-size:12px !important;font-weight:400 !important;color:inherit; ">&nbsp;&nbsp;<small>(All time slots listed are in IST)</small></span>
+                    </span>
+
+                    <span id="interviewers"></span>
+
+                    <div class="row pt-4">
+                        <div class="col-md-3">
+                            <div class="card" style="width: 18rem;">
+                                <img src="https://picsum.photos/200/300" class="card-img-top" alt="..." style="height: 200px">
+                                <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
                                 </div>
                             </div>
-                            <hr />
-                            <div class="row py-3 ml-2">
-                                @foreach ($booking_types as $booking_type)
-                                    <input type="hidden" name="booking_type" value="standard-booking">
-                                    <div class="col-md-4">
-                                        <div class="row">
-                                            <div class="col-md-1">
-                                                <div class="priority_circle" style="background: {{ $booking_type->color }}"></div>
-                                            </div>
-                                            @if($booking_type->title=='Tentative Booking')
-                                                <div class="col-md-7">
-                                            @else
-                                                <div class="col-md-10">
-                                            @endif
-                                                <strong>
-                                                    <span class="ml-3">
-                                                        {{ $booking_type->title }}
-                                                        @if($booking_type->title!='Tentative Booking')
-                                                            : {{ $booking_type->credits }} Credits
-                                                        @endif
-                                                    </span>
-                                                </strong>
-                                            </div>
-                                            @if($booking_type->title=='Tentative Booking')
-                                                <div class="col-sm-1">
-                                                    <button type="submit" class="blue-btn-small">Continue</button>
-                                                </div>
-                                            @endif
-                                            <div class="clearfix"></div>
-                                        </div>
-                                    </div>
-                                @endforeach
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card" style="width: 18rem;">
+                                <img src="https://picsum.photos/200/300" class="card-img-top" alt="..." style="height: 200px">
+                                <div class="card-body">
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -209,58 +92,58 @@
 
 @push('js')
     <script>
-        $(document).on('click', '.slot', function(){
-            if($(this).hasClass('active')){
-                $(this).removeClass('active');
-            }else{
-                $(this).addClass('active');
+         $("#current-date").datepicker({
+            onSelect: function(dateText) {
+                // console.log("Selected date: " + dateText + "; input's current value: " + this.value);
+                // alert(dateText);
+                var parent_id = $('#parent-interview-type').val();
+                var child_id = $('#child_interview_type_id').val();
+                if(parent_id != '' && child_id != ''){
+                    $.ajax({
+                        url : "{{ route('get-interviewers') }}",
+                        data : {'parent_id' : parent_id, 'child_id' : child_id},
+                        success : function(response){
+                            console.log(response);
+                            /* var html = '<option value="" selected>Select child interview type</option>';
+                            $.each(response.child_interview_types , function(index, val) { 
+                            html += '<option value="'+val.id+'">'+val.name+'</option>';
+                            });
+
+                            $('#child_interview_type_id').html(html); */
+                        }
+                    });
+                }
             }
         });
-        $(document).on('click', '.slot', function(){
-            $('.parent').find('.slot-selected').removeClass("slot-selected")
-            if($(this).hasClass('slot-selected')){
-                $(this).removeClass('slot-selected');
-            }else{
-                $(this).addClass('slot-selected');
-            }
-        });
 
-        var date = $('.datepicker').datepicker({ dateFormat: 'dd-mm-yy' }).val();
-        $('.next-day').on("click", function () {
-            var type = 'plus';
-            var date = $('.datepicker').datepicker('getDate');
-            date.setTime(date.getTime() + (1000*60*60*24))
-            $('.datepicker').datepicker("setDate", date);
-
-            var current_date = $('#current-date').val();
-
+        $(document).on('change', '.parent-interview-type', function(){
+            var parent_id = $(this).val();
             $.ajax({
-                url : "{{ route('next_pre_date') }}",
-                type : 'GET',
-                data: {current_date:current_date, type:type},
+                url : "{{ route('get-child-interview-types') }}",
+                data : {'parent_id' : parent_id},
                 success : function(response){
-                    $('.next-slots').html(response);
+                    var html = '<option value="" selected>Select child interview type</option>';
+                    $.each(response.child_interview_types , function(index, val) { 
+                       html += '<option value="'+val.id+'">'+val.name+'</option>';
+                    });
+
+                    $('#child_interview_type_id').html(html);
                 }
             });
         });
 
-        $('.prev-day').on("click", function () {
-            var type = 'minus';
-            var date = $('.datepicker').datepicker('getDate');
-            date.setTime(date.getTime() - (1000*60*60*24))
-            $('.datepicker').datepicker("setDate", date);
-
-            var current_date = $('#current-date').val();
-
-            $.ajax({
-                url : "{{ route('next_pre_date') }}",
-                type : 'GET',
-                data: {current_date:current_date, type:type},
-                success : function(response){
-                    console.log(response);
-                    $('.next-slots').html(response);
-                }
-            });
+        var dateToday = new Date();
+        var dates = $("#current-date").datepicker({
+            defaultDate: "+2d",
+            changeMonth: true,
+            numberOfMonths: 1,
+            minDate: "+2d",
+            onSelect: function(selectedDate) {
+                var option = this.id == "current-date" ? "minDate" : "maxDate",
+                    instance = $(this).data("datepicker"),
+                    date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+                dates.not(this).datepicker("option", option, date);
+            }
         });
     </script>
 @endpush
