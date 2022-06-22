@@ -613,7 +613,7 @@ class WebController extends Controller
     public function getChildInterviewTypes(Request $request)
     {
         $child_interview_types = InterviewType::where('parent_id', $request->parent_id)->get();
-        return response()->json(['child_interview_types' => $child_interview_types]);
+        return response()->json(['child_interview_types' => $child_interview_types, 'parent_id' => $request->parent_id]);
     }
 
     public function getInterviewers(Request $request)

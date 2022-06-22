@@ -22,7 +22,7 @@ class InterviewerController extends Controller
     {
         $this->authorize('schedule interview-list', User::class);
         $page_title = 'Schedule Interview - '.Auth::user()->roles->pluck('name')[0];
-        $parent_interview_types = InterviewType::where('status', 1)->where('parent_id', null)->get();
+        $parent_interview_types = InterviewType::where('status', 1)->where('parent_id', null)->get(['id', 'name']);
         return view('web-views.interviewer.schedule-interview', compact('page_title', 'parent_interview_types'));
     }
     public function resources(Request $request)

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\AvailableSlotDate;
 use App\Models\AvailableSlot;
 use App\Models\PageSetting;
+use App\Models\InterviewerInterviewType;
 use Auth;
 use DateTime;
 
@@ -18,12 +19,22 @@ class AvailableSlotDateController extends Controller
         $validator = $request->validate([
             'start_date' => 'required',
             'end_date' => 'required',
-            'parent_id' => 'required',
+            'parent_ids' => 'required',
+            'parent_ids.*' => 'required',
         ]);
 
-        /* if(empty($request->hr_type) && empty($request->technical_type)){
-            return redirect()->back()->with('error', 'Select interview type hr or technical!');
-        } */
+        if(empty($request->mornings) && empty($request->evenings)){
+            $rules = ([
+                'mornings' => 'required',
+                'mornings.*' => 'required',
+            ]);
+
+            $messages = ([
+                'required' => 'Select at least one slot to schedule.',
+            ]);
+
+            $this->validate($request, $rules, $messages);
+        }
 
         if(sizeof($request->mornings)==0 && sizeof($request->evenings) == 0){
             return redirect()->back()->with('error', 'Choose slot.!');
@@ -39,6 +50,16 @@ class AvailableSlotDateController extends Controller
             ]);
 
             if($model){
+                foreach($request->child_interview_types as $parent_id=>$interview_type){
+                    foreach($interview_type as $child_type_id){
+                        InterviewerInterviewType::create([
+                            'interviewer_id' => Auth::user()->id,
+                            'parent_interview_type_id' => $parent_id,
+                            'child__interview_type_id' => $child_type_id,
+                        ]);
+                    }
+                }
+
                 foreach($request->mornings as $morning){
                     if(!empty($morning)){
                         AvailableSlot::create([
@@ -48,6 +69,7 @@ class AvailableSlotDateController extends Controller
                         ]);
                     }
                 }
+
                 foreach($request->evenings as $evening){
                     if(!empty($evening)){
                         AvailableSlot::create([

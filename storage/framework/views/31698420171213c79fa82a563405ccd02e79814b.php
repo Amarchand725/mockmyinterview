@@ -1,15 +1,15 @@
-@extends('web-views.dashboard.master.app')
 
-@section('title', $page_title)
 
-@push('css')
+<?php $__env->startSection('title', $page_title); ?>
+
+<?php $__env->startPush('css'); ?>
     
-@endpush
+<?php $__env->stopPush(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="container-fluid py-3 ">
         <div class="row mx-auto">
-            <h2 class="mb-3">{{ $page_title }}</h2>
+            <h2 class="mb-3"><?php echo e($page_title); ?></h2>
             <div class="col-md-12  email_verificaion_box ">
                 <div class="row side-heading-font">
                     <span class="col-md-12">Check Your System Date and Time</span>
@@ -20,8 +20,8 @@
                     </div>
                 </div>
             </div>
-            <form action="{{ route('book_interview.store') }}" method="post">
-                @csrf
+            <form action="<?php echo e(route('book_interview.store')); ?>" method="post">
+                <?php echo csrf_field(); ?>
 
                 <div class="col-md-12 well py-3">
                     <div class="bg-white ">
@@ -30,7 +30,7 @@
                             <div class="col-md-5">
                                 <div class="form-group">
                                     <label for="">Date</label>
-                                    <input type="text" class="form-control datepicker" name="date" value="{{ date('d/m/Y') }}" id="current-date">
+                                    <input type="text" class="form-control datepicker" name="date" value="<?php echo e(date('d/m/Y')); ?>" id="current-date">
                                 </div>
                             </div>
                             <div class="col-md-5"></div>
@@ -39,9 +39,9 @@
                                     <label for="">Parent Interview Type</label>
                                     <select name="parent_id" id="parent-interview-type" class="form-control parent-interview-type">
                                         <option value="" selected>Select parent interview type</option>
-                                        @foreach ($parent_interview_types as $interview_type)
-                                            <option value="{{ $interview_type->id }}">{{ $interview_type->name }}</option>
-                                        @endforeach
+                                        <?php $__currentLoopData = $parent_interview_types; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $interview_type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($interview_type->id); ?>"><?php echo e($interview_type->name); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
                             </div>
@@ -89,9 +89,9 @@
             </form>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('js')
+<?php $__env->startPush('js'); ?>
     <script>
          $("#current-date").datepicker({
             onSelect: function(dateText) {
@@ -101,7 +101,7 @@
                 var child_id = $('#child_interview_type_id').val();
                 if(parent_id != '' && child_id != ''){
                     $.ajax({
-                        url : "{{ route('get-interviewers') }}",
+                        url : "<?php echo e(route('get-interviewers')); ?>",
                         data : {'parent_id' : parent_id, 'child_id' : child_id},
                         success : function(response){
                             console.log(response);
@@ -120,7 +120,7 @@
         $(document).on('change', '.parent-interview-type', function(){
             var parent_id = $(this).val();
             $.ajax({
-                url : "{{ route('get-child-interview-types') }}",
+                url : "<?php echo e(route('get-child-interview-types')); ?>",
                 data : {'parent_id' : parent_id},
                 success : function(response){
                     var html = '<option value="" selected>Select child interview type</option>';
@@ -147,4 +147,6 @@
             }
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('web-views.dashboard.master.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/web-views/interviews/create.blade.php ENDPATH**/ ?>

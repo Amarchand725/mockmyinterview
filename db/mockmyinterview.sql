@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 20, 2022 at 05:39 PM
+-- Generation Time: Jun 22, 2022 at 05:19 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.4.22
 
@@ -82,7 +82,9 @@ INSERT INTO `available_slots` (`id`, `available_date_id`, `shift`, `slot`, `crea
 (7, 2, 'evening', '20:30', '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
 (8, 2, 'evening', '21:30', '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
 (9, 2, 'evening', '22:00', '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
-(10, 2, 'evening', '22:30', '2022-06-20 08:14:18', '2022-06-20 08:14:18');
+(10, 2, 'evening', '22:30', '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
+(11, 4, 'morning', '12:00', '2022-06-22 10:13:17', '2022-06-22 10:13:17'),
+(12, 4, 'evening', '17:00', '2022-06-22 10:13:17', '2022-06-22 10:13:17');
 
 -- --------------------------------------------------------
 
@@ -108,7 +110,9 @@ CREATE TABLE `available_slot_dates` (
 --
 
 INSERT INTO `available_slot_dates` (`id`, `interviewer_id`, `interview_type`, `slot_type`, `start_date`, `end_date`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(2, 7, 5, 'weekdays', '2022-06-22', '2022-06-25', 0, NULL, '2022-06-20 08:14:18', '2022-06-20 08:14:18');
+(2, 7, 5, 'weekdays', '2022-06-22', '2022-06-25', 0, NULL, '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
+(3, 7, NULL, 'weekdays', '2022-06-18', '2022-06-20', 0, NULL, '2022-06-22 10:12:34', '2022-06-22 10:12:34'),
+(4, 7, NULL, 'weekdays', '2022-06-18', '2022-06-20', 0, NULL, '2022-06-22 10:13:17', '2022-06-22 10:13:17');
 
 -- --------------------------------------------------------
 
@@ -510,6 +514,29 @@ INSERT INTO `how_works` (`id`, `created_by`, `title`, `slug`, `description`, `st
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `interviewer_interview_types`
+--
+
+CREATE TABLE `interviewer_interview_types` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `interviewer_id` bigint(20) NOT NULL,
+  `parent_interview_type_id` bigint(20) NOT NULL,
+  `child__interview_type_id` bigint(20) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `interviewer_interview_types`
+--
+
+INSERT INTO `interviewer_interview_types` (`id`, `interviewer_id`, `parent_interview_type_id`, `child__interview_type_id`, `created_at`, `updated_at`) VALUES
+(1, 7, 1, 5, '2022-06-22 10:13:17', '2022-06-22 10:13:17'),
+(2, 7, 1, 6, '2022-06-22 10:13:17', '2022-06-22 10:13:17');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `interviewer_wallets`
 --
 
@@ -769,7 +796,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (127, '2022_06_20_082505_create_interview_categories_table', 81),
 (130, '2022_04_07_072048_create_interview_types_table', 82),
 (131, '2022_04_05_101251_create_available_slot_dates_table', 83),
-(133, '2022_04_05_101315_create_available_slots_table', 84);
+(133, '2022_04_05_101315_create_available_slots_table', 84),
+(135, '2022_06_22_143536_create_interviewer_interview_types_table', 85);
 
 -- --------------------------------------------------------
 
@@ -2171,6 +2199,12 @@ ALTER TABLE `how_works`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `interviewer_interview_types`
+--
+ALTER TABLE `interviewer_interview_types`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `interviewer_wallets`
 --
 ALTER TABLE `interviewer_wallets`
@@ -2432,13 +2466,13 @@ ALTER TABLE `advantage_mocks`
 -- AUTO_INCREMENT for table `available_slots`
 --
 ALTER TABLE `available_slots`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `available_slot_dates`
 --
 ALTER TABLE `available_slot_dates`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `blogs`
@@ -2525,6 +2559,12 @@ ALTER TABLE `how_works`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT for table `interviewer_interview_types`
+--
+ALTER TABLE `interviewer_interview_types`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `interviewer_wallets`
 --
 ALTER TABLE `interviewer_wallets`
@@ -2570,7 +2610,7 @@ ALTER TABLE `logs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=136;
 
 --
 -- AUTO_INCREMENT for table `notifications`

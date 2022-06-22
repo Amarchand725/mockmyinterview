@@ -1,8 +1,8 @@
-@extends('web-views.dashboard.master.app')
 
-@section('title', $page_title)
-@push('css')
-    <link href="{{ asset('public/css/calendar/main.min.css') }}" rel="stylesheet" />
+
+<?php $__env->startSection('title', $page_title); ?>
+<?php $__env->startPush('css'); ?>
+    <link href="<?php echo e(asset('public/css/calendar/main.min.css')); ?>" rel="stylesheet" />
 
     <style>
         .slot{
@@ -31,43 +31,43 @@
             border-color: #050505f2;
         }
     </style>
-@endpush
-@section('content')
+<?php $__env->stopPush(); ?>
+<?php $__env->startSection('content'); ?>
     <div class="container-fluid py-3 ">
         <h2 class="mb-3 text-center">Interview Scheduler </h2>
         <div class="py-3">
-            <form action="{{ route('available_slot.store') }}" method="post" id="subform">
-                @csrf
+            <form action="<?php echo e(route('available_slot.store')); ?>" method="post" id="subform">
+                <?php echo csrf_field(); ?>
 
                 <div class="row mx-auto custome" style="border: 2px solid #eee;">
                     <div class="row">
                         <div class="col-md-5">
                             <div class="form-group float-label-control">
                                 <label for="start-date">Start Date</label>
-                                <input type="text" name="start_date" class="form-control datepicker" id="start-date" value="{{ old('start_date') }}" placeholder="Start Date">
-                                <span style="color: red">{{ $errors->first('start_date') }}</span>
+                                <input type="text" name="start_date" class="form-control datepicker" id="start-date" value="<?php echo e(old('start_date')); ?>" placeholder="Start Date">
+                                <span style="color: red"><?php echo e($errors->first('start_date')); ?></span>
                             </div>
                         </div>
                         <div class="col-md-5">
                             <div class="form-group float-label-control">
                                 <label for="end-date">End Date</label>
-                                <input type="text" name="end_date" class="form-control datepicker" id="end-date" value="{{ old('end_date') }}" placeholder="End Date">
-                                <span style="color: red">{{ $errors->first('end_date') }}</span>
+                                <input type="text" name="end_date" class="form-control datepicker" id="end-date" value="<?php echo e(old('end_date')); ?>" placeholder="End Date">
+                                <span style="color: red"><?php echo e($errors->first('end_date')); ?></span>
                             </div>
                         </div>
                     </div>
 
                     <div class="row custome-interview-types">
                         <div class="col-md-5">
-                            <input type="hidden" id="parent-types" data-parent-types="{{ json_encode($parent_interview_types) }}">
+                            <input type="hidden" id="parent-types" data-parent-types="<?php echo e(json_encode($parent_interview_types)); ?>">
                             <label for="start-date">Parent Interview Type</label>
                             <select name="parent_ids[]" id="" class="form-control parent-type">
                                 <option value="" disabled selected>Select parent</option>
-                                @foreach ($parent_interview_types as $type)
-                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                @endforeach
+                                <?php $__currentLoopData = $parent_interview_types; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($type->id); ?>"><?php echo e($type->name); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
-                            <span style="color: red">{{ $errors->first('parent_ids') }}</span>
+                            <span style="color: red"><?php echo e($errors->first('parent_ids')); ?></span>
                         </div>
                         
                         <div class="col-md-5">
@@ -75,7 +75,7 @@
                                 <label for="start-date">Child Interview Type</label>
                                 <span id="child-types">
                                     <select name="child_interview_types" multiple id="child_interview_type_id" class="form-control"></select>
-                                    <span style="color: red">{{ $errors->first('child_interview_types') }}</span>
+                                    <span style="color: red"><?php echo e($errors->first('child_interview_types')); ?></span>
                                 </span>
                             </div>
                         </div>
@@ -115,7 +115,7 @@
                                         Weekands(+)
                                     </button>
                                 </div>
-                                <span style="color: red">{{ $errors->first('mornings') }}</span>
+                                <span style="color: red"><?php echo e($errors->first('mornings')); ?></span>
                             </div>
                         </div>
                     </center>
@@ -141,12 +141,12 @@
             </form>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('js')
-    <script src="{{ asset('public/js/calendar/main.min.js') }}"></script>
-    <script src="{{ asset('public/js/calendar/main.js') }}"></script>
-    <script src="{{ asset('public/js/calendar/interaction/main.js') }}"></script>
+<?php $__env->startPush('js'); ?>
+    <script src="<?php echo e(asset('public/js/calendar/main.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('public/js/calendar/main.js')); ?>"></script>
+    <script src="<?php echo e(asset('public/js/calendar/interaction/main.js')); ?>"></script>
     <script>
         $(document).on('click', '.add-more-types-btn', function(){
             var selected=[];
@@ -169,7 +169,7 @@
                                         }
                                     });
                                 html += '</select>'+
-                                '<span style="color: red">{{ $errors->first("parent_id") }}</span>'+
+                                '<span style="color: red"><?php echo e($errors->first("parent_id")); ?></span>'+
                             '</div>'+
                             
                             '<div class="col-md-5">'+
@@ -192,7 +192,7 @@
             var parent_id = $(this).val();
             var current = $(this);
             $.ajax({
-                url : "{{ route('get-child-interview-types') }}",
+                url : "<?php echo e(route('get-child-interview-types')); ?>",
                 data : {'parent_id' : parent_id},
                 success : function(response){
                     var html = '<select name="child_interview_types['+response.parent_id+'][]" multiple id="child_interview_type_id" class="form-control">'+
@@ -236,7 +236,7 @@
                 }
                 
                 $.ajax({
-                    url : "{{ route('get-slots') }}",
+                    url : "<?php echo e(route('get-slots')); ?>",
                     data : {'slot_type' : slot_type},
                     success : function(response){
                         $('.slot-days').html(response);
@@ -264,7 +264,7 @@
                 }
 
                 $.ajax({
-                    url : "{{ route('get-slots') }}",
+                    url : "<?php echo e(route('get-slots')); ?>",
                     data : {'slot_type' : slot_type},
                     success : function(response){
                         $('.slot-days').html(response);
@@ -280,7 +280,7 @@
                     }
 
                     $.ajax({
-                        url : "{{ route('get-slots') }}",
+                        url : "<?php echo e(route('get-slots')); ?>",
                         data : {'slot_type' : slot_type},
                         success : function(response){
                             $('.slot-days').html(response);
@@ -367,4 +367,5 @@
             calendar.render();
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('web-views.dashboard.master.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/web-views/interviewer/schedule-interview.blade.php ENDPATH**/ ?>
