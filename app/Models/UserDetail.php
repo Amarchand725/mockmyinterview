@@ -9,4 +9,9 @@ class UserDetail extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function hasLanguage()
+    {
+        return $this->hasOne(Language::class, 'slug', 'language_slug');
+    }
 }

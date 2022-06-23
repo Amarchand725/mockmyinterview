@@ -29,8 +29,10 @@ use App\Models\InvitedUser;
 use App\Models\Wallet;
 use App\Models\Referral;
 use App\Models\InterviewType;
+use App\Models\AvailableSlotDate;
 use Auth;
 use Hash;
+use DB;
 
 class WebController extends Controller
 {
@@ -618,6 +620,37 @@ class WebController extends Controller
 
     public function getInterviewers(Request $request)
     {
+        $models = DB::table('available_slot_dates')
+        ->selectRaw('users.*')
+        ->join('users', 'users.id', '=', 'available_slot_dates.interviewer_id')
+        ->join('interviewer_interview_types', 'available_slot_dates.interviewer_id', '=', 'interviewer_interview_types.interviewer_id')
+        ->where('available_slot_dates.start_date', '<=', $request->date)
+        ->where('available_slot_dates.end_date', '>=', $request->date)
+        ->where('interviewer_interview_types.parent_interview_type_id', $request->parent_interview_type)
+        ->where('interviewer_interview_types.child__interview_type_id', $request->child_interview_type)
+        ->get();
+
+        return (string) view('web-views.candidate.interviewer-cards', compact('models'));
+    }
+
+    public function getInterviewerDetails(Request $request)
+    {
         // return $request;
+        $date = $request->date;
+        $parent_interview_type_id = $request->parent_interview_type;
+        $child_interview_type_id = $request->child_interview_type;
+        $model = User::where('id', $request->user_id)->first();
+        $slots = DB::table('available_slot_dates')
+        ->selectRaw('users.id as user_id, available_slots.id, available_slots.shift, available_slots.slot')
+        ->join('users', 'users.id', '=', 'available_slot_dates.interviewer_id')
+        ->join('interviewer_interview_types', 'available_slot_dates.interviewer_id', '=', 'interviewer_interview_types.interviewer_id')
+        ->join('available_slots', 'available_slot_dates.id', '=', 'available_slots.available_date_id')
+        ->where('available_slot_dates.start_date', '<=', $request->date)
+        ->where('available_slot_dates.end_date', '>=', $request->date)
+        ->where('interviewer_interview_types.parent_interview_type_id', $request->parent_interview_type)
+        ->where('interviewer_interview_types.child__interview_type_id', $request->child_interview_type)
+        ->get();
+
+        return (string) view('web-views.candidate.interviewer-details', compact('model', 'slots', 'date', 'parent_interview_type_id', 'child_interview_type_id'));
     }
 }

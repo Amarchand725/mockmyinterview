@@ -30,7 +30,7 @@
                             <div class="col-md-5">
                                 <div class="form-group">
                                     <label for="">Date</label>
-                                    <input type="text" class="form-control datepicker" name="date" value="{{ date('d/m/Y') }}" id="current-date">
+                                    <input type="text" class="form-control datepicker" name="date" value="{{ date('Y/m/d') }}" id="current-date">
                                 </div>
                             </div>
                             <div class="col-md-5"></div>
@@ -51,6 +51,9 @@
                                     <select name="child_interview_type_id" id="child_interview_type_id" class="form-control"></select>
                                 </div>
                             </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-info search-btn" style="margin-top: 30px"><i class="fa fa-search"></i> Search</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -60,40 +63,94 @@
                     <span class="side-heading-font">
                         Available Interviewer <span style="font-size:12px !important;font-weight:400 !important;color:inherit; ">&nbsp;&nbsp;<small>(All time slots listed are in IST)</small></span>
                     </span>
-
                     <span id="interviewers"></span>
-
-                    <div class="row pt-4">
-                        <div class="col-md-3">
-                            <div class="card" style="width: 18rem;">
-                                <img src="https://picsum.photos/200/300" class="card-img-top" alt="..." style="height: 200px">
-                                <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="card" style="width: 18rem;">
-                                <img src="https://picsum.photos/200/300" class="card-img-top" alt="..." style="height: 200px">
-                                <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </main>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="interviewer-details" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fa fa-user"></i> Interviewer Details</h5>
+                </div>
+                <form action="{{ route('book_interview.store') }}" method="post">
+                    @csrf
+
+                    <div class="modal-body">
+                    ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-info">Book Slot</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 @endsection
 
 @push('js')
     <script>
-         $("#current-date").datepicker({
+        $(document).on('change', '#custom-slot', function() {
+
+            var id = $(this).val(); // this gives me null
+            if (id != null) {
+            alert(id)
+            }
+
+        });
+
+        $(document).on('click', '.more-info-btn', function(){
+            var user_id = $(this).attr('data-user-id');
+            var date = $('#current-date').val();
+            var parent_interview_type = $('#parent-interview-type').val();
+            var child_interview_type = $('#child_interview_type_id').val();
+            $.ajax({
+                url : "{{ route('get-interviewer-details') }}",
+                data : {'user_id' : user_id, 'date' : date, 'parent_interview_type' : parent_interview_type, 'child_interview_type' : child_interview_type},
+                success : function(response){
+                    console.log(response);
+                    $('.modal-body').html(response);
+                }
+            });
+            $('#interviewer-details').modal('show');
+        });
+
+        $(document).on('click', '.search-btn', function(){
+            var date = $('#current-date').val();
+            var parent_interview_type = $('#parent-interview-type').val();
+            var child_interview_type = $('#child_interview_type_id').val();
+            $.ajax({
+                url : "{{ route('get-interviewers') }}",
+                data : {'date' : date, 'parent_interview_type':parent_interview_type, 'child_interview_type':child_interview_type},
+                success : function(response){
+                    $('#interviewers').html(response);
+                }
+            });
+        });
+
+        $(document).on('click', '.slot', function(){
+            if($(this).hasClass('active')){
+                $(this).removeClass('active');
+            }else{
+                $(this).addClass('active');
+            }
+        });
+        $(document).on('click', '.slot', function(){
+            $('.parent').find('.slot-selected').removeClass("slot-selected")
+            if($(this).hasClass('slot-selected')){
+                $(this).removeClass('slot-selected');
+            }else{
+                $(this).addClass('slot-selected');
+            }
+        });
+
+        $( "#current-date" ).datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+        $("#current-date").datepicker({
             onSelect: function(dateText) {
                 // console.log("Selected date: " + dateText + "; input's current value: " + this.value);
                 // alert(dateText);

@@ -46,6 +46,7 @@ Route::post('my_profile/password', 'WebController@password')->name('my_profile.p
 
 Route::get('get-child-interview-types', 'WebController@getChildInterviewTypes')->name('get-child-interview-types');
 Route::get('get-interviewers', 'WebController@getInterviewers')->name('get-interviewers');
+Route::get('get-interviewer-details', 'WebController@getInterviewerDetails')->name('get-interviewer-details');
 
 //change email with verify
 Route::post('send_email', 'WebController@sendEmail')->name('send_email');

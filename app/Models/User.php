@@ -72,4 +72,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(Project::class, 'user_id', 'id');
     }
+    public function hasInterviewTypes()
+    {
+        return $this->hasMany(InterviewerInterviewType::class, 'interviewer_id', 'id');
+    }
 }
