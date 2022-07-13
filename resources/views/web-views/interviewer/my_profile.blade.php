@@ -1,7 +1,35 @@
 @extends('web-views.dashboard.master.app')
 
 @section('title', $page_title)
-
+@push('css')
+    <style>
+        .slot{
+            border: none;
+            font-style: inherit;
+            font-variant: inherit;
+            font-stretch: inherit;
+            line-height: inherit;
+            font-size: 16px;
+            font-family: "Open Sans";
+            cursor: pointer;
+            border: 2px solid;
+            border-radius: 15px;
+            padding: 5px 17px;
+            border-color: #050505f2;
+            background: #847e7e;
+            color: white;
+        }
+        .slot-selected{
+            color: #fff!important;
+            border-radius: 4px;
+            background: #008739!important;
+            border: 2px solid;
+            border-radius: 15px;
+            padding: 5px 17px;
+            border-color: #050505f2;
+        }
+    </style>
+@endpush
 @section('content')
     <div class="container py-3 ">
         <div class="row mx-auto">
@@ -18,19 +46,10 @@
                         <li><a href="#tab02">Qualifications</a></li>
                         <li><a href="#tab03">Experience</a></li>
                         <li><a href="#tab04">Resume Upload</a></li>
-                        <li><a href="#tab05">Interview prefrence</a></li>
-                        <li><a href="#tab06">Change Password</a></li>
+                        <li><a href="#tab05">Change Password</a></li>
+                        <li><a href="#tab06">Interview Types</a></li>
+                        <li><a href="#tab07">Schedule Interview</a></li>
                     </ul>
-                </div>
-                <div class="tab-select-outer">
-                    <select id="tab-select">
-                    <option value="#tab01">Personal Details</option>
-                    <option value="#tab02">Qualifications</option>
-                    <option value="#tab03">Experience</option>
-                    <option value="#tab04">Resume Upload</option>
-                    <option value="#tab05">Interview prefrence</option>
-                    <option value="#tab06">Change Password</option>
-                    </select>
                 </div>
 
                 <!-- Personl Details -->
@@ -375,49 +394,8 @@
                     </form>
                 </div>
 
-                <!-- Interview Type -->
-                <div id="tab05" class="tab-contents">
-                    <form action="{{ route('my_profile.interview') }}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-check">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="div">
-                                        <label for="interview">
-                                            Interview type
-                                        </label>
-                                    </div>
-                                    @if(isset(Auth::user()->hasResume) && Auth::user()->hasResume->technical==1)
-                                        <input class="form-check-input" type="checkbox" name="technical" value="1" checked id="technical">
-                                    @else 
-                                        <input class="form-check-input" type="checkbox" name="technical" value="1" id="technical">
-                                    @endif
-                                    <label class="form-check-label" for="technical">
-                                        Technical
-                                    </label>
-                                    <div class="mt-3">
-                                        @if(isset(Auth::user()->hasResume) && Auth::user()->hasResume->hr==1)
-                                            <input class="form-check-input" type="checkbox" name="technical" value="1" checked id="technical">
-                                        @else 
-                                            <input class="form-check-input" type="checkbox" name="technical" value="1" id="technical">
-                                        @endif
-                                        <label class="form-check-label" for="hr">
-                                            HR
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-5 mt-3">
-                                        <button type="submit" class="btn btn-info">Save</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
                 <!-- Password Update  -->
-                <div id="tab06" class="tab-contents">
+                <div id="tab05" class="tab-contents">
                     <form action="{{ route('my_profile.password') }}" method="post">
                         @csrf
                         <div class="form-group float-label-control">
@@ -442,11 +420,334 @@
                         </div>
                     </form>
                 </div>
+
+                <!-- Interview Type -->
+                <div id="tab06" class="tab-contents">
+                    <form action="{{ route('my_profile.interview') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row mx-auto custome" style="border: 2px solid #eee;">
+                            <div class="row custome-interview-types">
+                                <div class="col-md-5">
+                                    <input type="hidden" id="parent-types" data-parent-types="{{ json_encode($parent_interview_types) }}">
+                                    <label for="start-date">Parent Interview Type</label>
+                                    <select name="parent_ids[]" id="" class="form-control parent-type">
+                                        <option value="" disabled selected>Select parent</option>
+                                        @foreach ($parent_interview_types as $type)
+                                            <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <span style="color: red">{{ $errors->first('parent_ids') }}</span>
+                                </div>
+                                
+                                <div class="col-md-5">
+                                    <div class="form-group float-label-control">
+                                        <label for="start-date">Child Interview Type</label>
+                                        <span id="child-types">
+                                            <select name="child_interview_types" multiple id="child_interview_type_id" class="form-control"></select>
+                                            <span style="color: red">{{ $errors->first('child_interview_types') }}</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-success btn-sm add-more-types-btn" style="margin-top: 35px"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Schedule Interview -->
+                <div id="tab07" class="tab-contents">
+                    <h2 class="mb-3 text-left">Interview Scheduler </h2>
+                    <div class="py-3">
+                        <form action="{{ route('available_slot.store') }}" method="post" id="subform">
+                            @csrf
+            
+                            <div class="row mx-auto" style="border: 2px solid #eee;">
+                                <div class="row">
+                                    <div class="col-sm-6"> 
+                                        <div class="form-group pmd-textfield pmd-textfield-floating-label">
+                                            <label class="control-label" for="datepicker-start">Start Date</label>
+                                            <input type="datetime-local" class="form-control" name="start_date" id="datepicker-start">
+                                            <span style="color: red" id="error-start-date">{{ $errors->first('start_date') }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6"> 
+                                        <div class="form-group pmd-textfield pmd-textfield-floating-label">
+                                            <label class="control-label" for="datepicker-end">End Date</label>
+                                            <input type="datetime-local" class="form-control" name="end_date" id="datepicker-end">
+                                            <span style="color: red" id="error-end-date">{{ $errors->first('end_date') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {{-- <div class="row mx-auto" style="border: 2px solid #eee;">
+                                <div class="col-md-8">
+                                    <div class="row text-md">
+                                        <b>Do you want to Create / Cancel Interview Slots?</b> &nbsp;
+                                    </div>
+                                </div>
+                                <div class="col-md-10">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="sessiontype" id="createBulkInterviews" value="1" checked style="height:20px; width:20px;"> &nbsp;&nbsp;Create
+                                    </label>
+                                </div>
+                                <div class="col-md-10">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="sessiontype" id="cancelBulkInterviews" value="2" style="height:20px; width:20px;">&nbsp;&nbsp;Cancel 
+                                    </label>
+                                </div>
+                            </div> --}}
+                            
+                            <div class="row mx-auto pt-4" style="border: 2px solid #eee;">
+                                <span class="slot-days"></span>
+                            </div>
+            
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="tool-tip">
+                                        <div class="title" style="text-align:left">
+                                            <button type="submit" class="blue-btn-small" id="create-avialable-slot-btn">
+                                                Save
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 @endsection
 @push('js')
+    <script>
+        $(document).on('change', '#datepicker-start', function(){
+            var start_date_time = $(this).val();
+            var end_date_time = $('#datepicker-end').val();
+            if(end_date_time == '' || end_date_time <= start_date_time){
+                $('#error-end-date').html('Please add end date greater than start date.');
+                return false;
+            }else{
+                $('#error-end-date').html('');
+            } 
+            
+            if(start_date_time == '' || start_date_time >= end_date_time){
+                $('#error-start-date').html('Please add start date less than end date.');
+                return false;
+            }else{
+                $('#error-start-date').html('');
+                $.ajax({
+                    url : "{{ route('create-slots') }}",
+                    data : {'start_date_time' : start_date_time, 'end_date_time' : end_date_time},
+                    success : function(response){
+                        console.log(response);
+                    }
+                });
+            } 
+        });
+
+        $(document).on('change', '#datepicker-end', function(){
+            var end_date_time = $(this).val();
+            var start_date_time = $('#datepicker-start').val();
+            if(end_date_time == '' || end_date_time <= start_date_time){
+                $('#error-end-date').html('Please add end date greater than start date.');
+                return false;
+            }else{
+                $('#error-end-date').html('');
+            } 
+            
+            if(start_date_time == '' || start_date_time >= end_date_time){
+                $('#error-start-date').html('Please add start date less than end date.');
+                return false;
+            }else{
+                $('#error-start-date').html('');
+                $.ajax({
+                    url : "{{ route('create-slots') }}",
+                    data : {'start_date_time' : start_date_time, 'end_date_time' : end_date_time},
+                    success : function(response){
+                        console.log(response);
+                    }
+                });
+            }
+        });
+        
+        $(document).on('click', '.add-more-types-btn', function(){
+            var selected=[];
+            $('.parent-type :selected').each(function(){
+                if($(this).val() != 'empty'){
+                    selected[$(this).val()]=$(this).text();
+                }
+            }); 
+
+            var parent_interview_types = $('#parent-types').data('parent-types');
+            var html = '';
+
+                html =  '<div class="row custome-interview-types">'+
+                            '<div class="col-md-5">'+
+                                '<select name="parent_ids[]" id="" class="form-control parent-type">'+
+                                    '<option value="" disabled selected>Select parent</option>';
+                                    jQuery.each(parent_interview_types, function(index, item) {
+                                        if( $.inArray(item.name, selected) == -1 ) {
+                                            html += '<option value="'+item.id+'">'+item.name+'</option>';
+                                        }
+                                    });
+                                html += '</select>'+
+                                '<span style="color: red">{{ $errors->first("parent_id") }}</span>'+
+                            '</div>'+
+                            
+                            '<div class="col-md-5">'+
+                                '<div class="form-group float-label-control">'+
+                                    '<span id="child-types"><select name="child_interview_types" multiple id="child_interview_type_id" class="form-control"></select></span>'+
+                                '</div>'+
+                            '</div>'+
+                            '<div class="col-md-2">'+
+                                '<button type="button" class="btn btn-danger btn-sm remove-custome-btn"><i class="fa fa-times"></i></button>'+
+                            '</div>'+
+                        '</div>';
+            $('.custome').append(html);
+        });
+
+        $(document).on('click', '.remove-custome-btn', function(){
+            $(this).parents('.custome-interview-types').remove();
+        });
+        
+        $(document).on('change', '.parent-type', function(){
+            var parent_id = $(this).val();
+            var current = $(this);
+            $.ajax({
+                url : "{{ route('get-child-interview-types') }}",
+                data : {'parent_id' : parent_id},
+                success : function(response){
+                    var html = '<select name="child_interview_types['+response.parent_id+'][]" multiple id="child_interview_type_id" class="form-control">'+
+                                '<label for="start-date">Child Interview Type</label>'+
+                                '<option value="" selected>Select child interview type</option>';
+                    $.each(response.child_interview_types , function(index, val) { 
+                       html += '<option value="'+val.id+'">'+val.name+'</option>';
+                    });
+                    html += '</select>';
+
+                    current.parents('.custome-interview-types').find('#child-types').html(html);
+                }
+            });
+        });
+
+        $(document).on('click', '.m-slot-btn', function(){
+            var slot = $(this).val();
+            var index = $(this).attr('data-index');
+            $('#slot-m-'+index).val(slot);
+        });
+
+        $(document).on('click', '.e-slot-btn', function(){
+            var slot = $(this).val();
+            var index = $(this).attr('data-index');
+            $('#slot-e-'+index).val(slot);
+        });
+
+        /* $(document).on('click', '.get-slots-btn', function(){
+            var slot_type = $(this).val();
+
+            if(!$(this).hasClass('opened')){
+                $(this).addClass('opened');
+                if(slot_type=='weekdays'){
+                    $(this).text('Weekdays(-)');
+                    $('#weekands_btn_label').text('Weekands(+)');
+                    $('#weekands_btn_label').removeClass('opened');
+                }else{
+                    $(this).text('Weekands(-)');
+                    $('#weekdays_btn_label').text('Weekdays(+)');
+                    $('#weekdays_btn_label').removeClass('opened');
+                }
+                
+                $.ajax({
+                    url : "{{ route('get-slots') }}",
+                    data : {'slot_type' : slot_type},
+                    success : function(response){
+                        $('.slot-days').html(response);
+                    }
+                });
+            }else{
+                $(this).removeClass('opened');
+                $('.slot-days').html('');
+                if(slot_type=='weekdays'){
+                    $(this).text('Weekdays(+)');
+                }else{
+                    $(this).text('Weekands(+)');
+                }
+            }
+        });
+
+        $(document).ready(function() {
+            var slot_type = $('.get-slots-btn').val();
+            if(!$('.get-slots-btn').hasClass('opened')){
+                $('.get-slots-btn').addClass('opened');
+                if(slot_type=='weekdays'){
+                    $('.get-slots-btn').text('Weekdays(-)');
+                }else{
+                    $('.get-slots-btn').text('Weekands(-)');
+                }
+
+                $.ajax({
+                    url : "{{ route('get-slots') }}",
+                    data : {'slot_type' : slot_type},
+                    success : function(response){
+                        $('.slot-days').html(response);
+                    }
+                });
+            }else{
+                $('.slot-days').html('');
+                if($('.get-slots-btn').hasClass('opened')){
+                    if(slot_type=='weekdays'){
+                        $('.opened').text('Weekdays(-)');
+                    }else{
+                        $('.opened').text('Weekands(-)');
+                    }
+
+                    $.ajax({
+                        url : "{{ route('get-slots') }}",
+                        data : {'slot_type' : slot_type},
+                        success : function(response){
+                            $('.slot-days').html(response);
+                        }
+                    });
+                }else{
+                    if(slot_type=='weekdays'){
+                        $('.opened').text('Weekdays(+)');    
+                    }else{
+                        $('.opened').text('Weekands(+)');    
+                    }
+                }
+            }
+
+            $('.button-left').click(function() {
+                $('.sidebar').toggleClass('fliph');
+            });
+        }); */
+
+        $(document).on('click', '.slot', function(){
+            if($(this).hasClass('slot-selected')){
+                $(this).removeClass('slot-selected');
+            }else{
+                $(this).addClass('slot-selected');
+            }
+        });
+
+        /* var dateToday = new Date();
+        var dates = $("#start-date, #end-date").datepicker({
+            defaultDate: "+2d",
+            changeMonth: true,
+            numberOfMonths: 1,
+            minDate: "+2d",
+            onSelect: function(selectedDate) {
+                var option = this.id == "start-date" ? "minDate" : "maxDate",
+                    instance = $(this).data("datepicker"),
+                    date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
+                dates.not(this).datepicker("option", option, date);
+            }
+        }); */
+    </script>
     <script>
         $(document).on('focus','.datepicker', function(){
             $(this).removeClass('hasDatepicker').datepicker();

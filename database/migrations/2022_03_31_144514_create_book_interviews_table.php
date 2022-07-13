@@ -18,9 +18,11 @@ class CreateBookInterviewsTable extends Migration
             $table->bigInteger('meeting_id');
             $table->bigInteger('interviewer_id');
             $table->bigInteger('candidate_id');
+            $table->bigInteger('parent_interview_type_id');
+            $table->bigInteger('child_interview_type_id');
             $table->string('booking_type_slug');
             $table->float('credits');
-            $table->string('interview_type');
+            
             $table->date('date');
             $table->string('slot');
             $table->dateTime('start_at');

@@ -4,7 +4,7 @@
             <th colspan="3"><i class="fa fa-user"></i> Basic Info</th>
         </tr>
         <tr>
-            <td>
+            <td style="width: 10px">
                 @if($model->image)
                     <img src="{{ asset('public/web/assets/images/user') }}/{{ $model->image }}" class="card-img-top" alt="..." style="height: 100px; width:120px">
                 @else 
@@ -22,7 +22,7 @@
         </tr>
         <tr>
             <td colspan="3">
-                <table class="table">
+                <table class="table" style="margin-top: -20px">
                     <thead>
                         <tr>
                             <th>Degree</th>
@@ -49,7 +49,7 @@
         </tr>
         <tr>
             <td colspan="3">
-                <table class="table">
+                <table class="table" style="margin-top: -20px">
                     <thead>
                         <tr>
                             <th>Position</th>
@@ -87,15 +87,18 @@
             </td>
         </tr>
         <tr>
-            <th colspan="3"><i class="fa fa-clock-o"></i> Available Slots</th>
+            <th colspan="3"><i class="fa fa-clock-o"></i> Date 
+                <input type="text" class="form-control datepicker current-date" name="date" value="{{ date('Y/m/d') }}" id="current-date">
+                <span style="color: red" id="booked-slot-error">{{ $errors->first('booked_slot') }}</span>
+            </th>
         </tr>
         <tr>
             <td colspan="3">
                 <div class="col-md-12 block-rows next-slots">
                     <div class="row" id="slotsInDate">
                         <div class="col-md-10">
-                            <div class="row parent">
-                                @php
+                            <div class="row parent available-slots">
+                                {{-- @php
                                 $date = date('Y-m-d');
                                 $day = date("D", strtotime($date));
                                 @endphp
@@ -103,14 +106,30 @@
                                     @foreach ($slots as $slot)
                                         <div class="col-sm-2">
                                             <article class="feature1 slot">
-                                                <input type="radio" name="booked_slot" class="booked-slot" value="{{ $slot->slot }}" id="feature1"/>
-                                                <span>{{ $slot->slot }}</span>
+                                                @if(!empty($booked_slots))
+                                                    @php $ifbooked = 0; @endphp 
+                                                    @foreach ($booked_slots as $booked)
+                                                        @if($slot->slot==$booked->slot)
+                                                            @php $ifbooked=1; @endphp 
+                                                        @endif
+                                                    @endforeach
+                                                    @if($ifbooked)
+                                                        <input type="radio" disabled/>
+                                                        <span style="text-decoration: line-through !important">{{ $slot->slot }}</span>
+                                                    @else 
+                                                        <input type="radio" name="booked_slot" class="booked-slot" value="{{ $slot->slot }}" id="feature1"/>
+                                                        <span>{{ $slot->slot }}</span>
+                                                    @endif
+                                                @else 
+                                                    <input type="radio" name="booked_slot" class="booked-slot" value="{{ $slot->slot }}" id="feature1"/>
+                                                    <span>{{ $slot->slot }}</span>
+                                                @endif
                                             </article>
                                         </div>
                                     @endforeach
                                 @else 
                                     Not available slot
-                                @endif
+                                @endif --}}
                             </div>
                         </div>
                     </div>
@@ -120,22 +139,21 @@
         <tr>
             <th colspan="3">
                 <div class="form-check" id="">
-                    <input type="checkbox" class="form-check-input" id="custom-slot">
+                    <input type="checkbox" name="custom_slot" class="form-check-input" value="1" id="custom-slot">
                     <label class="form-check-label" for="custom-slot"> Create Custom Slot </label>
                 </div>
             </th>
         </tr>
         <tr>
-            <td colspan="3">
-                <div class="form-group">
-                    <label for="">Slot</label>
-                    <input type="time" name="custom_slot" class="form-control">
-                </div>
-            </td>
+            <td colspan="3" id="make-custom-slot"></td>
         </tr>
     </tbody>
 </table>
-<input type="hidden" name="date" value="{{ $date }}">
-<input type="hidden" name="parent_interview_type_id" value="{{ $parent_interview_type_id }}">
-<input type="hidden" name="child_interview_type_id" value="{{ $child_interview_type_id }}">
-<input type="hidden" name="interviewer_id" value="{{ $model->id }}">
+<input type="hidden" id="parent_interview_type_id" name="parent_interview_type_id" value="{{ $parent_interview_type_id }}">
+<input type="hidden" id="child_interview_type_id" name="child_interview_type_id" value="{{ $child_interview_type_id }}">
+<input type="hidden" id="interviewer_id" name="interviewer_id" value="{{ $model->id }}">
+<script>
+    $( ".current-date" ).datepicker({
+        dateFormat: "yy-mm-dd"
+    });
+</script>

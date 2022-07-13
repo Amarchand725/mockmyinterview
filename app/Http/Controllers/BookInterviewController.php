@@ -115,56 +115,52 @@ class BookInterviewController extends Controller
     public function store(Request $request)
     {
         $validator = $request->validate([
-            'interview_type' => 'required',
-        ]);
+            'booked_slot' => 'required',
+        ]); 
 
-        if(empty($request->booked_slots)){
+        /* if(empty($request->booked_slots)){
             return redirect()->back()->with('error', 'Select slot at least one.');
-        }
-        
+        } */
         $wallet = Wallet::orderby('id', 'desc')->where('candidate_id', Auth::user()->id)->first();
-        $priority = BookingPriority::where('slug', $request->booking_type)->first();
+        $priority = BookingPriority::where('slug', 'standard-booking')->first();
         if(isset($wallet) && $wallet->balance_credits < $priority->credits){
-            return redirect()->route('wallet.create')->with('error', 'You have not credits in your wallet purchase from here.');
+            return 'credits';
+            // return redirect()->route('wallet.create')->with('error', 'You have not credits in your wallet purchase from here.');
         }
         try {
-            foreach($request->booked_slots as $interviewer_id=>$slot){
-                $meeting = $this->createMeeting($request);
+            $meeting = $this->createMeeting($request);
 
-                $booked_interview = BookInterview::create([
-                    'meeting_id' => $meeting->id,
-                    'interviewer_id' => $interviewer_id,
+            $booked_interview = BookInterview::create([
+                'meeting_id' => $meeting->id,
+                'interviewer_id' => $request->interviewer_id,
+                'candidate_id' => Auth::user()->id,
+                'parent_interview_type_id' => $request->parent_interview_type_id,
+                'child_interview_type_id' => $request->child_interview_type_id,
+                'booking_type_slug' => $priority->slug,
+                'credits' => $priority->credits,
+                'date' => date('Y-m-d'),
+                'slot' => $request->booked_slot,
+                'start_at' => date('Y-m-d', strtotime($request->date)).' '.$request->booked_slot,
+                'duration' => $meeting->duration,
+                'password' => $meeting->password,
+                'start_url' => $meeting->start_url,
+                'join_url' => $meeting->join_url,
+            ]);
+
+            if($booked_interview){
+                Log::create([
+                    'booked_interview_id' => $booked_interview->id,
+                    'interviewer_id' => $request->interviewer_id,
                     'candidate_id' => Auth::user()->id,
-                    'booking_type_slug' => $request->booking_type,
-                    'credits' => $priority->credits,
-                    'interview_type' => $request->interview_type,
-                    'date' => date('Y-m-d'),
-                    'slot' => $slot,
-                    'start_at' => date('Y-m-d', strtotime($request->date)).' '.$slot,
-                    'duration' => $meeting->duration,
-                    'password' => $meeting->password,
-                    'start_url' => $meeting->start_url,
-                    'join_url' => $meeting->join_url,
+                    'credits' => $priority->credits, 
+                    'type' => 'charged', 
+                    'description' => 'Charged credits from candidate wallet.', 
                 ]);
-
-                if($booked_interview){
-                    Log::create([
-                        'booked_interview_id' => $booked_interview->id,
-                        'interviewer_id' => $interviewer_id,
-                        'candidate_id' => Auth::user()->id,
-                        'credits' => $priority->credits, 
-                        'type' => 'charged', 
-                        'description' => 'Charged credits from candidate wallet.', 
-                    ]);
-
-                    // $message = 'Scheduled new interview';
-                    // notification(Auth::user()->id, $booked_interview->id, 'book_interview', $message);
-                }
             }
-
-            return redirect()->route('book_interview.index')->with('message', 'Booking created successfully');
+            
+            return 'success';
         }catch(\Exception $e){
-            return redirect()->back()->with(['error' => $e->getMessage()]);
+            return $e->getMessage();
         }
     }
 

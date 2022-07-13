@@ -16,7 +16,8 @@ class CreateAvailableSlotsTable extends Migration
         Schema::create('available_slots', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('available_date_id');
-            $table->string('shift');
+            $table->date('date')->nullable();
+            $table->string('shift')->nullable();
             $table->string('slot');
             $table->timestamps();
 

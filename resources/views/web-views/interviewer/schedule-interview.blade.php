@@ -308,22 +308,6 @@
             }
         });
 
-        // calander scripts
-        /* var eventsArray = [{
-            title: 'event1',
-            start: '2019-07-20'
-        }, {
-            title: 'event2',
-            start: '2019-08-05',
-            end: '2019-08-07'
-        }, {
-            title: 'event3',
-            start: '2019-09-03'
-        }, {
-            title: 'event3',
-            start: '2019-10-05'
-        }]; */
-
         var dateToday = new Date();
         var dates = $("#start-date, #end-date").datepicker({
             defaultDate: "+2d",

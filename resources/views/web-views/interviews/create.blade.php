@@ -3,7 +3,6 @@
 @section('title', $page_title)
 
 @push('css')
-    
 @endpush
 
 @section('content')
@@ -20,52 +19,47 @@
                     </div>
                 </div>
             </div>
-            <form action="{{ route('book_interview.store') }}" method="post">
-                @csrf
 
-                <div class="col-md-12 well py-3">
-                    <div class="bg-white ">
-                        <span class="side-heading-font">Schedule an Interview </span>
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label for="">Date</label>
-                                    <input type="text" class="form-control datepicker" name="date" value="{{ date('Y/m/d') }}" id="current-date">
-                                </div>
+            <div class="col-md-12 well py-3">
+                <div class="bg-white ">
+                    <span class="side-heading-font">Schedule an Interview </span>
+                    <div class="row">
+                        {{-- <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="">Date</label>
+                                <input type="text" class="form-control datepicker" name="date" value="{{ date('Y/m/d') }}" id="current-date">
                             </div>
-                            <div class="col-md-5"></div>
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label for="">Parent Interview Type</label>
-                                    <select name="parent_id" id="parent-interview-type" class="form-control parent-interview-type">
-                                        <option value="" selected>Select parent interview type</option>
-                                        @foreach ($parent_interview_types as $interview_type)
-                                            <option value="{{ $interview_type->id }}">{{ $interview_type->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="col-md-5"></div> --}}
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="">Parent Interview Type</label>
+                                <select name="parent_id" id="parent-interview-type" class="form-control parent-interview-type">
+                                    <option value="" selected>Select parent interview type</option>
+                                    @foreach ($parent_interview_types as $interview_type)
+                                        <option value="{{ $interview_type->id }}">{{ $interview_type->name }}</option>
+                                    @endforeach
+                                </select>
+                                <span id="parent-interview-type-id" style="color: red"></span>
                             </div>
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label for="">Child Interview Type</label>
-                                    <select name="child_interview_type_id" id="child_interview_type_id" class="form-control"></select>
-                                </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="">Child Interview Type</label>
+                                <select name="child_interview_type_id" id="child_interview_type_id" class="form-control"></select>
+                                <span id="child-interview-type-id" style="color: red"></span>
                             </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-info search-btn" style="margin-top: 30px"><i class="fa fa-search"></i> Search</button>
-                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-info search-btn" style="margin-top: 30px"><i class="fa fa-search"></i> Search</button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Booking interview -->
-                <main class="container-fluid pt-5">
-                    <span class="side-heading-font">
-                        Available Interviewer <span style="font-size:12px !important;font-weight:400 !important;color:inherit; ">&nbsp;&nbsp;<small>(All time slots listed are in IST)</small></span>
-                    </span>
-                    <span id="interviewers"></span>
-                </main>
-            </form>
+            <main class="container-fluid pt-5">
+                <span id="interviewers"></span>
+            </main>
         </div>
     </div>
 
@@ -76,7 +70,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title"><i class="fa fa-user"></i> Interviewer Details</h5>
                 </div>
-                <form action="{{ route('book_interview.store') }}" method="post">
+                <form id="SubmitForm">
                     @csrf
 
                     <div class="modal-body">
@@ -93,16 +87,79 @@
 
 @push('js')
     <script>
+        $('#SubmitForm').on('submit',function(e){
+            e.preventDefault();
+            let booked_slot = $(".booked-slot:checked").val() ? $(".booked-slot:checked").val() : '';
+            let date = $('#date').val();
+            let parent_interview_type_id = $('#parent_interview_type_id').val();
+            let child_interview_type_id = $('#child_interview_type_id').val();
+            let interviewer_id = $('#interviewer_id').val();
+            
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ route('book_interview.store') }}",
+                type:"POST",
+                data:{
+                    booked_slot : booked_slot,
+                    date : date,
+                    parent_interview_type_id : parent_interview_type_id,
+                    child_interview_type_id : child_interview_type_id,
+                    interviewer_id : interviewer_id,
+                },
+                
+                success:function(response){
+                    if(response=='credits'){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'You do not have credits to book this interview please purchase credits.!',
+                            footer: '<a href="{{ route('wallet.create') }}">Click to get credits</a>',
+                        })
+                    }else if(response=='success'){
+                        $('#interviewer-details').hide();
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'You have booked slot successfully.',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        location.reload();
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong try again.',
+                        })
+                    }
+                    
+                },
+                error: function(response) {
+                    $('#booked-slot-error').text(response.responseJSON.errors.booked_slot);
+                },
+            });
+        });
         $(document).on('change', '#custom-slot', function() {
+            if($(this).is(":checked")) {
+                if($('.feature1').hasClass('active')){
+                    $('.feature1').removeClass('active');
+                    $('.feature1').removeClass('slot-selected');
+                }
 
-            var id = $(this).val(); // this gives me null
-            if (id != null) {
-            alert(id)
+                var html = '<div class="form-group">'+
+                                '<label for="">Slot</label>'+
+                                '<input type="time" name="booked_slot" id="feature1" class="form-control booked-slot">'+
+                            '</div>';
+                $('#make-custom-slot').html(html);
+            }else{
+                $('#make-custom-slot').html('');
             }
-
         });
 
         $(document).on('click', '.more-info-btn', function(){
+            $('.modal-body').html('');
             var user_id = $(this).attr('data-user-id');
             var date = $('#current-date').val();
             var parent_interview_type = $('#parent-interview-type').val();
@@ -111,7 +168,6 @@
                 url : "{{ route('get-interviewer-details') }}",
                 data : {'user_id' : user_id, 'date' : date, 'parent_interview_type' : parent_interview_type, 'child_interview_type' : child_interview_type},
                 success : function(response){
-                    console.log(response);
                     $('.modal-body').html(response);
                 }
             });
@@ -122,6 +178,19 @@
             var date = $('#current-date').val();
             var parent_interview_type = $('#parent-interview-type').val();
             var child_interview_type = $('#child_interview_type_id').val();
+            if(parent_interview_type==''){
+                $('#parent-interview-type-id').html('Interview type is required field.');
+                return false;
+            }else{
+                $('#parent-interview-type-id').html('');
+            }
+            if(child_interview_type==''){
+                $('#child-interview-type-id').html('Interview type is required field.');
+                return false;
+            }else{
+                $('#child-interview-type-id').html('');
+            }
+
             $.ajax({
                 url : "{{ route('get-interviewers') }}",
                 data : {'date' : date, 'parent_interview_type':parent_interview_type, 'child_interview_type':child_interview_type},
@@ -135,6 +204,8 @@
             if($(this).hasClass('active')){
                 $(this).removeClass('active');
             }else{
+                $('#custom-slot').prop('checked', false);
+                $('#make-custom-slot').html('');
                 $(this).addClass('active');
             }
         });
@@ -143,18 +214,40 @@
             if($(this).hasClass('slot-selected')){
                 $(this).removeClass('slot-selected');
             }else{
+                $('#custom-slot').prop('checked', false);
+                $('#make-custom-slot').html('');
                 $(this).addClass('slot-selected');
             }
         });
 
-        $( "#current-date" ).datepicker({
+        /* $( ".current-date" ).datepicker({
             dateFormat: "yy-mm-dd"
+        }); */
+
+        $(document).on('change', '.current-date', function(){
+            var date = $(this).val();
+            var parent_id = $('#parent_interview_type_id').val();
+            var child_id = $('#child_interview_type_id').val();
+            var interviewer_id = $('#interviewer_id').val();
+            if(parent_id != '' && child_id != ''){
+                $.ajax({
+                    url : "{{ route('get-interviewer-slots') }}",
+                    data : {'parent_id' : parent_id, 'child_id' : child_id, 'date' : date, 'interviewer_id' : interviewer_id},
+                    success : function(response){
+                        console.log(response);
+                        $('.available-slots').html(response);
+                    }
+                });
+            }
         });
-        $("#current-date").datepicker({
+
+
+        $(".current-date").datepicker({
             onSelect: function(dateText) {
                 // console.log("Selected date: " + dateText + "; input's current value: " + this.value);
                 // alert(dateText);
-                var parent_id = $('#parent-interview-type').val();
+                alert('good');
+                /* var parent_id = $('#parent-interview-type').val();
                 var child_id = $('#child_interview_type_id').val();
                 if(parent_id != '' && child_id != ''){
                     $.ajax({
@@ -162,15 +255,9 @@
                         data : {'parent_id' : parent_id, 'child_id' : child_id},
                         success : function(response){
                             console.log(response);
-                            /* var html = '<option value="" selected>Select child interview type</option>';
-                            $.each(response.child_interview_types , function(index, val) { 
-                            html += '<option value="'+val.id+'">'+val.name+'</option>';
-                            });
-
-                            $('#child_interview_type_id').html(html); */
                         }
                     });
-                }
+                } */
             }
         });
 

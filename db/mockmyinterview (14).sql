@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 23, 2022 at 05:40 PM
+-- Generation Time: Jul 13, 2022 at 05:45 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.4.22
 
@@ -62,29 +62,12 @@ INSERT INTO `advantage_mocks` (`id`, `created_by`, `title`, `slug`, `description
 CREATE TABLE `available_slots` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `available_date_id` bigint(20) UNSIGNED NOT NULL,
-  `shift` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `date` date DEFAULT NULL,
+  `shift` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `slot` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `available_slots`
---
-
-INSERT INTO `available_slots` (`id`, `available_date_id`, `shift`, `slot`, `created_at`, `updated_at`) VALUES
-(1, 2, 'morning', '11:00', '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
-(2, 2, 'morning', '11:30', '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
-(3, 2, 'morning', '12:00', '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
-(4, 2, 'morning', '12:30', '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
-(5, 2, 'evening', '17:00', '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
-(6, 2, 'evening', '17:30', '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
-(7, 2, 'evening', '20:30', '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
-(8, 2, 'evening', '21:30', '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
-(9, 2, 'evening', '22:00', '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
-(10, 2, 'evening', '22:30', '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
-(11, 4, 'morning', '12:00', '2022-06-22 10:13:17', '2022-06-22 10:13:17'),
-(12, 4, 'evening', '17:00', '2022-06-22 10:13:17', '2022-06-22 10:13:17');
 
 -- --------------------------------------------------------
 
@@ -112,7 +95,9 @@ CREATE TABLE `available_slot_dates` (
 INSERT INTO `available_slot_dates` (`id`, `interviewer_id`, `interview_type`, `slot_type`, `start_date`, `end_date`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
 (2, 7, 5, 'weekdays', '2022-06-22', '2022-06-25', 0, NULL, '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
 (3, 7, NULL, 'weekdays', '2022-06-18', '2022-06-20', 0, NULL, '2022-06-22 10:12:34', '2022-06-22 10:12:34'),
-(4, 7, NULL, 'weekdays', '2022-06-18', '2022-06-20', 0, NULL, '2022-06-22 10:13:17', '2022-06-22 10:13:17');
+(4, 7, NULL, 'weekdays', '2022-06-18', '2022-06-20', 0, NULL, '2022-06-22 10:13:17', '2022-06-22 10:13:17'),
+(5, 7, NULL, 'weekdays', '2022-07-08', '2022-07-10', 0, NULL, '2022-07-06 16:52:24', '2022-07-06 16:52:24'),
+(6, 7, NULL, 'weekdays', '2022-07-09', '2022-07-16', 0, NULL, '2022-07-07 08:31:31', '2022-07-07 08:31:31');
 
 -- --------------------------------------------------------
 
@@ -189,9 +174,10 @@ CREATE TABLE `book_interviews` (
   `meeting_id` bigint(20) NOT NULL,
   `interviewer_id` bigint(20) NOT NULL,
   `candidate_id` bigint(20) NOT NULL,
+  `parent_interview_type_id` bigint(20) DEFAULT NULL,
+  `child_interview_type_id` bigint(20) DEFAULT NULL,
   `booking_type_slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `credits` float DEFAULT NULL,
-  `interview_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date` date NOT NULL,
   `slot` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `start_at` datetime NOT NULL,
@@ -209,10 +195,17 @@ CREATE TABLE `book_interviews` (
 -- Dumping data for table `book_interviews`
 --
 
-INSERT INTO `book_interviews` (`id`, `meeting_id`, `interviewer_id`, `candidate_id`, `booking_type_slug`, `credits`, `interview_type`, `date`, `slot`, `start_at`, `duration`, `password`, `start_url`, `join_url`, `review`, `status`, `created_at`, `updated_at`) VALUES
-(1, 89690070398, 7, 5, 'standard-booking', 1599, 'hr', '2022-06-01', '12:30', '2022-01-06 12:30:00', 30, '12345', 'https://us05web.zoom.us/s/89690070398?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5NjkwMDcwMzk4IiwiZXhwIjoxNjU0MDg2MTk0LCJpYXQiOjE2NTQwNzg5OTQsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.bFsYPNOI7ZsZvPH7BaalmK4jB7hQHkLB_21QDZ7XIvI', 'https://us05web.zoom.us/j/89690070398?pwd=L09QU1hkRFp1UDd3MVJ3QnhHZndpUT09', NULL, 0, '2022-06-01 05:23:13', '2022-06-01 05:23:13'),
-(2, 87319067046, 7, 5, 'standard-booking', 1599, 'hr', '2022-06-01', '12:00', '2022-01-06 12:00:00', 30, '12345', 'https://us05web.zoom.us/s/87319067046?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg3MzE5MDY3MDQ2IiwiZXhwIjoxNjU0MDg2MzI0LCJpYXQiOjE2NTQwNzkxMjQsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.efQvoakYuhc6jSVZFyYgGtAxmeaHoPmpgC_ayDQTBD8', 'https://us05web.zoom.us/j/87319067046?pwd=ai80cnQyTzJOaFFPSkozcGRUeSt3QT09', NULL, 0, '2022-06-01 05:25:24', '2022-06-01 05:25:24'),
-(3, 81354282987, 7, 5, 'standard-booking', 1599, 'hr', '2022-06-01', '12:30', '2022-01-06 12:30:00', 30, '12345', 'https://us05web.zoom.us/s/81354282987?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6IjgxMzU0MjgyOTg3IiwiZXhwIjoxNjU0MDg2NDIyLCJpYXQiOjE2NTQwNzkyMjIsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.v5dS6WbpF33zocbnIxzuhk56BpCsxXBhyfjLa0HwWZE', 'https://us05web.zoom.us/j/81354282987?pwd=a0o2M09NdjQwTEJoNlp2R1BxTGlldz09', NULL, 4, '2022-06-01 05:27:03', '2022-06-01 08:00:01');
+INSERT INTO `book_interviews` (`id`, `meeting_id`, `interviewer_id`, `candidate_id`, `parent_interview_type_id`, `child_interview_type_id`, `booking_type_slug`, `credits`, `date`, `slot`, `start_at`, `duration`, `password`, `start_url`, `join_url`, `review`, `status`, `created_at`, `updated_at`) VALUES
+(1, 89690070398, 7, 5, NULL, NULL, 'standard-booking', 1599, '2022-06-01', '12:30', '2022-01-06 12:30:00', 30, '12345', 'https://us05web.zoom.us/s/89690070398?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5NjkwMDcwMzk4IiwiZXhwIjoxNjU0MDg2MTk0LCJpYXQiOjE2NTQwNzg5OTQsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.bFsYPNOI7ZsZvPH7BaalmK4jB7hQHkLB_21QDZ7XIvI', 'https://us05web.zoom.us/j/89690070398?pwd=L09QU1hkRFp1UDd3MVJ3QnhHZndpUT09', NULL, 0, '2022-06-01 05:23:13', '2022-06-01 05:23:13'),
+(2, 87319067046, 7, 5, NULL, NULL, 'standard-booking', 1599, '2022-06-01', '12:00', '2022-01-06 12:00:00', 30, '12345', 'https://us05web.zoom.us/s/87319067046?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg3MzE5MDY3MDQ2IiwiZXhwIjoxNjU0MDg2MzI0LCJpYXQiOjE2NTQwNzkxMjQsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.efQvoakYuhc6jSVZFyYgGtAxmeaHoPmpgC_ayDQTBD8', 'https://us05web.zoom.us/j/87319067046?pwd=ai80cnQyTzJOaFFPSkozcGRUeSt3QT09', NULL, 0, '2022-06-01 05:25:24', '2022-06-01 05:25:24'),
+(3, 81354282987, 7, 5, NULL, NULL, 'standard-booking', 1599, '2022-06-01', '12:30', '2022-01-06 12:30:00', 30, '12345', 'https://us05web.zoom.us/s/81354282987?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6IjgxMzU0MjgyOTg3IiwiZXhwIjoxNjU0MDg2NDIyLCJpYXQiOjE2NTQwNzkyMjIsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.v5dS6WbpF33zocbnIxzuhk56BpCsxXBhyfjLa0HwWZE', 'https://us05web.zoom.us/j/81354282987?pwd=a0o2M09NdjQwTEJoNlp2R1BxTGlldz09', NULL, 4, '2022-06-01 05:27:03', '2022-06-01 08:00:01'),
+(4, 88648565133, 7, 5, 1, 5, 'standard-booking', 1599, '2022-06-24', '11:00', '2022-06-24 11:00:00', 30, '12345', 'https://us05web.zoom.us/s/88648565133?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg4NjQ4NTY1MTMzIiwiZXhwIjoxNjU2MDg0NjQ2LCJpYXQiOjE2NTYwNzc0NDYsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.6UYW1seVXCkDSb4IJRdcDsD3A5Z6QrI1PjqAoDa-OBI', 'https://us05web.zoom.us/j/88648565133?pwd=dmpaSzY4OEh3elhUZnREVnNRSG90QT09', NULL, 0, '2022-06-24 08:30:46', '2022-06-24 08:30:46'),
+(5, 87550439126, 7, 5, 1, 5, 'standard-booking', 1599, '2022-06-24', '11:30', '2022-06-24 11:30:00', 30, '12345', 'https://us05web.zoom.us/s/87550439126?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg3NTUwNDM5MTI2IiwiZXhwIjoxNjU2MDg0Nzk4LCJpYXQiOjE2NTYwNzc1OTgsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.N9RkYnajiMIITj5ds4UVbfCpncflnFfM_eFh4ARs_4k', 'https://us05web.zoom.us/j/87550439126?pwd=c2VXbzVRU2JGRXZadi9BSnBRcExQdz09', NULL, 0, '2022-06-24 08:33:18', '2022-06-24 08:33:18'),
+(6, 82593673088, 7, 5, 1, 5, 'standard-booking', 1599, '2022-06-24', '12:00', '2022-06-24 12:00:00', 30, '12345', 'https://us05web.zoom.us/s/82593673088?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6IjgyNTkzNjczMDg4IiwiZXhwIjoxNjU2MDg0ODc2LCJpYXQiOjE2NTYwNzc2NzYsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.db8dNL1o6NhtPX9YNq5EHg9057BTrBLUaFD18gwapBk', 'https://us05web.zoom.us/j/82593673088?pwd=akNkZEFXUmdKdXcrR05nM0VWQ2tqdz09', NULL, 0, '2022-06-24 08:34:36', '2022-06-24 08:34:36'),
+(7, 88005171340, 7, 5, 1, 5, 'standard-booking', 1599, '2022-06-24', '12:30', '2022-06-24 12:30:00', 30, '12345', 'https://us05web.zoom.us/s/88005171340?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg4MDA1MTcxMzQwIiwiZXhwIjoxNjU2MDg0OTEyLCJpYXQiOjE2NTYwNzc3MTIsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.m2aNXIxee-fYN4QJ5y6XQEn5NiPFjTURqiVslpo82lo', 'https://us05web.zoom.us/j/88005171340?pwd=T0oySW5lOXFTamI0ekRtNDBTUmxMUT09', NULL, 0, '2022-06-24 08:35:12', '2022-06-24 08:35:12'),
+(8, 85344388503, 7, 5, 1, 5, 'standard-booking', 1599, '2022-06-24', '17:30', '2022-06-24 17:30:00', 30, '12345', 'https://us05web.zoom.us/s/85344388503?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg1MzQ0Mzg4NTAzIiwiZXhwIjoxNjU2MDg4MDM1LCJpYXQiOjE2NTYwODA4MzUsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.7_EKwporQXPRkfQTIxy_GWrWkiFrYmfhQ0ISXfzGPRU', 'https://us05web.zoom.us/j/85344388503?pwd=TG1HVURBblhvb3lQVEMvdTdGQ2RMQT09', NULL, 0, '2022-06-24 09:27:14', '2022-06-24 09:27:14'),
+(9, 89299481122, 7, 43, 1, 5, 'standard-booking', 1599, '2022-07-06', '11:30', '2022-07-06 11:30:00', 30, '12345', 'https://us05web.zoom.us/s/89299481122?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5Mjk5NDgxMTIyIiwiZXhwIjoxNjU3MTE5MzQ1LCJpYXQiOjE2NTcxMTIxNDUsImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.a7xNpoFfTJWcvQoNBEknVmqpsURRuWG7uUjiXI11br8', 'https://us05web.zoom.us/j/89299481122?pwd=cy9TUExab1A2SzBVUVVtcWJUZ0lMQT09', NULL, 1, '2022-07-06 16:55:45', '2022-07-06 17:11:26'),
+(10, 89165184716, 7, 43, 2, 8, 'standard-booking', 1599, '2022-07-07', '11:00', '2022-07-07 11:00:00', 30, '12345', 'https://us05web.zoom.us/s/89165184716?zak=eyJ0eXAiOiJKV1QiLCJzdiI6IjAwMDAwMSIsInptX3NrbSI6InptX28ybSIsImFsZyI6IkhTMjU2In0.eyJhdWQiOiJjbGllbnRzbSIsInVpZCI6IllkVzdqRFJZU2dlcFpSTkhpbDM4eVEiLCJpc3MiOiJ3ZWIiLCJzayI6IjY5NzYyNzE5ODE3NTU0Mzk0OTIiLCJzdHkiOjEwMCwid2NkIjoidXMwNSIsImNsdCI6MCwibW51bSI6Ijg5MTY1MTg0NzE2IiwiZXhwIjoxNjU3MTc1NjA5LCJpYXQiOjE2NTcxNjg0MDksImFpZCI6ImdDMXBKbE5aUTNteEVha1FWTVpOdWciLCJjaWQiOiIifQ.VrkLPcdfjTAXP-T937O4VhumwaLgTQ-LcNiN8IMCyT0', 'https://us05web.zoom.us/j/89165184716?pwd=Q09nM2ZXMVRVN2ZCeUhLY2FuUUMxdz09', NULL, 1, '2022-07-07 08:33:29', '2022-07-07 08:34:23');
 
 -- --------------------------------------------------------
 
@@ -408,7 +401,8 @@ CREATE TABLE `experiences` (
 
 INSERT INTO `experiences` (`id`, `user_id`, `position`, `company`, `joining_date`, `leaving_date`, `experiences`, `created_at`, `updated_at`) VALUES
 (8, 7, 'Junior Developer', 'Company 1', '2018-06-10', '2022-11-03', 4.40, '2022-03-29 08:23:12', '2022-03-29 08:23:12'),
-(9, 7, 'Mid Level Developer', 'Company 2', '2020-09-03', '2022-10-03', 2.00, '2022-03-29 08:23:12', '2022-03-29 08:23:12');
+(9, 7, 'Mid Level Developer', 'Company 2', '2020-09-03', '2022-10-03', 2.00, '2022-03-29 08:23:12', '2022-03-29 08:23:12'),
+(10, 48, 'asd', 'asdas', '1899-11-01', '2022-07-16', NULL, '2022-07-06 17:44:39', '2022-07-06 17:44:39');
 
 -- --------------------------------------------------------
 
@@ -432,7 +426,8 @@ CREATE TABLE `experience_details` (
 
 INSERT INTO `experience_details` (`id`, `user_id`, `total_experience`, `summary`, `expertise`, `created_at`, `updated_at`) VALUES
 (1, 7, '6.4', 'My summary -updated', 'Laravel framework of php. updated\r\nmysql\r\ncss3', '2022-03-29 06:24:50', '2022-03-29 08:23:12'),
-(2, 7, '6.4', 'My summary', 'Laravel framework of php.\r\nmysql\r\ncss3', '2022-03-29 08:21:24', '2022-03-29 08:21:24');
+(2, 7, '6.4', 'My summary', 'Laravel framework of php.\r\nmysql\r\ncss3', '2022-03-29 08:21:24', '2022-03-29 08:21:24'),
+(3, 48, '0', 'asdasd', 'asdasda', '2022-07-06 17:44:39', '2022-07-06 17:44:39');
 
 -- --------------------------------------------------------
 
@@ -532,7 +527,9 @@ CREATE TABLE `interviewer_interview_types` (
 
 INSERT INTO `interviewer_interview_types` (`id`, `interviewer_id`, `parent_interview_type_id`, `child__interview_type_id`, `created_at`, `updated_at`) VALUES
 (1, 7, 1, 5, '2022-06-22 10:13:17', '2022-06-22 10:13:17'),
-(2, 7, 1, 6, '2022-06-22 10:13:17', '2022-06-22 10:13:17');
+(2, 7, 1, 6, '2022-06-22 10:13:17', '2022-06-22 10:13:17'),
+(3, 7, 1, 5, '2022-07-06 16:52:24', '2022-07-06 16:52:24'),
+(4, 7, 2, 8, '2022-07-07 08:31:31', '2022-07-07 08:31:31');
 
 -- --------------------------------------------------------
 
@@ -731,7 +728,14 @@ INSERT INTO `logs` (`id`, `booked_interview_id`, `interviewer_id`, `candidate_id
 (2, 3, 7, 7, 1599.00, 'returned', 'Return credits due to rejection.', '2022-06-01 07:07:46', '2022-06-01 07:07:46'),
 (3, 3, 7, 7, 1599.00, 'returned', 'Return credits due to rejection.', '2022-06-01 07:08:38', '2022-06-01 07:08:38'),
 (4, 3, 7, 7, 1599.00, 'returned', 'Return credits due to rejection.', '2022-06-01 07:09:16', '2022-06-01 07:09:16'),
-(5, 3, 7, 7, 1599.00, 'returned', 'Return credits due to rejection.', '2022-06-01 08:00:01', '2022-06-01 08:00:01');
+(5, 3, 7, 7, 1599.00, 'returned', 'Return credits due to rejection.', '2022-06-01 08:00:01', '2022-06-01 08:00:01'),
+(6, 4, 7, 5, 1599.00, 'charged', 'Charged credits from candidate wallet.', '2022-06-24 08:30:46', '2022-06-24 08:30:46'),
+(7, 5, 7, 5, 1599.00, 'charged', 'Charged credits from candidate wallet.', '2022-06-24 08:33:18', '2022-06-24 08:33:18'),
+(8, 6, 7, 5, 1599.00, 'charged', 'Charged credits from candidate wallet.', '2022-06-24 08:34:36', '2022-06-24 08:34:36'),
+(9, 7, 7, 5, 1599.00, 'charged', 'Charged credits from candidate wallet.', '2022-06-24 08:35:12', '2022-06-24 08:35:12'),
+(10, 8, 7, 5, 1599.00, 'charged', 'Charged credits from candidate wallet.', '2022-06-24 09:27:14', '2022-06-24 09:27:14'),
+(11, 9, 7, 43, 1599.00, 'charged', 'Charged credits from candidate wallet.', '2022-07-06 16:55:45', '2022-07-06 16:55:45'),
+(12, 10, 7, 43, 1599.00, 'charged', 'Charged credits from candidate wallet.', '2022-07-07 08:33:29', '2022-07-07 08:33:29');
 
 -- --------------------------------------------------------
 
@@ -796,8 +800,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (127, '2022_06_20_082505_create_interview_categories_table', 81),
 (130, '2022_04_07_072048_create_interview_types_table', 82),
 (131, '2022_04_05_101251_create_available_slot_dates_table', 83),
-(133, '2022_04_05_101315_create_available_slots_table', 84),
-(135, '2022_06_22_143536_create_interviewer_interview_types_table', 85);
+(135, '2022_06_22_143536_create_interviewer_interview_types_table', 85),
+(136, '2022_04_05_101315_create_available_slots_table', 86);
 
 -- --------------------------------------------------------
 
@@ -830,6 +834,8 @@ CREATE TABLE `model_has_roles` (
 INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (1, 'App\\Models\\User', 1),
 (3, 'App\\Models\\User', 7),
+(3, 'App\\Models\\User', 48),
+(3, 'App\\Models\\User', 50),
 (6, 'App\\Models\\User', 5),
 (6, 'App\\Models\\User', 6),
 (6, 'App\\Models\\User', 8),
@@ -864,7 +870,13 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (6, 'App\\Models\\User', 39),
 (6, 'App\\Models\\User', 40),
 (6, 'App\\Models\\User', 41),
-(6, 'App\\Models\\User', 42);
+(6, 'App\\Models\\User', 42),
+(6, 'App\\Models\\User', 43),
+(6, 'App\\Models\\User', 44),
+(6, 'App\\Models\\User', 45),
+(6, 'App\\Models\\User', 46),
+(6, 'App\\Models\\User', 47),
+(6, 'App\\Models\\User', 49);
 
 -- --------------------------------------------------------
 
@@ -1440,7 +1452,8 @@ INSERT INTO `qualifications` (`id`, `user_id`, `institute`, `degree_slug`, `cour
 (11, 7, 'testedd', 'btech', 'electronics-communication-engineering', '1994', '2022-03-28 09:51:10', '2022-03-28 09:51:10'),
 (14, 6, 'Institute 1', 'btech', 'electrical-electronics-engineering', '1994', '2022-03-30 08:16:06', '2022-03-30 08:16:06'),
 (15, 6, 'Institute 2', 'btech', 'civil-engineering', '1985', '2022-03-30 08:16:06', '2022-03-30 08:16:06'),
-(16, 5, 'Deleniti consequatur', 'btech', 'computer-science-engineering', '1994', '2022-05-09 04:38:17', '2022-05-09 04:38:17');
+(16, 5, 'Deleniti consequatur', 'btech', 'computer-science-engineering', '1994', '2022-05-09 04:38:17', '2022-05-09 04:38:17'),
+(17, 48, 'sdkfj', 'btech', 'electronics-communication-engineering', '2000', '2022-07-06 17:43:59', '2022-07-06 17:43:59');
 
 -- --------------------------------------------------------
 
@@ -1464,7 +1477,8 @@ CREATE TABLE `qualification_details` (
 
 INSERT INTO `qualification_details` (`id`, `user_id`, `achievements`, `awards`, `additional_data`, `created_at`, `updated_at`) VALUES
 (1, 7, 'achievements update', 'Award update', 'Additional update', '2022-03-28 09:05:26', '2022-03-28 09:50:48'),
-(2, 6, NULL, NULL, NULL, '2022-03-30 08:06:55', '2022-03-30 08:06:55');
+(2, 6, NULL, NULL, NULL, '2022-03-30 08:06:55', '2022-03-30 08:06:55'),
+(3, 48, 'sdfs', 'sdfsd', 'sdfsdf', '2022-07-06 17:43:59', '2022-07-06 17:43:59');
 
 -- --------------------------------------------------------
 
@@ -1530,7 +1544,8 @@ CREATE TABLE `resumes` (
 
 INSERT INTO `resumes` (`id`, `user_id`, `technical`, `hr`, `linkedin_url`, `resume`, `introduction_video`, `created_at`, `updated_at`) VALUES
 (1, 7, 1, 0, NULL, 'sample.pdf', 'file_example_MP4_480_1_5MG.mp4', '2022-03-29 09:00:51', '2022-03-29 10:14:54'),
-(2, 6, 0, 0, NULL, '30-03-2022-130928.pdf', '30-03-2022-130928.mp4', '2022-03-30 08:09:28', '2022-03-30 08:09:28');
+(2, 6, 0, 0, NULL, '30-03-2022-130928.pdf', '30-03-2022-130928.mp4', '2022-03-30 08:09:28', '2022-03-30 08:09:28'),
+(3, 48, 0, 0, 'sfdsfsd', NULL, NULL, '2022-07-06 17:44:58', '2022-07-06 17:44:58');
 
 -- --------------------------------------------------------
 
@@ -1977,17 +1992,24 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `user_id`, `referral_code`, `name`, `last_name`, `phone`, `promo_code`, `email`, `temprary_email`, `email_verified_at`, `password`, `remember_token`, `verify_token`, `status`, `image`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 4046, 'BG7kf4qV', 'Hardik tested', NULL, NULL, NULL, 'admin@gmail.com', NULL, NULL, '$2y$10$TrSMTkdqZ4CkZe8zLOz/AuMG5CYt3vVpO4dHwUN.ecPMsAorlD416', 'kQnZE228D6ytHfpgJz98cWwM4yDuaBwUQOPjmDSxD9LQjZV76k7iTcwCf2YW', NULL, 1, NULL, NULL, '2022-03-09 11:01:24', '2022-03-25 05:12:33'),
+(1, 4046, 'BG7kf4qV', 'Hardik tested', NULL, NULL, NULL, 'admin@gmail.com', NULL, NULL, '$2y$10$TrSMTkdqZ4CkZe8zLOz/AuMG5CYt3vVpO4dHwUN.ecPMsAorlD416', 'INkOZPVgBILahhmxpLwaXmGRxaeHClRwyTHNjGr2mLK6V0jpXHdGX9mugJFW', NULL, 1, NULL, NULL, '2022-03-09 11:01:24', '2022-03-25 05:12:33'),
 (5, 5465, 'RnnJ5saS', 'Alika Avila', NULL, NULL, NULL, 'lawukobov@mailinator.com', NULL, NULL, '$2y$10$/MR9SKwPqOJbVU0uHvd1MOzLwrsQDeUy4aiC1dM3/vnCqF5HFUBKO', NULL, NULL, 1, NULL, NULL, '2022-03-22 03:43:24', '2022-03-22 03:43:24'),
 (6, 2964, 'DeSDyqsv', 'Yvette Glover', 'Cash', '1234567800', NULL, 'testweb@mailinator.com', 'chandamar725@gmail.com', '2022-03-30 09:34:14', '$2y$10$FipZvMlM.AsqEoPvqF8PHOdl7DN43JYgAm4IZRevIZEBwZVLlV6/.', NULL, '627e13ffd2356', 1, '30-03-2022-112134.jpg', NULL, '2022-03-22 06:02:18', '2022-05-13 03:17:03'),
-(7, 5461, 'BuaUhPzS', 'Sydnee Langley', 'Ratliff', '12345678', NULL, 'dudaguhu@interviewer.com', NULL, NULL, '$2y$10$0YqFHYTffC4jMVOzF9oL3.o2AFDbqifo/eWT/FSQlQxTQmI8KIZ6i', NULL, NULL, 1, NULL, NULL, '2022-03-22 06:04:59', '2022-03-31 03:39:09'),
+(7, 5461, 'BuaUhPzS', 'Sydnee Langley', 'Ratliff', '12345678', NULL, 'dudaguhu@interviewer.com', NULL, NULL, '$2y$10$QTyniXWr19HZSfcdvVtvSuWR5c9qde9MmS.D7qiQ.SYSrPOp8Vf8a', NULL, NULL, 1, NULL, NULL, '2022-03-22 06:04:59', '2022-03-31 03:39:09'),
 (8, 8002, 'gzejzmGB', 'Quail Spence', 'Foley', '12345678', NULL, 'xytudip@mailinator.com', NULL, NULL, '$2y$10$QnJbTYfCsFklwp3sSS9njue.6Z0dZhofmCOh8JUSRps2gGPq8gArG', NULL, '623c97c42c7c5', 1, NULL, NULL, '2022-03-24 05:11:51', '2022-03-25 02:18:42'),
 (9, 8261, 'rHkpKl0y', 'Kibo Bryan', 'Martinez', '3333333', NULL, 'xanytabaki@mailinator.com', NULL, NULL, '$2y$10$NqsSaD8g/gS.dUG1ld3jXeocINr2AACWC0KzWkMlp49XVR7DEFp2m', NULL, NULL, 1, NULL, NULL, '2022-03-24 06:29:39', '2022-03-24 06:29:39'),
 (10, 7074, 'MglQUbN3', 'Reuben Barry', 'Torres', '34343343', NULL, 'viqytujehy@mailinator.com', NULL, NULL, '$2y$10$YfFUjBeeyy0Zos/laTDfR.As6L8Ks4NOsV2XDNhGEDGladKGgKP8q', NULL, '623c568702ce1', 1, NULL, NULL, '2022-03-24 06:31:19', '2022-03-24 06:31:19'),
 (11, 1410, 'Hx0p7sC6', 'Georgia Brock', 'Rutledge', '2222222', NULL, 'cesyxi@mailinator.com', NULL, NULL, '$2y$10$lCMuQ1gcYGzuJ7wzR9Ijwu1JExN7Of.oI8Y/9bSQd7PmuUUP6rpme', NULL, '623c5719ceffa', 1, NULL, NULL, '2022-03-24 06:33:45', '2022-03-24 10:04:19'),
 (34, 5362, '0A6kEVNc', 'Farhan', NULL, NULL, NULL, 'farhandigtandigtal@gmail.com', NULL, NULL, '$2y$10$/Y1cOHddN8DyfpYxMBtaKOEaGHspmUeo7j4RpEBY2C.IYuVV6djxy', NULL, NULL, 1, NULL, NULL, '2022-03-24 09:18:22', '2022-03-25 04:28:38'),
 (39, 5589, '7CKPWJFk', 'Aphrodite Joseph', 'Wooten', 'sizulyz@mailinator.com', 'Enim non sint archi', 'ligiqikuva@mailinator.com', NULL, NULL, '$2y$10$1G.KGmgWm8vBAFRgjsoSRe83E15EBvLzOHTvkPIp12xUcsGufkIg6', NULL, '6284b4b09f1f5', 0, NULL, NULL, '2022-05-18 03:56:16', '2022-05-18 03:56:16'),
-(42, 2230, 'Kuo7FBmK', 'Registeration', 'Mcgowan', NULL, NULL, 'chandamar725@gmail.com', NULL, NULL, '$2y$10$2cHbNy55wECWScuChY52buQYdZGsZJ.bd4mZoPs.foHARoXv.bSoO', NULL, '62ab3ae019ac5', 0, NULL, NULL, '2022-06-16 09:14:56', '2022-06-16 09:14:56');
+(42, 2230, 'Kuo7FBmK', 'Registeration', 'Mcgowan', NULL, NULL, 'chandamar725@gmail.com', NULL, NULL, '$2y$10$2cHbNy55wECWScuChY52buQYdZGsZJ.bd4mZoPs.foHARoXv.bSoO', NULL, '62ab3ae019ac5', 0, NULL, NULL, '2022-06-16 09:14:56', '2022-06-16 09:14:56'),
+(43, 9896, 'yc158DAl', 'Aman', 'Singh', '0403717283', NULL, 'amanpreet.india@gmail.com', NULL, '2022-07-06 16:31:19', '$2y$10$QTyniXWr19HZSfcdvVtvSuWR5c9qde9MmS.D7qiQ.SYSrPOp8Vf8a', NULL, NULL, 1, NULL, NULL, '2022-07-06 16:31:04', '2022-07-06 16:31:19'),
+(44, 2801, '2gM5y5wp', 'Aman', 'Interviewer', '09936319660', NULL, 'aman_preet@hotmail.com', NULL, '2022-07-06 16:41:03', '$2y$10$QTyniXWr19HZSfcdvVtvSuWR5c9qde9MmS.D7qiQ.SYSrPOp8Vf8a', NULL, NULL, 1, NULL, NULL, '2022-07-06 16:40:40', '2022-07-06 16:41:03'),
+(45, 5052, 'AiRUAaPu', 'Ahsan', 'Abid', '+923133255662', NULL, 'ahsankk1sd26@gmail.com', NULL, '2022-07-06 17:27:10', '$2y$10$gq1V7nWkccXMTj7X0foFluuyKvfhiAUIHdI3dEyv4YqHTs9M7/1Ra', NULL, NULL, 0, NULL, NULL, '2022-07-06 17:26:50', '2022-07-06 17:27:10'),
+(46, 5462, 'lK8H21cV', 'Ahsan', 'kk', '+923133255662', NULL, 'ahsankk126@gmail.com', NULL, '2022-07-06 17:28:40', '$2y$10$vOgjsF2enmOP1EFQE3tgyufcyyeRNml5I8hDvlE1MMjZsc5UmXYDu', NULL, NULL, 1, NULL, NULL, '2022-07-06 17:28:20', '2022-07-06 17:28:40'),
+(48, 6577, '0TaewRZb', 'Ahsan', 'ali', '03133255662', NULL, 'digtandigital20@gmail.com', NULL, '2022-07-06 17:40:31', '$2y$10$GXBhAJLQGYw3kmOAdFU0F.0zkU49exBzt7StG0YiCJGuGJ5s9nwc2', NULL, NULL, 1, NULL, NULL, '2022-07-06 17:38:23', '2022-07-06 17:41:27'),
+(49, 6377, 'PEpaydtR', 'Ahsan', 'Abid', '03133255662', NULL, 'digtndigitalfiver@gmail.com', NULL, NULL, '$2y$10$5BlBx5xUWFgKtErEfGX02OfwZjGuk.rshnd/2qSsXUgd3hrw2Xx/q', NULL, '62c6a4e0155ee', 0, NULL, NULL, '2022-07-07 13:18:24', '2022-07-07 13:18:24'),
+(50, 4575, 'ocwbL55y', 'Ahsan', 'kk', '+923133255662', NULL, 'digtandigital18@gmail.com', NULL, NULL, '$2y$10$c32Yb3X56TAiD36i0/5InObkr/bRgUMJwD.7gAURbKGm6XCVZ/S1C', NULL, '62c6a51d24034', 0, NULL, NULL, '2022-07-07 13:19:25', '2022-07-07 13:19:25');
 
 -- --------------------------------------------------------
 
@@ -2012,7 +2034,8 @@ CREATE TABLE `user_details` (
 --
 
 INSERT INTO `user_details` (`id`, `user_id`, `date_of_birth`, `gender`, `address`, `language_slug`, `skype_id`, `created_at`, `updated_at`) VALUES
-(1, 7, '2022-03-28', 'male', 'Address tested', 'hindi', '12222222', '2022-03-28 07:36:41', '2022-03-28 08:05:32');
+(1, 7, '2022-03-28', 'male', 'Address tested', 'hindi', '12222222', '2022-03-28 07:36:41', '2022-03-28 08:05:32'),
+(2, 48, '2022-07-14', 'male', 'Flat # 303/4 sulehra appartment gulistan-e-johar\r\n3534534', 'french', '1231312', '2022-07-06 17:43:21', '2022-07-06 17:43:21');
 
 -- --------------------------------------------------------
 
@@ -2466,13 +2489,13 @@ ALTER TABLE `advantage_mocks`
 -- AUTO_INCREMENT for table `available_slots`
 --
 ALTER TABLE `available_slots`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `available_slot_dates`
 --
 ALTER TABLE `available_slot_dates`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `blogs`
@@ -2490,7 +2513,7 @@ ALTER TABLE `booking_priorities`
 -- AUTO_INCREMENT for table `book_interviews`
 --
 ALTER TABLE `book_interviews`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -2532,13 +2555,13 @@ ALTER TABLE `degrees`
 -- AUTO_INCREMENT for table `experiences`
 --
 ALTER TABLE `experiences`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `experience_details`
 --
 ALTER TABLE `experience_details`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -2562,7 +2585,7 @@ ALTER TABLE `how_works`
 -- AUTO_INCREMENT for table `interviewer_interview_types`
 --
 ALTER TABLE `interviewer_interview_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `interviewer_wallets`
@@ -2604,13 +2627,13 @@ ALTER TABLE `languages`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=136;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
 
 --
 -- AUTO_INCREMENT for table `notifications`
@@ -2676,13 +2699,13 @@ ALTER TABLE `projects`
 -- AUTO_INCREMENT for table `qualifications`
 --
 ALTER TABLE `qualifications`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `qualification_details`
 --
 ALTER TABLE `qualification_details`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `read_notifications`
@@ -2700,7 +2723,7 @@ ALTER TABLE `referrals`
 -- AUTO_INCREMENT for table `resumes`
 --
 ALTER TABLE `resumes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -2754,13 +2777,13 @@ ALTER TABLE `testimonials`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `user_details`
 --
 ALTER TABLE `user_details`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `user_know_languages`

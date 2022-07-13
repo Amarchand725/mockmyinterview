@@ -8,6 +8,7 @@
     <title> @yield('title')</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <!-- Favicons -->
     @if($home_page_data['header_logo'])

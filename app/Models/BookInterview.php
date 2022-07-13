@@ -18,4 +18,14 @@ class BookInterview extends Model
     {
         return $this->hasOne(User::class, 'id', 'interviewer_id');
     }
+
+    public function hasParentInterviewType()
+    {
+        return $this->hasOne(InterviewType::class, 'id', 'parent_interview_type_id');
+    }
+
+    public function hasChildInterviewType()
+    {
+        return $this->hasOne(InterviewType::class, 'id', 'child_interview_type_id');
+    }
 }

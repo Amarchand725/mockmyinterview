@@ -38,9 +38,10 @@
                                         <th>Condidate</th>
                                         <th>Interviewer</th>
                                     @endif
-                                    <th>Priority</th>
-                                    <th>Type</th>
                                     <th>Meeting ID</th>
+                                    <th>Parent Type</th>
+                                    <th>Child Type</th>
+                                    <th>Slot</th>
                                     <th>Duration</th>
                                     <th class="col-sm-1">Status</th>
                                     <th>Join URL</th>
@@ -61,9 +62,10 @@
                                             <td>{{ $interview->hasInterviewer->name }}</td>
                                         @endif
                                         
-                                        <td>{{ \Illuminate\Support\Str::upper($interview->booking_type_slug) }}</td>
-                                        <td>{{ \Illuminate\Support\Str::upper($interview->interview_type) }}</td>
                                         <td>{{ $interview->meeting_id }}</td>
+                                        <td>{{ isset($interview->hasParentInterviewType)?$interview->hasParentInterviewType->name:'' }}</td>
+                                        <td>{{ isset($interview->hasChildInterviewType)?$interview->hasChildInterviewType->name:'' }}</td>
+                                        <td>{{ $interview->slot }}</td>
                                         <td>{{ $interview->duration }} Mins</td>
                                         <td>
                                             @if($interview->status==1)

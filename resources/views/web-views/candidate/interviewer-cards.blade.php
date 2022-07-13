@@ -1,3 +1,6 @@
+<span class="side-heading-font">
+    Available Interviewer <span style="font-size:12px !important;font-weight:400 !important;color:inherit; ">&nbsp;&nbsp;<small>(All time slots listed are in IST)</small></span>
+</span>
 <div class="row pt-4">
     @foreach ($models as $model)
         <div class="col-md-2">
