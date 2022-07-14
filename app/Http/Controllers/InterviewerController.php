@@ -84,26 +84,31 @@ class InterviewerController extends Controller
     }
     public function createSlot(Request $request)
     {
-        // return $start_time = strtotime('2022-07-14 09:00:00');
         $start_time = strtotime($request->start_date_time);
-        // $end_time = strtotime('2022-07-15 19:45:00');
         $end_time = strtotime($request->end_date_time);
-        $slot = strtotime(date('Y-m-d h:i',$start_time) . ' +30 minutes');
+        $slot = strtotime(date('Y-m-d H:i:s', $start_time) . ' +30 minutes');
 
         $data = [];
 
         for ($i=0; $slot <= $end_time; $i++) { 
 
             $data[$i] = [ 
-                'start' => date('Y-m-d h:i', $start_time),
-                'end' => date('Y-m-d h:i', $slot),
+                'start' => date('Y-m-d H:i:s', $start_time),
+                'end' => date('Y-m-d H:i:s', $slot),
             ];
 
             $start_time = $slot;
-            $slot = strtotime(date('Y-m-d h:i',$start_time) . ' +30 minutes');
+            $slot = strtotime(date('Y-m-d H:i:s', $start_time) . ' +30 minutes');
         }
         // return $data;
-        print_r($data);
-        die;
+        return (string) view('web-views.interviewer.slots', compact('data'));
+        /* // return $data;
+        // print_r($data);
+        // die;
+
+        foreach($data as $item){
+            // return date('h:i', strtotime($item['start']));
+        } */
+
     }
 }

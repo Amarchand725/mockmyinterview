@@ -1,7 +1,7 @@
-@extends('web-views.dashboard.master.app')
 
-@section('title', $page_title)
-@push('css')
+
+<?php $__env->startSection('title', $page_title); ?>
+<?php $__env->startPush('css'); ?>
     <style>
         .slot{
             border: none;
@@ -29,8 +29,8 @@
             border-color: #050505f2;
         }
     </style>
-@endpush
-@section('content')
+<?php $__env->stopPush(); ?>
+<?php $__env->startSection('content'); ?>
     <div class="container py-3 ">
         <div class="row mx-auto">
             <h2 class="mb-3 text-center">PROFILE </h2>
@@ -54,47 +54,47 @@
 
                 <!-- Personl Details -->
                 <div id="tab01" class="tab-contents">
-                    <form id="personal-details" method="post" action="{{ route('my_profile.personal_details') }}">
-                        @csrf
-                        @php $user_details = isset(Auth::user()->hasUserDetails)?Auth::user()->hasUserDetails:null; @endphp 
+                    <form id="personal-details" method="post" action="<?php echo e(route('my_profile.personal_details')); ?>">
+                        <?php echo csrf_field(); ?>
+                        <?php $user_details = isset(Auth::user()->hasUserDetails)?Auth::user()->hasUserDetails:null; ?> 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group float-label-control">
                                     <label for="first_name">First Name  </label>
-                                    <input type="name" name="name" class="form-control" value="{{ Auth::user()->name }}" id="first_name" placeholder="First Name">
+                                    <input type="name" name="name" class="form-control" value="<?php echo e(Auth::user()->name); ?>" id="first_name" placeholder="First Name">
                                 </div>
                                 <div class="form-group float-label-control">
                                     <label for="last_name">Last Name</label>
-                                    <input type="text" name="last_name" class="form-control" value="{{ Auth::user()->last_name }}" id="last_name" placeholder="Last Name">
+                                    <input type="text" name="last_name" class="form-control" value="<?php echo e(Auth::user()->last_name); ?>" id="last_name" placeholder="Last Name">
                                 </div>
                                 <div class="form-group float-label-control">
                                     <label for="email">Email</label>
-                                    <input type="email" class="form-control" readonly value="{{ Auth::user()->email }}" id="email" placeholder="email">
+                                    <input type="email" class="form-control" readonly value="<?php echo e(Auth::user()->email); ?>" id="email" placeholder="email">
                                 </div>
                                 <div class="form-group float-label-control">
                                     <label for="phone">Phone</label>
-                                    <input type="text" name="phone" class="form-control" value="{{ Auth::user()->phone }}" id="phone" placeholder="Phone">
+                                    <input type="text" name="phone" class="form-control" value="<?php echo e(Auth::user()->phone); ?>" id="phone" placeholder="Phone">
                                 </div>
                                 <div class="form-group float-label-control">
                                     <label for="date_of_birth">Date of Birth</label>
-                                    <input type="text" name="date_of_birth" value="{{ !empty($user_details)?$user_details->date_of_birth:'' }}" class="form-control datepicker" id="date_of_birth" placeholder="Date of Birth">
+                                    <input type="text" name="date_of_birth" value="<?php echo e(!empty($user_details)?$user_details->date_of_birth:''); ?>" class="form-control datepicker" id="date_of_birth" placeholder="Date of Birth">
                                 </div>
                                 <div class="form-check">
-                                    @if(!empty($user_details) && $user_details->gender=='male')
+                                    <?php if(!empty($user_details) && $user_details->gender=='male'): ?>
                                         <input class="form-check-input" type="radio" value="male" name="gender" id="male" checked>
-                                    @else 
+                                    <?php else: ?> 
                                         <input class="form-check-input" type="radio" value="male" name="gender" id="male">
-                                    @endif
+                                    <?php endif; ?>
                                     <label class="form-check-label" for="male">
                                         Male
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    @if(!empty($user_details) && $user_details->gender=='female')
+                                    <?php if(!empty($user_details) && $user_details->gender=='female'): ?>
                                         <input class="form-check-input" type="radio" value="female" name="gender" id="female" checked>
-                                    @else 
+                                    <?php else: ?> 
                                         <input class="form-check-input" type="radio" value="female" name="gender" id="female">
-                                    @endif
+                                    <?php endif; ?>
                                     <label class="form-check-label" for="female">
                                         Female
                                     </label>
@@ -103,17 +103,17 @@
                             <div class="col-md-6 language">
                                 <div class="form-group float-label-control">
                                     <label for="address">Address</label>
-                                    <textarea name="address" class="form-control" id="address" placeholder="Address" rows="4">{{ !empty($user_details)?$user_details->address:'' }}</textarea>
+                                    <textarea name="address" class="form-control" id="address" placeholder="Address" rows="4"><?php echo e(!empty($user_details)?$user_details->address:''); ?></textarea>
                                 </div>
                                 <label for="language">Languages Known (Hold shift/ctrl to select more than one language)</label>
                                 <select class="form-select select2" name="language_slug" id="language">
-                                    @foreach ($languages as $language)
-                                        <option value="{{ $language->slug }}" {{ !empty($user_details)?($user_details->language_slug==$language->slug?'selected':''):'' }}>{{ $language->title }}</option>
-                                    @endforeach    
+                                    <?php $__currentLoopData = $languages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $language): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($language->slug); ?>" <?php echo e(!empty($user_details)?($user_details->language_slug==$language->slug?'selected':''):''); ?>><?php echo e($language->title); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>    
                                 </select>
                                 <div class="form-group float-label-control">
                                     <label for="skype_id">Skype ID</label>
-                                    <input type="name" name="skype_id" class="form-control" value="{{ !empty($user_details)?$user_details->skype_id:'' }}" id="skype_id" placeholder="Skype ID">
+                                    <input type="name" name="skype_id" class="form-control" value="<?php echo e(!empty($user_details)?$user_details->skype_id:''); ?>" id="skype_id" placeholder="Skype ID">
                                 </div>
                             </div>
                             <div class="form-group float-label-control">
@@ -125,12 +125,12 @@
 
                 <!-- Qualification & Qualification Details -->
                 <div id="tab02" class="tab-contents">
-                    @php 
+                    <?php 
                         $qualifications = isset(Auth::user()->hasUserQualification)?Auth::user()->hasUserQualification:null;
                         $qualification_details = isset(Auth::user()->hasUserQualificationDetails)?Auth::user()->hasUserQualificationDetails:null;
-                    @endphp 
-                    <form id="qualification-details" method="post" action="{{ route('my_profile.qualifications') }}">
-                        @csrf
+                    ?> 
+                    <form id="qualification-details" method="post" action="<?php echo e(route('my_profile.qualifications')); ?>">
+                        <?php echo csrf_field(); ?>
                         <div class="row institute">
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -143,9 +143,9 @@
                                     <label for="degree">Degree</label>
                                     <select name="degrees[]" class="form-control select2 degree" id="">
                                         <option value="" selected>Select degree</option>
-                                        @foreach ($degrees as $degree)
-                                            <option value="{{ $degree->slug }}">{{ $degree->title }}</option>
-                                        @endforeach
+                                        <?php $__currentLoopData = $degrees; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $degree): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($degree->slug); ?>"><?php echo e($degree->title); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>   
                                 </div>
                             </div>
@@ -166,31 +166,31 @@
                             <div class="col-md-1">
                                 <div class="tool-tip">
                                     <div class="title">
-                                        <button type="button" data-degrees="{{ $degrees }}" id="institute-btn" class="blue-btn-small">
+                                        <button type="button" data-degrees="<?php echo e($degrees); ?>" id="institute-btn" class="blue-btn-small">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        @if(!empty($qualifications))
-                            @foreach ($qualifications as $key=>$qualification)
-                                @php 
+                        <?php if(!empty($qualifications)): ?>
+                            <?php $__currentLoopData = $qualifications; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$qualification): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php 
                                     $courses = courses($qualification->degree_slug);
-                                @endphp 
+                                ?> 
                                 <div class="row institute">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <input type="text" name="institutes[]" id="institute" class="form-control" value="{{ $qualification->institute }}" placeholder="Enter institute name">
+                                            <input type="text" name="institutes[]" id="institute" class="form-control" value="<?php echo e($qualification->institute); ?>" placeholder="Enter institute name">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <select name="degrees[]" class="form-control select2 degree" id="">
                                                 <option value="" selected>Select degree</option>
-                                                @foreach ($degrees as $degree)
-                                                    <option value="{{ $degree->slug }}" {{ $qualification->degree_slug==$degree->slug?'selected':'' }}>{{ $degree->title }}</option>
-                                                @endforeach
+                                                <?php $__currentLoopData = $degrees; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $degree): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <option value="<?php echo e($degree->slug); ?>" <?php echo e($qualification->degree_slug==$degree->slug?'selected':''); ?>><?php echo e($degree->title); ?></option>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </select>   
                                         </div>
                                     </div>
@@ -198,40 +198,40 @@
                                         <div class="form-group">
                                             <select name="courses[]" id="courses" class="form-control selecte2">
                                                 <option value="" selected>Select course</option>
-                                                @foreach ($courses as $course)
-                                                    <option value="{{ $course->slug }}" {{ $qualification->course_slug==$course->slug?'selected':'' }}>{{ $course->title }}</option>
-                                                @endforeach
+                                                <?php $__currentLoopData = $courses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $course): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <option value="<?php echo e($course->slug); ?>" <?php echo e($qualification->course_slug==$course->slug?'selected':''); ?>><?php echo e($course->title); ?></option>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
-                                            <input type="text" value="{{ $qualification->passing_year }}" class="form-control" id="passing_year" name="passing_years[]" placeholder="Year e.g 2022">
+                                            <input type="text" value="<?php echo e($qualification->passing_year); ?>" class="form-control" id="passing_year" name="passing_years[]" placeholder="Year e.g 2022">
                                         </div>
                                     </div>
                                     <div class="col-md-1">
                                         <div class="tool-tip">
-                                            <button type="button" data-degrees="{{ $degrees }}" id="remove-btn" style="background-color:#b92b2b" class="blue-btn-small ml-2">
+                                            <button type="button" data-degrees="<?php echo e($degrees); ?>" id="remove-btn" style="background-color:#b92b2b" class="blue-btn-small ml-2">
                                                 <i class="fa fa-times"></i>
                                             </button>
                                         </div>
                                     </div>
                                 </div>   
-                            @endforeach
-                        @endif
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endif; ?>
                         <span id="added-more"></span>    
 
                         <div class="form-group float-label-control">
                             <label for="achievement">Achievemnts</label>
-                            <textarea class="form-control" id="achievement" name="achievements" placeholder="Achievemnts" rows="5">{{ isset($qualification_details->achievements)?$qualification_details->achievements:'' }}</textarea>
+                            <textarea class="form-control" id="achievement" name="achievements" placeholder="Achievemnts" rows="5"><?php echo e(isset($qualification_details->achievements)?$qualification_details->achievements:''); ?></textarea>
                         </div>
                         <div class="form-group float-label-control">
                             <label for="awards">Awards</label>
-                            <textarea class="form-control" id="awards" name="awards" placeholder="Awards" rows="5">{{ isset($qualification_details->awards)?$qualification_details->awards:'' }}</textarea>
+                            <textarea class="form-control" id="awards" name="awards" placeholder="Awards" rows="5"><?php echo e(isset($qualification_details->awards)?$qualification_details->awards:''); ?></textarea>
                         </div>
                         <div class="form-group float-label-control">
                             <label for="additional">Additional </label>
-                            <textarea class="form-control" id="additional" name="additional_data" placeholder="Additional" rows="5">{{ isset($qualification_details->additional_data)?$qualification_details->additional_data:'' }}</textarea>
+                            <textarea class="form-control" id="additional" name="additional_data" placeholder="Additional" rows="5"><?php echo e(isset($qualification_details->additional_data)?$qualification_details->additional_data:''); ?></textarea>
                         </div>
                         <div class="form-group float-label-control">
                             <button type="submit" class="btn btn-info">Save</button>
@@ -241,8 +241,8 @@
 
                 <!-- Experience & Experience Details -->
                 <div id="tab03" class="tab-contents">
-                    <form id="experience-details" method="post" action="{{ route('my_profile.experience') }}">
-                        @csrf
+                    <form id="experience-details" method="post" action="<?php echo e(route('my_profile.experience')); ?>">
+                        <?php echo csrf_field(); ?>
                         <div class="row experience">
                             <div class="col-md-2">
                                 <div class="form-group">
@@ -286,33 +286,33 @@
                                 </div>
                             </div>
                         </div>
-                        @foreach (Auth::user()->hasUserExperiences as $experience)
+                        <?php $__currentLoopData = Auth::user()->hasUserExperiences; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $experience): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <div class="row experience">
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <input type="text" name="positions[]" class="form-control" value="{{ $experience->position }}" placeholder="Enter position">
+                                        <input type="text" name="positions[]" class="form-control" value="<?php echo e($experience->position); ?>" placeholder="Enter position">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <input type="text" name="companies[]" class="form-control" value="{{ $experience->company }}" placeholder="Enter company name">
+                                        <input type="text" name="companies[]" class="form-control" value="<?php echo e($experience->company); ?>" placeholder="Enter company name">
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <input type="text" name="joining_dates[]" class="form-control datepicker joining-date" value="{{ date('d/m/Y', strtotime($experience->joining_date)) }}" placeholder="Select joining date">
+                                        <input type="text" name="joining_dates[]" class="form-control datepicker joining-date" value="<?php echo e(date('d/m/Y', strtotime($experience->joining_date))); ?>" placeholder="Select joining date">
                                         <span class="error-joining-date" style="color:red"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <input type="text" name="leaving_date[]" class="form-control datepicker leaving-date" value="{{ date('d/mY', strtotime($experience->leaving_date)) }}" placeholder="Select leaving date">
+                                        <input type="text" name="leaving_date[]" class="form-control datepicker leaving-date" value="<?php echo e(date('d/mY', strtotime($experience->leaving_date))); ?>" placeholder="Select leaving date">
                                         <span class="error-leaving-date" style="color:red"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <input type="text" name="experiences[]" class="form-control experience-years" value="{{ $experience->experiences }}" id="experience-years" readonly>
+                                        <input type="text" name="experiences[]" class="form-control experience-years" value="<?php echo e($experience->experiences); ?>" id="experience-years" readonly>
                                     </div>
                                 </div>
                                 <div class="col-md-1">
@@ -323,7 +323,7 @@
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         
                         <span id="added-more-experience"></span>
 
@@ -331,13 +331,13 @@
                         <div class="row ">
                             <div class="form-group">
                                 <label for="summar">Summary</label>
-                                <textarea name="summary" rows="3" id="summar" class="form-control" placeholder="Enter summary">{{ isset(Auth::user()->hasUserExperienceDetails)?Auth::user()->hasUserExperienceDetails->summary:'' }}</textarea>
+                                <textarea name="summary" rows="3" id="summar" class="form-control" placeholder="Enter summary"><?php echo e(isset(Auth::user()->hasUserExperienceDetails)?Auth::user()->hasUserExperienceDetails->summary:''); ?></textarea>
                             </div>
                         </div>
                         <div class="row ">
                             <div class="form-group">
                                 <label for="experties">Expertise Details</label>
-                                <textarea name="expertise" rows="3" id="experties" class="form-control" placeholder="Enter experties">{{ isset(Auth::user()->hasUserExperienceDetails)?Auth::user()->hasUserExperienceDetails->expertise:'' }}</textarea>
+                                <textarea name="expertise" rows="3" id="experties" class="form-control" placeholder="Enter experties"><?php echo e(isset(Auth::user()->hasUserExperienceDetails)?Auth::user()->hasUserExperienceDetails->expertise:''); ?></textarea>
                             </div>
                         </div>
                         <div class="row">
@@ -350,40 +350,40 @@
 
                 <!-- Resume -->
                 <div id="tab04" class="tab-contents">
-                    <form action="{{ route('my_profile.resume') }}" method="post" enctype="multipart/form-data">
-                        @csrf
+                    <form action="<?php echo e(route('my_profile.resume')); ?>" method="post" enctype="multipart/form-data">
+                        <?php echo csrf_field(); ?>
                         <div class="row">
-                            @if(isset(Auth::user()->hasResume) && !empty(Auth::user()->hasResume->resume))
+                            <?php if(isset(Auth::user()->hasResume) && !empty(Auth::user()->hasResume->resume)): ?>
                                 <div class="form-group">
                                     <label for="" class="col-sm-2 control-label">Exist Your Resume </label>
                                     <div class="col-sm-9" style="padding-top:5px">
-                                        <iframe src="{{ asset('public/web/assets/resumes') }}/{{ Auth::user()->hasResume->resume }}" style="width:600px; height:500px;" frameborder="0"></iframe>
+                                        <iframe src="<?php echo e(asset('public/web/assets/resumes')); ?>/<?php echo e(Auth::user()->hasResume->resume); ?>" style="width:600px; height:500px;" frameborder="0"></iframe>
                                     </div>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                             <div class="form-group">
                                 <label for="upload">Resume <small style="color: orange">(Uploade new resume if you want to replace otherwise keep it empty.)</small></label>
                                 <input type="file" name="resume" id="myFile" class="form-control" accept=".doc, .docx, .pdf">
                             </div>
-                            @if(isset(Auth::user()->hasResume) && !empty(Auth::user()->hasResume->introduction_video))
+                            <?php if(isset(Auth::user()->hasResume) && !empty(Auth::user()->hasResume->introduction_video)): ?>
                                 <div class="form-group">
                                     <label for="" class="col-sm-5 control-label">Exist Your Introduction Video </label>
                                     <div class="col-sm-9" style="padding-top:5px">
                                         <video width="320" height="240" controls>
-                                            <source src="{{ asset('public/web/assets/resumes') }}/{{ Auth::user()->hasResume->introduction_video }}" type="video/mp4">
+                                            <source src="<?php echo e(asset('public/web/assets/resumes')); ?>/<?php echo e(Auth::user()->hasResume->introduction_video); ?>" type="video/mp4">
                                             <source src="movie.ogg" type="video/ogg">
                                             Your browser does not support the video tag.
                                           </video>
                                     </div>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                             <div class="form-group">
                                 <label for="upload">Introduction Video <small style="color: orange">(Uploade new video if you want to replace otherwise keep it empty.)</small></label>
                                 <input type="file" name="introduction_video" class="form-control" accept="video/mp4,video/x-m4v,video/*">
                             </div>
                             <div class="form-group float-label-control">
                                 <label for="linkedin_url">LinkedIn Url  </label>
-                                <input type="text" name="linkedin_url" value="{{ isset(Auth::user()->hasResume)?Auth::user()->hasResume->linkedin_url:'' }}" class="form-control" id="linkedin_url" placeholder="LinkedIn Url">
+                                <input type="text" name="linkedin_url" value="<?php echo e(isset(Auth::user()->hasResume)?Auth::user()->hasResume->linkedin_url:''); ?>" class="form-control" id="linkedin_url" placeholder="LinkedIn Url">
                             </div>
                         </div>
                         <div class="row">
@@ -396,22 +396,22 @@
 
                 <!-- Password Update  -->
                 <div id="tab05" class="tab-contents">
-                    <form action="{{ route('my_profile.password') }}" method="post">
-                        @csrf
+                    <form action="<?php echo e(route('my_profile.password')); ?>" method="post">
+                        <?php echo csrf_field(); ?>
                         <div class="form-group float-label-control">
                             <label for="password">Current Password  <span style="color: red">*</span></label>
                             <input type="password" name="password" class="form-control" id="password" placeholder="Current Password" required>
-                            <span style="color: red">{{ $errors->first('password') }}</span>
+                            <span style="color: red"><?php echo e($errors->first('password')); ?></span>
                         </div>
                         <div class="form-group float-label-control">
                             <label for="new_password">New password <span style="color: red">*</span></label>
                             <input type="password" name="new_password" class="form-control" id="new_password" placeholder="New password" required>
-                            <span style="color: red">{{ $errors->first('new_password') }}</span>
+                            <span style="color: red"><?php echo e($errors->first('new_password')); ?></span>
                         </div>
                         <div class="form-group float-label-control">
                             <label for="confirm_password">Confirm Password <span style="color: red">*</span></label>
                             <input type="password" name="confirmed" class="form-control" id="confirm_password" placeholder="Confirm Password" required>
-                            <span style="color: red">{{ $errors->first('confirmed') }}</span>
+                            <span style="color: red"><?php echo e($errors->first('confirmed')); ?></span>
                         </div>
                         <div class="row">
                             <div class="col-md-12 mt-3">
@@ -423,20 +423,20 @@
 
                 <!-- Interview Type -->
                 <div id="tab06" class="tab-contents">
-                    <form action="{{ route('my_profile.interview') }}" method="post" enctype="multipart/form-data">
-                        @csrf
+                    <form action="<?php echo e(route('my_profile.interview')); ?>" method="post" enctype="multipart/form-data">
+                        <?php echo csrf_field(); ?>
                         <div class="row mx-auto custome" style="border: 2px solid #eee;">
                             <div class="row custome-interview-types">
                                 <div class="col-md-5">
-                                    <input type="hidden" id="parent-types" data-parent-types="{{ json_encode($parent_interview_types) }}">
+                                    <input type="hidden" id="parent-types" data-parent-types="<?php echo e(json_encode($parent_interview_types)); ?>">
                                     <label for="start-date">Parent Interview Type</label>
                                     <select name="parent_ids[]" id="" class="form-control parent-type">
                                         <option value="" disabled selected>Select parent</option>
-                                        @foreach ($parent_interview_types as $type)
-                                            <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                        @endforeach
+                                        <?php $__currentLoopData = $parent_interview_types; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $type): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($type->id); ?>"><?php echo e($type->name); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
-                                    <span style="color: red">{{ $errors->first('parent_ids') }}</span>
+                                    <span style="color: red"><?php echo e($errors->first('parent_ids')); ?></span>
                                 </div>
                                 
                                 <div class="col-md-5">
@@ -444,7 +444,7 @@
                                         <label for="start-date">Child Interview Type</label>
                                         <span id="child-types">
                                             <select name="child_interview_types" multiple id="child_interview_type_id" class="form-control"></select>
-                                            <span style="color: red">{{ $errors->first('child_interview_types') }}</span>
+                                            <span style="color: red"><?php echo e($errors->first('child_interview_types')); ?></span>
                                         </span>
                                     </div>
                                 </div>
@@ -460,8 +460,8 @@
                 <div id="tab07" class="tab-contents">
                     <h2 class="mb-3 text-left">Interview Scheduler </h2>
                     <div class="py-3">
-                        <form action="{{ route('available_slot.store') }}" method="post" id="subform">
-                            @csrf
+                        <form action="<?php echo e(route('available_slot.store')); ?>" method="post" id="subform">
+                            <?php echo csrf_field(); ?>
             
                             <div class="row mx-auto" style="border: 2px solid #eee;">
                                 <div class="row">
@@ -469,36 +469,20 @@
                                         <div class="form-group pmd-textfield pmd-textfield-floating-label">
                                             <label class="control-label" for="datepicker-start">Start Date</label>
                                             <input type="datetime-local" class="form-control" name="start_date" id="datepicker-start">
-                                            <span style="color: red" id="error-start-date">{{ $errors->first('start_date') }}</span>
+                                            <span style="color: red" id="error-start-date"><?php echo e($errors->first('start_date')); ?></span>
                                         </div>
                                     </div>
                                     <div class="col-sm-6"> 
                                         <div class="form-group pmd-textfield pmd-textfield-floating-label">
                                             <label class="control-label" for="datepicker-end">End Date</label>
                                             <input type="datetime-local" class="form-control" name="end_date" id="datepicker-end">
-                                            <span style="color: red" id="error-end-date">{{ $errors->first('end_date') }}</span>
+                                            <span style="color: red" id="error-end-date"><?php echo e($errors->first('end_date')); ?></span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             
-                            {{-- <div class="row mx-auto" style="border: 2px solid #eee;">
-                                <div class="col-md-8">
-                                    <div class="row text-md">
-                                        <b>Do you want to Create / Cancel Interview Slots?</b> &nbsp;
-                                    </div>
-                                </div>
-                                <div class="col-md-10">
-                                    <label class="radio-inline">
-                                        <input type="radio" name="sessiontype" id="createBulkInterviews" value="1" checked style="height:20px; width:20px;"> &nbsp;&nbsp;Create
-                                    </label>
-                                </div>
-                                <div class="col-md-10">
-                                    <label class="radio-inline">
-                                        <input type="radio" name="sessiontype" id="cancelBulkInterviews" value="2" style="height:20px; width:20px;">&nbsp;&nbsp;Cancel 
-                                    </label>
-                                </div>
-                            </div> --}}
+                            
                             
                             <div class="row mx-auto pt-4" style="border: 2px solid #eee;">
                                 <span class="slot-days"></span>
@@ -521,8 +505,8 @@
             </div>
         </div>
     </div>
-@endsection
-@push('js')
+<?php $__env->stopSection(); ?>
+<?php $__env->startPush('js'); ?>
     <script>
         $(document).on('change', '#datepicker-start', function(){
             var start_date_time = $(this).val();
@@ -540,7 +524,7 @@
             }else{
                 $('#error-start-date').html('');
                 $.ajax({
-                    url : "{{ route('create-slots') }}",
+                    url : "<?php echo e(route('create-slots')); ?>",
                     data : {'start_date_time' : start_date_time, 'end_date_time' : end_date_time},
                     success : function(response){
                         // console.log(response);
@@ -566,7 +550,7 @@
             }else{
                 $('#error-start-date').html('');
                 $.ajax({
-                    url : "{{ route('create-slots') }}",
+                    url : "<?php echo e(route('create-slots')); ?>",
                     data : {'start_date_time' : start_date_time, 'end_date_time' : end_date_time},
                     success : function(response){
                         // console.log(response);
@@ -605,7 +589,7 @@
                                         }
                                     });
                                 html += '</select>'+
-                                '<span style="color: red">{{ $errors->first("parent_id") }}</span>'+
+                                '<span style="color: red"><?php echo e($errors->first("parent_id")); ?></span>'+
                             '</div>'+
                             
                             '<div class="col-md-5">'+
@@ -628,7 +612,7 @@
             var parent_id = $(this).val();
             var current = $(this);
             $.ajax({
-                url : "{{ route('get-child-interview-types') }}",
+                url : "<?php echo e(route('get-child-interview-types')); ?>",
                 data : {'parent_id' : parent_id},
                 success : function(response){
                     var html = '<select name="child_interview_types['+response.parent_id+'][]" multiple id="child_interview_type_id" class="form-control">'+
@@ -672,7 +656,7 @@
                 }
                 
                 $.ajax({
-                    url : "{{ route('get-slots') }}",
+                    url : "<?php echo e(route('get-slots')); ?>",
                     data : {'slot_type' : slot_type},
                     success : function(response){
                         $('.slot-days').html(response);
@@ -700,7 +684,7 @@
                 }
 
                 $.ajax({
-                    url : "{{ route('get-slots') }}",
+                    url : "<?php echo e(route('get-slots')); ?>",
                     data : {'slot_type' : slot_type},
                     success : function(response){
                         $('.slot-days').html(response);
@@ -716,7 +700,7 @@
                     }
 
                     $.ajax({
-                        url : "{{ route('get-slots') }}",
+                        url : "<?php echo e(route('get-slots')); ?>",
                         data : {'slot_type' : slot_type},
                         success : function(response){
                             $('.slot-days').html(response);
@@ -774,7 +758,7 @@
                 $(this).parents('.experience').find('.error-joining-date').html('');
 
                 $.ajax({
-                    url : "{{ url('calculate-experience') }}",
+                    url : "<?php echo e(url('calculate-experience')); ?>",
                     data : {'joining_date' : joining_date, 'leaving_date':leaving_date},
                     type : 'GET',
                     success : function(response){
@@ -797,7 +781,7 @@
                 $(this).parents('.experience').find('.error-leaving-date').html('');
 
                 $.ajax({
-                    url : "{{ url('calculate-experience') }}",
+                    url : "<?php echo e(url('calculate-experience')); ?>",
                     data : {'joining_date' : joining_date, 'leaving_date':leaving_date},
                     type : 'GET',
                     success : function(response){
@@ -901,7 +885,7 @@
             var current = $(this);
             $.ajax({
                 type:'GET',
-                url:'{{ url("get_courses") }}/'+degree_slug,
+                url:'<?php echo e(url("get_courses")); ?>/'+degree_slug,
                 success: function( response ) {
                     var html = '';
                     jQuery.each(response, function(index, val) {
@@ -949,4 +933,5 @@
             });
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('web-views.dashboard.master.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mockmyinterview\resources\views/web-views/interviewer/my_profile.blade.php ENDPATH**/ ?>
