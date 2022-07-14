@@ -31,6 +31,8 @@ use App\Models\Referral;
 use App\Models\InterviewType;
 use App\Models\AvailableSlotDate;
 use App\Models\BookInterview;
+use App\Models\InterviewerInterviewType;
+use App\Models\AvailableSlot;
 use Auth;
 use Hash;
 use DB;
@@ -61,7 +63,9 @@ class WebController extends Controller
             return view('web-views.candidate.my_profile', compact('page_title', 'degrees'));
         }elseif(Auth::check() && Auth::user()->hasRole('Interviewer')){
             $parent_interview_types = InterviewType::where('status', 1)->where('parent_id', null)->get(['id', 'name']);
-            return view('web-views.interviewer.my_profile', compact('page_title', 'languages', 'degrees', 'parent_interview_types'));
+            $interviewer_interview_types = InterviewerInterviewType::where('interviewer_id', Auth::user()->id)->get();
+            $interviewer_slots = AvailableSlot::where('interviewer_id', Auth::user()->id)->get();
+            return view('web-views.interviewer.my_profile', compact('page_title', 'languages', 'degrees', 'parent_interview_types', 'interviewer_interview_types'));
         }
     }
     public function personalDetails(Request $request)

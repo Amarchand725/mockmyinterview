@@ -4,6 +4,7 @@ use App\Models\Course;
 use App\Models\Notification;
 use App\Models\Blog;
 use App\Models\BookInterview;
+use App\Models\AvailableSlot;
 
 function globalData()
 {
@@ -41,4 +42,12 @@ function getNotify($notify_id, $notify_type)
     }elseif($notify_type=='book_interview'){
         return BookInterview::where('id', $notify_id)->first();
     }
+}
+
+function getSlot($interviewer_id, $start_time){
+    return AvailableSlot::where('interviewer_id', $interviewer_id)->where('slot', 'like', date('Y-m-d H', strtotime($start_time)).'%')->first();
+}
+
+function getChildInterviewTypes($parent_id){
+    return InterviewType::where('parent_id', $parent_id)->get();
 }

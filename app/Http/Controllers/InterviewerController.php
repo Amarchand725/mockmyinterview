@@ -82,33 +82,4 @@ class InterviewerController extends Controller
         $interviews = $query->paginate(10);
         return (string) view('web-views.interviewer.reports.search', compact('interviews'));
     }
-    public function createSlot(Request $request)
-    {
-        $start_time = strtotime($request->start_date_time);
-        $end_time = strtotime($request->end_date_time);
-        $slot = strtotime(date('Y-m-d H:i:s', $start_time) . ' +30 minutes');
-
-        $data = [];
-
-        for ($i=0; $slot <= $end_time; $i++) { 
-
-            $data[$i] = [ 
-                'start' => date('Y-m-d H:i:s', $start_time),
-                'end' => date('Y-m-d H:i:s', $slot),
-            ];
-
-            $start_time = $slot;
-            $slot = strtotime(date('Y-m-d H:i:s', $start_time) . ' +30 minutes');
-        }
-        // return $data;
-        return (string) view('web-views.interviewer.slots', compact('data'));
-        /* // return $data;
-        // print_r($data);
-        // die;
-
-        foreach($data as $item){
-            // return date('h:i', strtotime($item['start']));
-        } */
-
-    }
 }

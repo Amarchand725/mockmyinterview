@@ -93,11 +93,11 @@ Route::get('book_interview/review', 'BookInterviewController@review')->name('boo
 Route::get('schedule-interview', 'InterviewerController@scheduleInterview')->name('schedule-interview');
 Route::get('report', 'InterviewerController@report')->name('report');
 Route::get('report/search', 'InterviewerController@reportSearch')->name('report.search');
-Route::get('create-slots', 'InterviewerController@createSlot')->name('create-slots');
+Route::get('create-slots', 'AvailableSlotController@createSlot')->name('create-slots');
 //Interviewer
 
 //availableslots
-Route::post('available_slot.store', 'AvailableSlotDateController@store')->name('available_slot.store');
+// Route::post('available_slot.store', 'AvailableSlotDateController@store')->name('available_slot.store');
 Route::get('get-slots', 'AvailableSlotDateController@getSlots')->name('get-slots');
 Route::get('get_coupon', 'admin\CouponController@getCoupon')->name('get_coupon');
 Route::get('remove-coupon', 'admin\CouponController@removeCoupon')->name('remove-coupon');
@@ -187,3 +187,9 @@ Route::resource('referral', 'admin\ReferralController');
 
 //Interview Category
 Route::resource('interview_category', 'admin\InterviewCategoryController');
+
+//Available Slot
+Route::resource('available_slot', 'AvailableSlotController');
+
+//Interview Interviewer Types
+Route::resource('interviewer_interview_types', 'InterviewerInterviewTypeController');

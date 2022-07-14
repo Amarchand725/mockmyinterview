@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 13, 2022 at 05:45 PM
+-- Generation Time: Jul 14, 2022 at 06:28 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.4.22
 
@@ -61,13 +61,40 @@ INSERT INTO `advantage_mocks` (`id`, `created_by`, `title`, `slug`, `description
 
 CREATE TABLE `available_slots` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `available_date_id` bigint(20) UNSIGNED NOT NULL,
-  `date` date DEFAULT NULL,
-  `shift` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `slot` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `interviewer_id` bigint(20) NOT NULL,
+  `date` date NOT NULL,
+  `slot` datetime NOT NULL,
+  `duration` time NOT NULL DEFAULT '00:30:00',
+  `status` int(11) NOT NULL DEFAULT 0 COMMENT '0=pending, 2=confirmed, 3=rejected, 1=completed',
+  `deleted_at` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `available_slots`
+--
+
+INSERT INTO `available_slots` (`id`, `interviewer_id`, `date`, `slot`, `duration`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 7, '2022-07-14', '2022-07-14 16:25:00', '00:30:00', 0, NULL, '2022-07-14 06:46:06', '2022-07-14 06:46:06'),
+(2, 7, '2022-07-14', '2022-07-14 19:25:00', '00:30:00', 0, NULL, '2022-07-14 06:46:06', '2022-07-14 06:46:06'),
+(3, 7, '2022-07-14', '2022-07-14 19:55:00', '00:30:00', 0, NULL, '2022-07-14 06:46:06', '2022-07-14 06:46:06'),
+(4, 7, '2022-07-14', '2022-07-14 20:25:00', '00:30:00', 0, NULL, '2022-07-14 06:46:06', '2022-07-14 06:46:06'),
+(5, 7, '2022-07-14', '2022-07-14 20:55:00', '00:30:00', 0, NULL, '2022-07-14 06:46:06', '2022-07-14 06:46:06'),
+(6, 7, '2022-07-14', '2022-07-14 21:25:00', '00:30:00', 0, NULL, '2022-07-14 06:46:06', '2022-07-14 06:46:06'),
+(7, 7, '2022-07-14', '2022-07-14 21:55:00', '00:30:00', 0, NULL, '2022-07-14 06:46:06', '2022-07-14 06:46:06'),
+(8, 7, '2022-07-14', '2022-07-14 22:55:00', '00:30:00', 0, NULL, '2022-07-14 06:46:06', '2022-07-14 06:46:06'),
+(9, 7, '2022-07-14', '2022-07-14 23:25:00', '00:30:00', 0, NULL, '2022-07-14 06:46:06', '2022-07-14 06:46:06'),
+(10, 7, '2022-07-14', '2022-07-14 23:55:00', '00:30:00', 0, NULL, '2022-07-14 06:46:06', '2022-07-14 06:46:06'),
+(11, 7, '2022-07-15', '2022-07-15 00:25:00', '00:30:00', 0, NULL, '2022-07-14 06:46:06', '2022-07-14 06:46:06'),
+(12, 7, '2022-07-15', '2022-07-15 00:55:00', '00:30:00', 0, NULL, '2022-07-14 06:46:06', '2022-07-14 06:46:06'),
+(13, 7, '2022-07-15', '2022-07-15 02:55:00', '00:30:00', 0, NULL, '2022-07-14 06:46:06', '2022-07-14 06:46:06'),
+(14, 7, '2022-07-15', '2022-07-15 03:25:00', '00:30:00', 0, NULL, '2022-07-14 06:46:06', '2022-07-14 06:46:06'),
+(15, 7, '2022-07-15', '2022-07-15 03:55:00', '00:30:00', 0, NULL, '2022-07-14 06:46:06', '2022-07-14 06:46:06'),
+(20, 7, '2022-07-14', '2022-07-14 17:16:00', '00:30:00', 0, NULL, '2022-07-14 10:16:56', '2022-07-14 10:16:56'),
+(21, 7, '2022-07-14', '2022-07-14 17:46:00', '00:30:00', 0, NULL, '2022-07-14 10:16:56', '2022-07-14 10:16:56'),
+(22, 7, '2022-07-14', '2022-07-14 18:16:00', '00:30:00', 0, NULL, '2022-07-14 10:16:56', '2022-07-14 10:16:56'),
+(23, 7, '2022-07-14', '2022-07-14 18:46:00', '00:30:00', 0, NULL, '2022-07-14 10:16:56', '2022-07-14 10:16:56');
 
 -- --------------------------------------------------------
 
@@ -80,8 +107,8 @@ CREATE TABLE `available_slot_dates` (
   `interviewer_id` bigint(20) NOT NULL,
   `interview_type` bigint(20) DEFAULT NULL,
   `slot_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
+  `start_date` datetime NOT NULL,
+  `end_date` datetime NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 0,
   `deleted_at` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -93,11 +120,11 @@ CREATE TABLE `available_slot_dates` (
 --
 
 INSERT INTO `available_slot_dates` (`id`, `interviewer_id`, `interview_type`, `slot_type`, `start_date`, `end_date`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(2, 7, 5, 'weekdays', '2022-06-22', '2022-06-25', 0, NULL, '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
-(3, 7, NULL, 'weekdays', '2022-06-18', '2022-06-20', 0, NULL, '2022-06-22 10:12:34', '2022-06-22 10:12:34'),
-(4, 7, NULL, 'weekdays', '2022-06-18', '2022-06-20', 0, NULL, '2022-06-22 10:13:17', '2022-06-22 10:13:17'),
-(5, 7, NULL, 'weekdays', '2022-07-08', '2022-07-10', 0, NULL, '2022-07-06 16:52:24', '2022-07-06 16:52:24'),
-(6, 7, NULL, 'weekdays', '2022-07-09', '2022-07-16', 0, NULL, '2022-07-07 08:31:31', '2022-07-07 08:31:31');
+(2, 7, 5, 'weekdays', '2022-06-22 00:00:00', '2022-06-25 00:00:00', 0, NULL, '2022-06-20 08:14:18', '2022-06-20 08:14:18'),
+(3, 7, NULL, 'weekdays', '2022-06-18 00:00:00', '2022-06-20 00:00:00', 0, NULL, '2022-06-22 10:12:34', '2022-06-22 10:12:34'),
+(4, 7, NULL, 'weekdays', '2022-06-18 00:00:00', '2022-06-20 00:00:00', 0, NULL, '2022-06-22 10:13:17', '2022-06-22 10:13:17'),
+(5, 7, NULL, 'weekdays', '2022-07-08 00:00:00', '2022-07-10 00:00:00', 0, NULL, '2022-07-06 16:52:24', '2022-07-06 16:52:24'),
+(6, 7, NULL, 'weekdays', '2022-07-09 00:00:00', '2022-07-16 00:00:00', 0, NULL, '2022-07-07 08:31:31', '2022-07-07 08:31:31');
 
 -- --------------------------------------------------------
 
@@ -529,7 +556,10 @@ INSERT INTO `interviewer_interview_types` (`id`, `interviewer_id`, `parent_inter
 (1, 7, 1, 5, '2022-06-22 10:13:17', '2022-06-22 10:13:17'),
 (2, 7, 1, 6, '2022-06-22 10:13:17', '2022-06-22 10:13:17'),
 (3, 7, 1, 5, '2022-07-06 16:52:24', '2022-07-06 16:52:24'),
-(4, 7, 2, 8, '2022-07-07 08:31:31', '2022-07-07 08:31:31');
+(4, 7, 2, 8, '2022-07-07 08:31:31', '2022-07-07 08:31:31'),
+(5, 7, 1, 5, '2022-07-14 11:08:13', '2022-07-14 11:08:13'),
+(6, 7, 1, 6, '2022-07-14 11:08:13', '2022-07-14 11:08:13'),
+(7, 7, 2, 8, '2022-07-14 11:08:13', '2022-07-14 11:08:13');
 
 -- --------------------------------------------------------
 
@@ -801,7 +831,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (130, '2022_04_07_072048_create_interview_types_table', 82),
 (131, '2022_04_05_101251_create_available_slot_dates_table', 83),
 (135, '2022_06_22_143536_create_interviewer_interview_types_table', 85),
-(136, '2022_04_05_101315_create_available_slots_table', 86);
+(140, '2022_04_05_101315_create_available_slots_table', 86);
 
 -- --------------------------------------------------------
 
@@ -2127,8 +2157,7 @@ ALTER TABLE `advantage_mocks`
 -- Indexes for table `available_slots`
 --
 ALTER TABLE `available_slots`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `available_slots_available_date_id_foreign` (`available_date_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `available_slot_dates`
@@ -2489,7 +2518,7 @@ ALTER TABLE `advantage_mocks`
 -- AUTO_INCREMENT for table `available_slots`
 --
 ALTER TABLE `available_slots`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `available_slot_dates`
@@ -2585,7 +2614,7 @@ ALTER TABLE `how_works`
 -- AUTO_INCREMENT for table `interviewer_interview_types`
 --
 ALTER TABLE `interviewer_interview_types`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `interviewer_wallets`
@@ -2633,7 +2662,7 @@ ALTER TABLE `logs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=137;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=141;
 
 --
 -- AUTO_INCREMENT for table `notifications`
@@ -2806,12 +2835,6 @@ ALTER TABLE `whychooses`
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `available_slots`
---
-ALTER TABLE `available_slots`
-  ADD CONSTRAINT `available_slots_available_date_id_foreign` FOREIGN KEY (`available_date_id`) REFERENCES `available_slot_dates` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `model_has_permissions`

@@ -423,20 +423,53 @@
 
                 <!-- Interview Type -->
                 <div id="tab06" class="tab-contents">
-                    <form action="{{ route('my_profile.interview') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('interviewer_interview_types.store') }}" method="post" id="interviewer_interview_type_form">
                         @csrf
                         <div class="row mx-auto custome" style="border: 2px solid #eee;">
+                            @if(!empty($interviewer_interview_types))
+                                @foreach ($interviewer_interview_types as $interview_type)
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <label for="start-date">Parent Interview Type</label>
+                                            <select name="parent_ids[]" id="" class="form-control parent-type" required>
+                                                <option value="" disabled selected>Select parent</option>
+                                                @foreach ($parent_interview_types as $type)
+                                                    <option value="{{ $type->id }}" {{ $interview_type->parent_interview_type_id==$type->id?'selected':'' }}>{{ $type->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <span style="color: red" id="error-parent_ids">{{ $errors->first('parent_ids') }}</span>
+                                        </div>
+                                        
+                                        <div class="col-md-5">
+                                            <div class="form-group float-label-control">
+                                                <label for="start-date">Child Interview Type</label>
+                                                <span id="child-types">
+                                                    <select name="child_interview_types" multiple id="child_interview_type_id" class="form-control">
+                                                        @foreach (getChildInterviewTypes($interview_type->parent_interview_type_id) as $child_type)
+                                                            <option value="{{ $child_type->id }}" >{{ $child_type->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    <span style="color: red" id="error-child_interview_types">{{ $errors->first('child_interview_types') }}</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="button" class="btn btn-danger btn-sm remove-custome-btn" style="margin-top: 35px"><i class="fa fa-times"></i></button>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
                             <div class="row custome-interview-types">
                                 <div class="col-md-5">
                                     <input type="hidden" id="parent-types" data-parent-types="{{ json_encode($parent_interview_types) }}">
                                     <label for="start-date">Parent Interview Type</label>
-                                    <select name="parent_ids[]" id="" class="form-control parent-type">
+                                    <select name="parent_ids[]" id="" class="form-control parent-type" required>
                                         <option value="" disabled selected>Select parent</option>
                                         @foreach ($parent_interview_types as $type)
                                             <option value="{{ $type->id }}">{{ $type->name }}</option>
                                         @endforeach
                                     </select>
-                                    <span style="color: red">{{ $errors->first('parent_ids') }}</span>
+                                    <span style="color: red" id="error-parent_ids">{{ $errors->first('parent_ids') }}</span>
                                 </div>
                                 
                                 <div class="col-md-5">
@@ -444,12 +477,19 @@
                                         <label for="start-date">Child Interview Type</label>
                                         <span id="child-types">
                                             <select name="child_interview_types" multiple id="child_interview_type_id" class="form-control"></select>
-                                            <span style="color: red">{{ $errors->first('child_interview_types') }}</span>
+                                            <span style="color: red" id="error-child_interview_types">{{ $errors->first('child_interview_types') }}</span>
                                         </span>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <button type="button" class="btn btn-success btn-sm add-more-types-btn" style="margin-top: 35px"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group mt-4">
+                                    <button class="btn btn-info" type="submit">Save</button>
                                 </div>
                             </div>
                         </div>
@@ -460,23 +500,21 @@
                 <div id="tab07" class="tab-contents">
                     <h2 class="mb-3 text-left">Interview Scheduler </h2>
                     <div class="py-3">
-                        <form action="{{ route('available_slot.store') }}" method="post" id="subform">
-                            @csrf
-            
+                        <form id="available-slot-form">
                             <div class="row mx-auto" style="border: 2px solid #eee;">
                                 <div class="row">
                                     <div class="col-sm-6"> 
                                         <div class="form-group pmd-textfield pmd-textfield-floating-label">
                                             <label class="control-label" for="datepicker-start">Start Date</label>
                                             <input type="datetime-local" class="form-control" name="start_date" id="datepicker-start">
-                                            <span style="color: red" id="error-start-date">{{ $errors->first('start_date') }}</span>
+                                            <span style="color: red" id="error-datepicker-start">{{ $errors->first('start_date') }}</span>
                                         </div>
                                     </div>
                                     <div class="col-sm-6"> 
                                         <div class="form-group pmd-textfield pmd-textfield-floating-label">
                                             <label class="control-label" for="datepicker-end">End Date</label>
                                             <input type="datetime-local" class="form-control" name="end_date" id="datepicker-end">
-                                            <span style="color: red" id="error-end-date">{{ $errors->first('end_date') }}</span>
+                                            <span style="color: red" id="error-datepicker-end">{{ $errors->first('end_date') }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -500,7 +538,8 @@
                                 </div>
                             </div> --}}
                             
-                            <div class="row mx-auto pt-4" style="border: 2px solid #eee;">
+                            <div class="row mx-auto" style="border: 2px solid #eee;">
+                                <span style="color: red" id="error-slots"></span>
                                 <span class="slot-days"></span>
                             </div>
             
@@ -524,6 +563,90 @@
 @endsection
 @push('js')
     <script>
+        /* $('#interviewer_interview_type_form').on('submit',function(e){
+            e.preventDefault();
+            var parent_ids = $("input[name='parent_ids[]']")
+              .map(function(){return $(this).val();}).get();
+            
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ route('interviewer_interview_types.store') }}",
+                type:"POST",
+                data:{
+                    parent_ids : parent_ids,
+                },
+                
+                success:function(response){
+                    if(response=='success'){
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Slots saved successfully.',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong try again.',
+                        })
+                    }
+                },
+                error: function(response) {
+                    $('#error-parent_ids').text(response.responseJSON.errors.parent_ids);
+                },
+            });
+        }); */
+
+        $('#available-slot-form').on('submit',function(e){
+            e.preventDefault();
+            let start_date = $("#datepicker-start").val();
+            let end_date = $('#datepicker-end').val();
+            var selected_dates = $("input[name='slots[]']")
+              .map(function(){return $(this).val();}).get();
+            
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ route('available_slot.store') }}",
+                type:"POST",
+                data:{
+                    start_date : start_date,
+                    end_date : end_date,
+                    selected_dates : selected_dates,
+                },
+                
+                success:function(response){
+                    if(response=='success'){
+                        $('#datepicker-start').val('');
+                        $('#datepicker-end').val('');
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Slots saved successfully.',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong try again.',
+                        })
+                    }
+                },
+                error: function(response) {
+                    $('#error-datepicker-start').text(response.responseJSON.errors.start_date);
+                    $('#error-datepicker-end').text(response.responseJSON.errors.end_date);
+                    $('#error-slots').text(response.responseJSON.errors.selected_dates);
+                },
+            });
+        });
+
         $(document).on('change', '#datepicker-start', function(){
             var start_date_time = $(this).val();
             var end_date_time = $('#datepicker-end').val();
@@ -543,7 +666,6 @@
                     url : "{{ route('create-slots') }}",
                     data : {'start_date_time' : start_date_time, 'end_date_time' : end_date_time},
                     success : function(response){
-                        // console.log(response);
                         $('.slot-days').html(response);
                     }
                 });
@@ -569,20 +691,11 @@
                     url : "{{ route('create-slots') }}",
                     data : {'start_date_time' : start_date_time, 'end_date_time' : end_date_time},
                     success : function(response){
-                        // console.log(response);
                         $('.slot-days').html(response);
                     }
                 });
             }
         });
-
-        /* $(document).on('click', '.slot', function(){
-            if($(this).hasClass('slot-selected')){
-                $(this).removeClass('slot-selected');
-            }else{
-                $(this).addClass('slot-selected');
-            }
-        }); */
         
         $(document).on('click', '.add-more-types-btn', function(){
             var selected=[];
@@ -631,7 +744,7 @@
                 url : "{{ route('get-child-interview-types') }}",
                 data : {'parent_id' : parent_id},
                 success : function(response){
-                    var html = '<select name="child_interview_types['+response.parent_id+'][]" multiple id="child_interview_type_id" class="form-control">'+
+                    var html = '<select name="child_interview_types['+response.parent_id+'][]" multiple id="child_interview_type_id" class="form-control" required>'+
                                 '<label for="start-date">Child Interview Type</label>'+
                                 '<option value="" selected>Select child interview type</option>';
                     $.each(response.child_interview_types , function(index, val) { 
@@ -656,86 +769,6 @@
             $('#slot-e-'+index).val(slot);
         });
 
-        /* $(document).on('click', '.get-slots-btn', function(){
-            var slot_type = $(this).val();
-
-            if(!$(this).hasClass('opened')){
-                $(this).addClass('opened');
-                if(slot_type=='weekdays'){
-                    $(this).text('Weekdays(-)');
-                    $('#weekands_btn_label').text('Weekands(+)');
-                    $('#weekands_btn_label').removeClass('opened');
-                }else{
-                    $(this).text('Weekands(-)');
-                    $('#weekdays_btn_label').text('Weekdays(+)');
-                    $('#weekdays_btn_label').removeClass('opened');
-                }
-                
-                $.ajax({
-                    url : "{{ route('get-slots') }}",
-                    data : {'slot_type' : slot_type},
-                    success : function(response){
-                        $('.slot-days').html(response);
-                    }
-                });
-            }else{
-                $(this).removeClass('opened');
-                $('.slot-days').html('');
-                if(slot_type=='weekdays'){
-                    $(this).text('Weekdays(+)');
-                }else{
-                    $(this).text('Weekands(+)');
-                }
-            }
-        });
-
-        $(document).ready(function() {
-            var slot_type = $('.get-slots-btn').val();
-            if(!$('.get-slots-btn').hasClass('opened')){
-                $('.get-slots-btn').addClass('opened');
-                if(slot_type=='weekdays'){
-                    $('.get-slots-btn').text('Weekdays(-)');
-                }else{
-                    $('.get-slots-btn').text('Weekands(-)');
-                }
-
-                $.ajax({
-                    url : "{{ route('get-slots') }}",
-                    data : {'slot_type' : slot_type},
-                    success : function(response){
-                        $('.slot-days').html(response);
-                    }
-                });
-            }else{
-                $('.slot-days').html('');
-                if($('.get-slots-btn').hasClass('opened')){
-                    if(slot_type=='weekdays'){
-                        $('.opened').text('Weekdays(-)');
-                    }else{
-                        $('.opened').text('Weekands(-)');
-                    }
-
-                    $.ajax({
-                        url : "{{ route('get-slots') }}",
-                        data : {'slot_type' : slot_type},
-                        success : function(response){
-                            $('.slot-days').html(response);
-                        }
-                    });
-                }else{
-                    if(slot_type=='weekdays'){
-                        $('.opened').text('Weekdays(+)');    
-                    }else{
-                        $('.opened').text('Weekands(+)');    
-                    }
-                }
-            }
-
-            $('.button-left').click(function() {
-                $('.sidebar').toggleClass('fliph');
-            });
-        }); */
-
         $(document).on('click', '.slot', function(){
             if($(this).hasClass('slot-selected')){
                 $(this).removeClass('slot-selected');
@@ -743,20 +776,6 @@
                 $(this).addClass('slot-selected');
             }
         });
-
-        /* var dateToday = new Date();
-        var dates = $("#start-date, #end-date").datepicker({
-            defaultDate: "+2d",
-            changeMonth: true,
-            numberOfMonths: 1,
-            minDate: "+2d",
-            onSelect: function(selectedDate) {
-                var option = this.id == "start-date" ? "minDate" : "maxDate",
-                    instance = $(this).data("datepicker"),
-                    date = $.datepicker.parseDate(instance.settings.dateFormat || $.datepicker._defaults.dateFormat, selectedDate, instance.settings);
-                dates.not(this).datepicker("option", option, date);
-            }
-        }); */
     </script>
     <script>
         $(document).on('focus','.datepicker', function(){
