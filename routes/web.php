@@ -193,3 +193,6 @@ Route::resource('available_slot', 'AvailableSlotController');
 
 //Interview Interviewer Types
 Route::resource('interviewer_interview_types', 'InterviewerInterviewTypeController');
+
+//Ratings
+Route::resource('rating', 'RatingController');

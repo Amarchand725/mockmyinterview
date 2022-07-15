@@ -76,7 +76,7 @@ class BookInterviewController extends Controller
 
         $slots = [];
         
-        $b_slots = AvailableSlotDate::whereIn('interviewer_id', $interviewers)->where('start_date', date('Y-m-d'))->get();
+        /* $b_slots = AvailableSlotDate::whereIn('interviewer_id', $interviewers)->where('start_date', date('Y-m-d'))->get();
         if(!empty($b_slots)){
             foreach ($b_slots as $available_slot){
                 if(!empty($available_slot->hasBookedSlots)){
@@ -105,15 +105,16 @@ class BookInterviewController extends Controller
                     }     
                 }
             }
-        }
+        } */
 
         // return $next_slots;
 
-        return view('web-views.interviews.create', compact('page_title', 'parent_interview_types', 'booking_types', 'slots', 'next_slots'));
+        return view('web-views.interviews.create', compact('page_title', 'parent_interview_types', 'booking_types'));
     }
 
     public function store(Request $request)
     {
+        // return $request;
         $validator = $request->validate([
             'booked_slot' => 'required',
         ]); 
@@ -289,8 +290,7 @@ class BookInterviewController extends Controller
     public function status(Request $request)
     {
         $interview = BookInterview::where('id', $request->interview_id)->first();
-        $interview->status = $request->status;
-        $interview->save();
+        
 
         if($request->status==1){ //confirm
             // $message = 'Scheduled interview is confirmed';
@@ -324,38 +324,8 @@ class BookInterviewController extends Controller
 
             return 1;
         }elseif($request->status==4){ //complete
-            //booking priority credits
-            $credits = BookingPriority::where('slug', $interview->booking_type_slug)->first();
-            //transfer credits to interviewer wallet.
-            $interviewer_wallet = InterviewerWallet::where('interviewer_id', $interview->interviewer_id)->first();
-            if(empty($interviewer_wallet)){
-                $interviewer_wallet = new InterviewerWallet();
-                $interviewer_wallet->interviewer_id = $interview->interviewer_id;
-                $interviewer_wallet->booking_id = $interview->id;
-                $interviewer_wallet->last_balance_credits = 0;
-                $interviewer_wallet->total_credits = $credits->credits;
-                $interviewer_wallet->save();
-            }else{
-                $interviewer_wallet->booking_id = $interview->id;
-                $interviewer_wallet->last_balance_credits = $interviewer_wallet->total_credits;
-                $interviewer_wallet->total_credits = $interviewer_wallet->total_credits+$credits->credits;
-                $interviewer_wallet->save();
-            }
-
-            if($interviewer_wallet){
-                Log::create([
-                    'booked_interview_id' => $interview->id,
-                    'interviewer_id' => $interview->interviewer_id,
-                    'candidate_id' => Auth::user()->id,
-                    'credits' => $credits->credits, 
-                    'type' => 'returned', 
-                    'description' => 'Return credits due to rejection.', 
-                ]);
-
-                // $message = 'Scheduled interview has been completed & closed.';
-                // notification(Auth::user()->id, $booked_interview->id, 'book_interview', $message);
-            }
-
+            $interview->status = $request->status;
+            $interview->save();
             return 1; //completed
         }
     }

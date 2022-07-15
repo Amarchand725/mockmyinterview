@@ -66,6 +66,7 @@ class CourseController extends Controller
     {
         $this->validate($request, [
             'title' => 'required|max:100',
+            'video_url' => 'required',
             'degree_slug' => 'required',
             'description' => 'max:255',
         ]);
@@ -74,6 +75,7 @@ class CourseController extends Controller
             'created_by' => Auth::user()->id,
             'degree_slug' => $request->degree_slug,
             'title' => $request->title,
+            'video_url' => $request->video_url,
             'slug' => \Str::slug($request->title),
             'description'=>$request->description
         ]);
@@ -116,17 +118,17 @@ class CourseController extends Controller
      */
     public function update(Request $request, $slug)
     {
-        // return $request;
-
         $this->validate($request, [
             'degree_slug' => 'required',
             'title' => 'required|max:100',
+            'video_url' => 'required',
             'description' => 'max:255',
         ]);
 
         $course = Course::where('slug', $slug)->first();
         $course->degree_slug = $request->degree_slug;
         $course->title = $request->title;
+        $course->video_url = $request->video_url;
         $course->slug = \Str::slug($request->title);
         $course->description = $request->description;
         $course->status = $request->status;

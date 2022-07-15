@@ -123,7 +123,8 @@
                                                     @endif
                                                 </select>
                                                 @if($interview->status==4)
-                                                    <button class="btn btn-info mt-2 review-btn" data-interview-id="{{ $interview->id }}" data-toggle="tooltip" data-placement="top" title="Review"><i class="fa fa-star"></i> Review</button>
+                                                    <button class="btn btn-info mt-2 suggetion-btn" data-url="{{ route('rating.show', $interview->id) }}" id="suggetion-btn"><i class="fa fa-check"></i> Suggestion</button>
+                                                    <button class="btn btn-primary mt-2 review-btn" data-interview-id="{{ $interview->id }}" data-toggle="tooltip" data-placement="top" title="Review"><i class="fa fa-star"></i> Review</button>
                                                 @endif
                                             @else 
                                                 <select name="" id="booking-status" data-interview-id="{{ $interview->id }}" class="form-control" id="">
@@ -142,6 +143,11 @@
                                                 </select>
                                                 @if($interview->status==4)
                                                     <a href="{{ route('book_interview.show', $interview->meeting_id) }}" class="btn btn-success mt-2" data-toggle="tooltip" data-placement="top" title="Meeting Recordings">Meeting Recordings</a>
+                                                    @if($interview->hasRated)
+                                                        <label class="badge badge-primary"><i class="fa fa-check"></i> Rated</label>
+                                                    @else 
+                                                        <button class="btn btn-info mt-2" data-course-title='{{ $interview->hasChildInterviewType->name??'' }}' data-course-id='{{ $interview->hasChildInterviewType->id??'' }}' data-interview-id="{{ $interview->id }}" id="rating-btn"><i class="fa fa-star"></i> Ratings</button>                                                        
+                                                    @endif 
                                                 @endif
                                             @endif
                                         </td>
@@ -188,10 +194,144 @@
         </div>
         </div>
     </div>
+
+    <!-- Rating Modal -->
+    <div class="modal fade" id="rating-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-star"></i> Review Interview</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="rating-form">
+                <div class="modal-body">
+                    <input type="hidden" name="interview_id" id="interview_id">
+                    <div class="form-group">
+                        <label for="title" class="control-label">Title <span style='color:red'>*</span></label>
+                        <input type="text" class="form-control" name="title" id="title" placeholder="Enter title">
+                        <span id="error-title" style="color: red">{{ $errors->first('title') }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="review" class="control-label">Review Interview <span style='color:red'>*</span></label>
+                        <textarea name="review" class="form-control" id="review" cols="30" rows="5" maxlength="255" placeholder="Enter review here..."></textarea>
+                        <span id="error-review" style="color: red">{{ $errors->first('review') }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="review" class="control-label">Recommended Course</label>
+
+                        <div class="form-check">
+                            <input class="form-check-input course-id" name="course_id" type="checkbox" value="" id="course-id">
+                            <label class="form-check-label" for="course-id">
+                              <span id="course-name"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+        </div>
+    </div>
+
+    <!-- suggetion Modal -->
+    <div class="modal fade" id="suggetion-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-check"></i> Suggestions</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                
+            </div>
+        </div>
+        </div>
+    </div>
 @endsection
 
 @push('js')
     <script>
+        $(document).on('click', '#suggetion-btn', function(){
+            var interview_id = $(this).attr('data-interview-id');
+            var url = $(this).attr('data-url');
+            $.ajax({
+                url : url,
+                type : 'GET',
+                success : function(response){
+                    // console.log(response);
+                    $('#modal-body').html(response);
+                }
+            });
+            $('#suggetion-modal').modal('show');
+        });
+
+        $(document).on('click', '#rating-btn', function(){
+            var interview_id = $(this).attr('data-interview-id');
+            var course_title = $(this).attr('data-course-title');
+            var course_id = $(this).attr('data-course-id');
+            $('.course-id').val(course_id);
+            $('#course-name').html(course_title);
+            $('#interview_id').val(interview_id);
+            $('#rating-modal').modal('show');
+        });
+
+        $('#rating-form').on('submit',function(e){
+            e.preventDefault();
+            
+            let interview_id = $("#interview_id").val();
+            let title = $("#title").val();
+            let review = $('#review').val();
+            let course_id = $('input[name="course_id"]').val();
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ route('rating.store') }}",
+                type:"POST",
+                data:{
+                    interview_id : interview_id,
+                    title : title,
+                    review : review,
+                    course_id : course_id,
+                },
+                
+                success:function(response){
+                    // console.log(response);
+                    if(response=='success'){
+                        $('#rating-modal').modal('hide');
+
+                        $('#interview_id').val('');
+                        $('#title').val('');
+                        $('#review').val('');
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Rated successfully.',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong try again.',
+                        })
+                    }
+                },
+                error: function(response) {
+                    $('#error-title').text(response.responseJSON.errors.title);
+                    $('#error-review').text(response.responseJSON.errors.review);
+                },
+            });
+        });
+
         $(document).on('click', '.review-btn', function(){
             var interview_id = $(this).attr('data-interview-id');
             $('#interview-id').val(interview_id);

@@ -19,7 +19,9 @@ class CreateAvailableSlotDatesTable extends Migration
             $table->bigInteger('interview_type')->nullable();
             $table->string('slot_type')->nullable();
             $table->date('start_date');
+            $table->time('start_time');
             $table->date('end_date');
+            $table->time('end_time');
             $table->boolean('status')->default(0);
             $table->string('deleted_at')->nullable();
             $table->timestamps();

@@ -30,13 +30,13 @@
                 <span class="nav-label">Book Interview</span></a>
             </li>
             @endcan
-            @can('schedule interview-list')
+            {{-- @can('schedule interview-list')
             <li>
                 <a href="{{ route('schedule-interview') }}" class="{{ request()->is('schedule-interview') ? 'active' : '' }}">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
                 <span class="nav-label">Schedule Interview</span></a>
             </li>
-            @endcan
+            @endcan --}}
             @can('report-list')
             <li>
                 <a href="{{ route('report') }}" class="{{ request()->is('report') ? 'active' : '' }}">

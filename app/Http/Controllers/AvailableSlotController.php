@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\AvailableSlotDate;
 use App\Models\AvailableSlot;
 use Auth;
 
@@ -13,9 +14,13 @@ class AvailableSlotController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if($request->ajax()){
+            $query = AvailableSlotDate::orderby('id', 'desc')->where('id', '>', 0);
+            $interviewer_slots = $query->paginate(10);
+            return (string) view('web-views.interviewer.show', compact('interviewer_slots'));
+        }
     }
 
     /**
@@ -36,7 +41,6 @@ class AvailableSlotController extends Controller
      */
     public function store(Request $request)
     {
-        // return $request->selected_dates;
         $validator = $request->validate([
             'start_date' => 'required',
             'end_date' => 'required',
@@ -45,14 +49,58 @@ class AvailableSlotController extends Controller
         ]);
 
         try{
+            $start_date_time = date('Y-m-d H:i:s', strtotime($request->start_date));
+            $start_date = explode(' ', $start_date_time);
+            
+            $end_date = date('Y-m-d H:i:s', strtotime($request->end_date));
+            $end_date = explode(' ', $end_date);
+
+            $bool = false;
             foreach($request->selected_dates as $slot){
                 $date = explode(' ', $slot)[0];
                 if(!empty($slot)){
-                    AvailableSlot::create([
-                        'interviewer_id' => Auth::user()->id,
-                        'date' => $date,
-                        'slot' => $slot,
-                    ]);
+                    $model = DB::table('available_slot_dates')
+                    ->select('available_slots.*')
+                    ->join('available_slots', 'available_slot_dates.id', '=', 'available_slots.available_slot_date_id')
+                    ->where('available_slot_dates.interviewer_id', $model->interviewer_id)
+                    ->where('available_slots.slot', date('Y-m-d H', strtotime($slot)))
+                    ->first();
+
+                    if(empty($model)){
+                        $bool = true;
+                    }
+                }
+            }
+
+            if($bool){
+                $model = AvailableSlotDate::create([
+                    'interviewer_id' => Auth::user()->id,
+                    'start_date' => date('Y-m-d', strtotime($start_date[0])),
+                    'start_time' => $start_date[1],
+                    'end_date' => date('Y-m-d', strtotime($end_date[0])),
+                    'end_time' => $end_date[1],
+                ]);
+
+                if($model){
+                    foreach($request->selected_dates as $slot){
+                        $date = explode(' ', $slot)[0];
+                        if(!empty($slot)){
+                            $model = DB::table('available_slot_dates')
+                            ->select('available_slots.*')
+                            ->join('available_slots', 'available_slot_dates.id', '=', 'available_slots.available_slot_date_id')
+                            ->where('available_slot_dates.interviewer_id', $model->interviewer_id)
+                            ->where('available_slots.slot', date('Y-m-d H', strtotime($slot)))
+                            ->first();
+
+                            if(empty($model)){
+                                AvailableSlot::create([
+                                    'available_slot_date_id' => $model->id,
+                                    'date' => $date,
+                                    'slot' => $slot,
+                                ]);
+                            }
+                        }
+                    }
                 }
             }
 
@@ -68,9 +116,10 @@ class AvailableSlotController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slot_id)
     {
-        //
+        $model = AvailableSlotDate::with('hasBookedSlots')->where('id', $slot_id)->first();
+        return (string) view('web-views.interviewer.show-slots', compact('model'));
     }
 
     /**

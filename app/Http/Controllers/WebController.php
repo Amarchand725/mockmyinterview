@@ -63,9 +63,10 @@ class WebController extends Controller
             return view('web-views.candidate.my_profile', compact('page_title', 'degrees'));
         }elseif(Auth::check() && Auth::user()->hasRole('Interviewer')){
             $parent_interview_types = InterviewType::where('status', 1)->where('parent_id', null)->get(['id', 'name']);
-            $interviewer_interview_types = InterviewerInterviewType::where('interviewer_id', Auth::user()->id)->get();
-            $interviewer_slots = AvailableSlot::where('interviewer_id', Auth::user()->id)->get();
-            return view('web-views.interviewer.my_profile', compact('page_title', 'languages', 'degrees', 'parent_interview_types', 'interviewer_interview_types'));
+            $interviewer_interview_types = InterviewerInterviewType::where('interviewer_id', Auth::user()->id)->groupby('parent_interview_type_id')->get();
+            $interviewer_slots = AvailableSlotDate::with('hasBookedSlots')->orderby('id', 'desc')->where('interviewer_id', Auth::user()->id)->paginate(10);
+
+            return view('web-views.interviewer.my_profile', compact('page_title', 'languages', 'degrees', 'parent_interview_types', 'interviewer_interview_types', 'interviewer_slots'));
         }
     }
     public function personalDetails(Request $request)
@@ -665,7 +666,22 @@ class WebController extends Controller
         $date = $request->date;
         $parent_interview_type_id = $request->parent_id;
         $child_interview_type_id = $request->child_id;
+
+        /* $interviewers = InterviewerInterviewType::where('parent_interview_type_id', $parent_interview_type_id)->where('child__interview_type_id', $child_interview_type_id)->get(['interviewer_id']);
+        $interview_types_interviewers = [];
+        foreach($interviewers as $interviewer){
+            $interview_types_interviewers[] = $interviewer->interviewer_id;
+        } */
+
+        // return $interview_types_interviewers;
+
         $slots = DB::table('available_slot_dates')
+        ->select('available_slots.*')
+        ->join('available_slots', 'available_slot_dates.id', '=', 'available_slots.available_slot_date_id')
+        ->where('available_slot_dates.interviewer_id', $request->interviewer_id)
+        ->get();
+
+        /* $slots = DB::table('available_slot_dates')
         ->selectRaw('users.id as user_id, available_slots.id, available_slots.shift, available_slots.slot')
         ->join('users', 'users.id', '=', 'available_slot_dates.interviewer_id')
         ->join('interviewer_interview_types', 'available_slot_dates.interviewer_id', '=', 'interviewer_interview_types.interviewer_id')
@@ -674,7 +690,7 @@ class WebController extends Controller
         ->where('available_slot_dates.end_date', '>=', $request->date)
         ->where('interviewer_interview_types.parent_interview_type_id', $request->parent_interview_type)
         ->where('interviewer_interview_types.child_interview_type_id', $request->child_interview_type)
-        ->get();
+        ->get(); */
 
         $booked_slots = BookInterview::where('candidate_id', Auth::user()->id)->where('interviewer_id', $request->interviewer_id)->where('date', $request->date)->get();
 

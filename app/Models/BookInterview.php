@@ -28,4 +28,9 @@ class BookInterview extends Model
     {
         return $this->hasOne(InterviewType::class, 'id', 'child_interview_type_id');
     }
+
+    public function hasRated()
+    {
+        return $this->hasOne(Rating::class, 'interview_id', 'id');
+    }
 }

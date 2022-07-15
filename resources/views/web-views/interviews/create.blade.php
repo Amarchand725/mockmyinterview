@@ -134,7 +134,6 @@
                             text: 'Something went wrong try again.',
                         })
                     }
-                    
                 },
                 error: function(response) {
                     $('#booked-slot-error').text(response.responseJSON.errors.booked_slot);
@@ -220,10 +219,6 @@
             }
         });
 
-        /* $( ".current-date" ).datepicker({
-            dateFormat: "yy-mm-dd"
-        }); */
-
         $(document).on('change', '.current-date', function(){
             var date = $(this).val();
             var parent_id = $('#parent_interview_type_id').val();
@@ -234,30 +229,10 @@
                     url : "{{ route('get-interviewer-slots') }}",
                     data : {'parent_id' : parent_id, 'child_id' : child_id, 'date' : date, 'interviewer_id' : interviewer_id},
                     success : function(response){
-                        console.log(response);
+                        // console.log(response);
                         $('.available-slots').html(response);
                     }
                 });
-            }
-        });
-
-
-        $(".current-date").datepicker({
-            onSelect: function(dateText) {
-                // console.log("Selected date: " + dateText + "; input's current value: " + this.value);
-                // alert(dateText);
-                alert('good');
-                /* var parent_id = $('#parent-interview-type').val();
-                var child_id = $('#child_interview_type_id').val();
-                if(parent_id != '' && child_id != ''){
-                    $.ajax({
-                        url : "{{ route('get-interviewers') }}",
-                        data : {'parent_id' : parent_id, 'child_id' : child_id},
-                        success : function(response){
-                            console.log(response);
-                        }
-                    });
-                } */
             }
         });
 

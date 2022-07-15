@@ -13,10 +13,10 @@ class AvailableSlotDate extends Model
 
     public function hasBookedSlots()
     {
-        return $this->hasMany(AvailableSlot::class, 'available_date_id');
+        return $this->hasMany(AvailableSlot::class, 'available_slot_date_id', 'id');
     }
     public function hasBookedSlot()
     {
-        return $this->hasOne(AvailableSlot::class, 'available_date_id');
+        return $this->hasOne(AvailableSlot::class, 'available_slot_date_id', 'id');
     }
 }

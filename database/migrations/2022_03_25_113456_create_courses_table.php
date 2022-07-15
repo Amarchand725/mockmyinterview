@@ -18,6 +18,7 @@ class CreateCoursesTable extends Migration
             $table->bigInteger('created_by');
             $table->string('degree_slug');
             $table->string('title');
+            $table->text('video_url');
             $table->string('slug');
             $table->string('description')->nullable();
             $table->boolean('status')->default(1);

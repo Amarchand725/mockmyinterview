@@ -1,6 +1,7 @@
 @extends('web-views.dashboard.master.app')
 
 @section('title', $page_title)
+<input type="hidden" id="page_url" value="{{ route('available_slot.index') }}">
 @push('css')
     <style>
         .slot{
@@ -428,7 +429,7 @@
                         <div class="row mx-auto custome" style="border: 2px solid #eee;">
                             @if(!empty($interviewer_interview_types))
                                 @foreach ($interviewer_interview_types as $interview_type)
-                                    <div class="row">
+                                    <div class="row" id="id-{{ $interview_type->parent_interview_type_id }}">
                                         <div class="col-md-5">
                                             <label for="start-date">Parent Interview Type</label>
                                             <select name="parent_ids[]" id="" class="form-control parent-type" required>
@@ -443,10 +444,16 @@
                                         <div class="col-md-5">
                                             <div class="form-group float-label-control">
                                                 <label for="start-date">Child Interview Type</label>
+                                                @php 
+                                                    $child_interviewer_types = [];
+                                                    foreach (getInterviewerChildInterviewTypes($interview_type->parent_interview_type_id) as $key => $child) {
+                                                        $child_interviewer_types[] = $child->child__interview_type_id;
+                                                    }
+                                                @endphp 
                                                 <span id="child-types">
-                                                    <select name="child_interview_types" multiple id="child_interview_type_id" class="form-control">
+                                                    <select name="child_interview_types[{{ $interview_type->parent_interview_type_id }}][]" multiple id="child_interview_type_id" class="form-control">
                                                         @foreach (getChildInterviewTypes($interview_type->parent_interview_type_id) as $child_type)
-                                                            <option value="{{ $child_type->id }}" >{{ $child_type->name }}</option>
+                                                            <option value="{{ $child_type->id }}" {{in_array($child_type->id, $child_interviewer_types) ? 'selected' : '' }}>{{ $child_type->name }}</option>
                                                         @endforeach
                                                     </select>
                                                     <span style="color: red" id="error-child_interview_types">{{ $errors->first('child_interview_types') }}</span>
@@ -454,7 +461,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-2">
-                                            <button type="button" class="btn btn-danger btn-sm remove-custome-btn" style="margin-top: 35px"><i class="fa fa-times"></i></button>
+                                            <button type="button" class="btn btn-danger delete" data-interviewer-interview-id="{{ $interview_type->parent_interview_type_id }}" data-del-url="{{ route('interviewer_interview_types.destroy', $interview_type->parent_interview_type_id) }}" style="margin-top: 35px"><i class="fa fa-times"></i></button>
                                         </div>
                                     </div>
                                 @endforeach
@@ -463,7 +470,7 @@
                                 <div class="col-md-5">
                                     <input type="hidden" id="parent-types" data-parent-types="{{ json_encode($parent_interview_types) }}">
                                     <label for="start-date">Parent Interview Type</label>
-                                    <select name="parent_ids[]" id="" class="form-control parent-type" required>
+                                    <select name="parent_ids[]" id="" class="form-control parent-type" @if(empty($interviewer_interview_types)) required @endif>
                                         <option value="" disabled selected>Select parent</option>
                                         @foreach ($parent_interview_types as $type)
                                             <option value="{{ $type->id }}">{{ $type->name }}</option>
@@ -520,27 +527,19 @@
                                 </div>
                             </div>
                             
-                            {{-- <div class="row mx-auto" style="border: 2px solid #eee;">
-                                <div class="col-md-8">
-                                    <div class="row text-md">
-                                        <b>Do you want to Create / Cancel Interview Slots?</b> &nbsp;
-                                    </div>
-                                </div>
-                                <div class="col-md-10">
-                                    <label class="radio-inline">
-                                        <input type="radio" name="sessiontype" id="createBulkInterviews" value="1" checked style="height:20px; width:20px;"> &nbsp;&nbsp;Create
-                                    </label>
-                                </div>
-                                <div class="col-md-10">
-                                    <label class="radio-inline">
-                                        <input type="radio" name="sessiontype" id="cancelBulkInterviews" value="2" style="height:20px; width:20px;">&nbsp;&nbsp;Cancel 
-                                    </label>
-                                </div>
-                            </div> --}}
-                            
                             <div class="row mx-auto" style="border: 2px solid #eee;">
                                 <span style="color: red" id="error-slots"></span>
-                                <span class="slot-days"></span>
+                                <span class="slot-days">
+                                    {{-- <div class="row" style="">
+                                        <div class="well col-sm-12">
+                                            <div class="py-3">
+                                                <center><h6>Available Slots</h6></center>
+                                                <div class="row py-3">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> --}}
+                                </span>
                             </div>
             
                             <div class="row">
@@ -556,6 +555,58 @@
                             </div>
                         </form>
                     </div>
+                    <br />
+                    <h2 class="mb-3 text-left">Your Exist Slots </h2>
+                    <div class="py-3">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>S.No#</th>
+                                    <th>Start Date</th>
+                                    <th>Start Time</th>
+                                    <th>End Date</th>
+                                    <th>End Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="body">
+                                @foreach($interviewer_slots as $key=>$slot)
+                                    <tr id="id-{{ $slot->id }}">
+                                        <td>{{  $interviewer_slots->firstItem()+$key }}.</td>
+                                        <td>{{ date('d, F-Y', strtotime($slot->start_date)) }}</td>
+                                        <td>{{ $slot->start_time }}</td>
+                                        <td>{{ date('d, F-Y', strtotime($slot->end_date)) }}</td>
+                                        <td>{{ $slot->end_time }}</td>
+                                        <td>
+                                            <button class="btn btn-info btn-sm slots-btn" data-show-url="{{ route('available_slot.show', $slot->id) }}"><i class="fa fa-eye"></i> Slots</button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                <tr>
+                                    <td colspan="6">
+                                        Displying {{$interviewer_slots->firstItem()}} to {{$interviewer_slots->lastItem()}} of {{$interviewer_slots->total()}} records
+                                        <div class="d-flex justify-content-center">
+                                            {!! $interviewer_slots->links('pagination::bootstrap-4') !!}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="slot-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background: #2279d3; color:white ">
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-clock-o"></i> Exist Slots</h5>
+                </div>
+                <div class="modal-body">
+                ...
                 </div>
             </div>
         </div>
@@ -563,51 +614,29 @@
 @endsection
 @push('js')
     <script>
-        /* $('#interviewer_interview_type_form').on('submit',function(e){
-            e.preventDefault();
-            var parent_ids = $("input[name='parent_ids[]']")
-              .map(function(){return $(this).val();}).get();
-            
+        $(document).on('click', '.slots-btn', function(){
+            var url = $(this).attr('data-show-url');
             $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: "{{ route('interviewer_interview_types.store') }}",
-                type:"POST",
-                data:{
-                    parent_ids : parent_ids,
-                },
-                
-                success:function(response){
-                    if(response=='success'){
-                        Swal.fire({
-                            position: 'top-end',
-                            icon: 'success',
-                            title: 'Slots saved successfully.',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
-                    }else{
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Something went wrong try again.',
-                        })
-                    }
-                },
-                error: function(response) {
-                    $('#error-parent_ids').text(response.responseJSON.errors.parent_ids);
-                },
+                url : url,
+                success : function(response){
+                    $('.modal-body').html(response);
+                }
             });
-        }); */
+            $('#slot-modal').modal('show');
+        });
 
         $('#available-slot-form').on('submit',function(e){
             e.preventDefault();
+            var pageurl = $('#page_url').val();
+            var page = 1;
+            
             let start_date = $("#datepicker-start").val();
             let end_date = $('#datepicker-end').val();
-            var selected_dates = $("input[name='slots[]']")
-              .map(function(){return $(this).val();}).get();
-            
+
+            let selected_dates = [];
+            $("input[name='slots[]']:checked").each(function() {
+                selected_dates.push(this.value);
+            });
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -621,6 +650,8 @@
                 },
                 
                 success:function(response){
+                    fetchAll(pageurl, page);
+                    
                     if(response=='success'){
                         $('#datepicker-start').val('');
                         $('#datepicker-end').val('');
@@ -646,6 +677,66 @@
                 },
             });
         });
+
+        $(document).on('click', '.pagination a', function(event){
+            event.preventDefault();
+            var pageurl = $('#page_url').val();
+            var page = $(this).attr('href').split('page=')[1];
+            fetchAll(pageurl, page);
+        });
+
+        function fetchAll(pageurl, page){
+            $.ajax({
+                url:pageurl+'?page='+page,
+                type: 'get',
+                success: function(response){
+                    $('#body').html(response);
+                }
+            });
+        }
+
+        //delete record
+        $('.delete').on('click', function(){
+            var slug = $(this).attr('data-interviewer-interview-id');
+            var delete_url = $(this).attr('data-del-url');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url : delete_url,
+                        type : 'DELETE',
+                        success : function(response){
+                            if(response){
+                                $('#id-'+slug).hide();
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Your file has been deleted.',
+                                    'success'
+                                )
+                            }else{
+                                Swal.fire(
+                                    'Not Deleted!',
+                                    'Sorry! Something went wrong.',
+                                    'danger'
+                                )
+                            }
+                        }
+                    });
+                }
+            })
+        });        
 
         $(document).on('change', '#datepicker-start', function(){
             var start_date_time = $(this).val();
@@ -744,7 +835,7 @@
                 url : "{{ route('get-child-interview-types') }}",
                 data : {'parent_id' : parent_id},
                 success : function(response){
-                    var html = '<select name="child_interview_types['+response.parent_id+'][]" multiple id="child_interview_type_id" class="form-control" required>'+
+                    var html = '<select name="child_interview_types['+response.parent_id+'][]" multiple id="child_interview_type_id" class="form-control" @if(empty($interviewer_interview_types)) required @endif>'+
                                 '<label for="start-date">Child Interview Type</label>'+
                                 '<option value="" selected>Select child interview type</option>';
                     $.each(response.child_interview_types , function(index, val) { 

@@ -88,7 +88,7 @@
         </tr>
         <tr>
             <th colspan="3"><i class="fa fa-clock-o"></i> Date 
-                <input type="text" class="form-control datepicker current-date" name="date" value="{{ date('Y/m/d') }}" id="current-date">
+                <input type="text" class="form-control datepicker current-date" name="date" value="" id="current-date">
                 <span style="color: red" id="booked-slot-error">{{ $errors->first('booked_slot') }}</span>
             </th>
         </tr>
@@ -136,14 +136,14 @@
                 </div>
             </td>
         </tr>
-        <tr>
+        {{-- <tr>
             <th colspan="3">
                 <div class="form-check" id="">
                     <input type="checkbox" name="custom_slot" class="form-check-input" value="1" id="custom-slot">
                     <label class="form-check-label" for="custom-slot"> Create Custom Slot </label>
                 </div>
             </th>
-        </tr>
+        </tr> --}}
         <tr>
             <td colspan="3" id="make-custom-slot"></td>
         </tr>

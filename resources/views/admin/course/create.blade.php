@@ -37,6 +37,14 @@
 								<span style="color: red">{{ $errors->first('title') }}</span>
 							</div>
 						</div>
+
+						<div class="form-group">
+							<label for="" class="col-sm-2 control-label">Study Video URL <span style="color: red">*</span></label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" value="{{ old('video_url') }}" name="video_url" placeholder="Enter study video url">
+								<span style="color: red">{{ $errors->first('video_url') }}</span>
+							</div>
+						</div>
 						
 						<div class="form-group">
 							<label for="" class="col-sm-2 control-label">Description </label>

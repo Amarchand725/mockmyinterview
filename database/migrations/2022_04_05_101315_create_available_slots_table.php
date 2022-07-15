@@ -15,7 +15,7 @@ class CreateAvailableSlotsTable extends Migration
     {
         Schema::create('available_slots', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('interviewer_id');
+            $table->bigInteger('available_slot_date_id');
             $table->date('date');
             $table->dateTime('slot');
             $table->time('duration')->default('00:30:00');

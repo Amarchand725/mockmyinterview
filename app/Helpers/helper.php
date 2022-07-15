@@ -5,6 +5,9 @@ use App\Models\Notification;
 use App\Models\Blog;
 use App\Models\BookInterview;
 use App\Models\AvailableSlot;
+use App\Models\InterviewType;
+use App\Models\InterviewerInterviewType;
+use Illuminate\Support\Facades\DB;
 
 function globalData()
 {
@@ -45,9 +48,18 @@ function getNotify($notify_id, $notify_type)
 }
 
 function getSlot($interviewer_id, $start_time){
-    return AvailableSlot::where('interviewer_id', $interviewer_id)->where('slot', 'like', date('Y-m-d H', strtotime($start_time)).'%')->first();
+    return DB::table('available_slot_dates')
+    ->select('available_slots.*')
+    ->join('available_slots', 'available_slot_dates.id', '=', 'available_slots.available_slot_date_id')
+    ->where('available_slot_dates.interviewer_id', $interviewer_id)
+    ->where('available_slots.slot', 'like', date('Y-m-d H', strtotime($start_time)).'%')
+    ->first();
 }
 
 function getChildInterviewTypes($parent_id){
     return InterviewType::where('parent_id', $parent_id)->get();
+}
+
+function getInterviewerChildInterviewTypes($parent_id){
+    return InterviewerInterviewType::where('parent_interview_type_id', $parent_id)->get();
 }
