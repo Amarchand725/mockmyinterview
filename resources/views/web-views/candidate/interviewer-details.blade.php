@@ -7,8 +7,8 @@
             <td style="width: 10px">
                 @if($model->image)
                     <img src="{{ asset('public/web/assets/images/user') }}/{{ $model->image }}" class="card-img-top" alt="..." style="height: 100px; width:120px">
-                @else 
-                    <img src="https://picsum.photos/200/300" class="card-img-top" alt="..." style="height: 100px; width:120px">
+                @else
+                    <img src="{{ asset('public/web/assets/images/user/no-image.png') }}" class="card-img-top" alt="..." style="height: 100px; width:120px">
                 @endif
             </td>
             <td>{{ $model->name }}</td>
@@ -81,13 +81,13 @@
             <td colspan="3">
                 <ul>
                     @foreach ($model->hasInterviewTypes as $interview_type)
-                        <li>{{ $interview_type->hasParentInterviewType->name }} - {{ $interview_type->hasChildInterviewType->name }}</li>   
+                        <li>{{ $interview_type->hasParentInterviewType->name }} - {{ $interview_type->hasChildInterviewType->name }}</li>
                     @endforeach
                 </ul>
             </td>
         </tr>
         <tr>
-            <th colspan="3"><i class="fa fa-clock-o"></i> Date 
+            <th colspan="3"><i class="fa fa-clock-o"></i> Date
                 <input type="text" class="form-control datepicker current-date" name="date" value="" id="current-date">
                 <span style="color: red" id="booked-slot-error">{{ $errors->first('booked_slot') }}</span>
             </th>
@@ -98,52 +98,20 @@
                     <div class="row" id="slotsInDate">
                         <div class="col-md-10">
                             <div class="row parent available-slots">
-                                {{-- @php
-                                $date = date('Y-m-d');
-                                $day = date("D", strtotime($date));
-                                @endphp
-                                @if(sizeof($slots)>0)
-                                    @foreach ($slots as $slot)
-                                        <div class="col-sm-2">
-                                            <article class="feature1 slot">
-                                                @if(!empty($booked_slots))
-                                                    @php $ifbooked = 0; @endphp 
-                                                    @foreach ($booked_slots as $booked)
-                                                        @if($slot->slot==$booked->slot)
-                                                            @php $ifbooked=1; @endphp 
-                                                        @endif
-                                                    @endforeach
-                                                    @if($ifbooked)
-                                                        <input type="radio" disabled/>
-                                                        <span style="text-decoration: line-through !important">{{ $slot->slot }}</span>
-                                                    @else 
-                                                        <input type="radio" name="booked_slot" class="booked-slot" value="{{ $slot->slot }}" id="feature1"/>
-                                                        <span>{{ $slot->slot }}</span>
-                                                    @endif
-                                                @else 
-                                                    <input type="radio" name="booked_slot" class="booked-slot" value="{{ $slot->slot }}" id="feature1"/>
-                                                    <span>{{ $slot->slot }}</span>
-                                                @endif
-                                            </article>
-                                        </div>
-                                    @endforeach
-                                @else 
-                                    Not available slot
-                                @endif --}}
                             </div>
                         </div>
                     </div>
                 </div>
             </td>
         </tr>
-        {{-- <tr>
+        <tr>
             <th colspan="3">
                 <div class="form-check" id="">
                     <input type="checkbox" name="custom_slot" class="form-check-input" value="1" id="custom-slot">
                     <label class="form-check-label" for="custom-slot"> Create Custom Slot </label>
                 </div>
             </th>
-        </tr> --}}
+        </tr>
         <tr>
             <td colspan="3" id="make-custom-slot"></td>
         </tr>

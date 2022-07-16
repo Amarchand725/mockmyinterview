@@ -94,7 +94,7 @@
             let parent_interview_type_id = $('#parent_interview_type_id').val();
             let child_interview_type_id = $('#child_interview_type_id').val();
             let interviewer_id = $('#interviewer_id').val();
-            
+
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -108,8 +108,9 @@
                     child_interview_type_id : child_interview_type_id,
                     interviewer_id : interviewer_id,
                 },
-                
+
                 success:function(response){
+                    // console.log(response);
                     if(response=='credits'){
                         Swal.fire({
                             icon: 'error',
@@ -243,7 +244,7 @@
                 data : {'parent_id' : parent_id},
                 success : function(response){
                     var html = '<option value="" selected>Select child interview type</option>';
-                    $.each(response.child_interview_types , function(index, val) { 
+                    $.each(response.child_interview_types , function(index, val) {
                        html += '<option value="'+val.id+'">'+val.name+'</option>';
                     });
 

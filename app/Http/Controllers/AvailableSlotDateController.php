@@ -15,7 +15,6 @@ class AvailableSlotDateController extends Controller
 {
     public function store(Request $request)
     {
-        // return $request;
         $validator = $request->validate([
             'start_date' => 'required',
             'end_date' => 'required',
@@ -95,12 +94,12 @@ class AvailableSlotDateController extends Controller
         $b_slots = AvailableSlotDate::where('interviewer_id', Auth::user()->id)->where('slot_type', $request->slot_type)->where('start_date', '>=', date('Y-m-d'))->where('end_date', '<=', date('Y-m-d'))->first();
         if(!empty($b_slots)){
             foreach ($b_slots->hasBookedSlots as $available_slot){
-                $booked_slots[] = $available_slot->slot;         
+                $booked_slots[] = $available_slot->slot;
             }
         }
 
         if($slot_type=='weekdays'){
-            //weekdays morning 
+            //weekdays morning
             $weekdays_morning_from_time = PageSetting::where('key', 'weekdays_morning_from_time')->first()->value;
             $weekdays_morning_to_time = PageSetting::where('key', 'weekdays_morning_to_time')->first()->value;
 
@@ -152,7 +151,7 @@ class AvailableSlotDateController extends Controller
             $startTime = date('H:i',strtotime('+'.$interval.' minutes',strtotime($startTime)));
             $i++;
             if(strtotime($startTime) <= strtotime($endTime)){
-                $time[] = $start;   
+                $time[] = $start;
                 // $time[] = $end;
             }
         }
