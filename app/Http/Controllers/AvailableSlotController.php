@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\AvailableSlotDate;
 use App\Models\AvailableSlot;
 use Auth;
+use DB;
 
 class AvailableSlotController extends Controller
 {
@@ -41,6 +42,7 @@ class AvailableSlotController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request;
         $validator = $request->validate([
             'start_date' => 'required',
             'end_date' => 'required',
@@ -51,60 +53,66 @@ class AvailableSlotController extends Controller
         try{
             $start_date_time = date('Y-m-d H:i:s', strtotime($request->start_date));
             $start_date = explode(' ', $start_date_time);
-            
+
             $end_date = date('Y-m-d H:i:s', strtotime($request->end_date));
             $end_date = explode(' ', $end_date);
 
+            // return ;
             $bool = false;
-            foreach($request->selected_dates as $slot){
-                $date = explode(' ', $slot)[0];
-                if(!empty($slot)){
-                    $model = DB::table('available_slot_dates')
-                    ->select('available_slots.*')
-                    ->join('available_slots', 'available_slot_dates.id', '=', 'available_slots.available_slot_date_id')
-                    ->where('available_slot_dates.interviewer_id', $model->interviewer_id)
-                    ->where('available_slots.slot', date('Y-m-d H', strtotime($slot)))
-                    ->first();
+            if (count($request->selected_dates) > 0) {
+                foreach ($request->selected_dates as $slot) {
+                    $date = explode(' ', $slot)[0];
+                    if (!empty($slot)) {
+                        $model = DB::table('available_slot_dates')
+                        ->select('available_slots.*')
+                        ->join('available_slots', 'available_slot_dates.id', '=', 'available_slots.available_slot_date_id')
+                        ->where('available_slot_dates.interviewer_id', Auth::user()->id)
+                        ->where('available_slots.slot', date('Y-m-d H', strtotime($slot)))
+                        ->first();
 
-                    if(empty($model)){
-                        $bool = true;
+                        if (empty($model)) {
+                            $bool = true;
+                        }
                     }
                 }
-            }
 
-            if($bool){
-                $model = AvailableSlotDate::create([
-                    'interviewer_id' => Auth::user()->id,
-                    'start_date' => date('Y-m-d', strtotime($start_date[0])),
-                    'start_time' => $start_date[1],
-                    'end_date' => date('Y-m-d', strtotime($end_date[0])),
-                    'end_time' => $end_date[1],
-                ]);
+                if ($bool) {
+                    $available_date = AvailableSlotDate::create([
+                        'interviewer_id' => Auth::user()->id,
+                        'start_date' => date('Y-m-d', strtotime($start_date[0])),
+                        'start_time' => $start_date[1],
+                        'end_date' => date('Y-m-d', strtotime($end_date[0])),
+                        'end_time' => $end_date[1],
+                    ]);
 
-                if($model){
-                    foreach($request->selected_dates as $slot){
-                        $date = explode(' ', $slot)[0];
-                        if(!empty($slot)){
-                            $model = DB::table('available_slot_dates')
-                            ->select('available_slots.*')
-                            ->join('available_slots', 'available_slot_dates.id', '=', 'available_slots.available_slot_date_id')
-                            ->where('available_slot_dates.interviewer_id', $model->interviewer_id)
-                            ->where('available_slots.slot', date('Y-m-d H', strtotime($slot)))
-                            ->first();
+                    if ($available_date) {
+                        foreach ($request->selected_dates as $slot) {
+                            $date_time = explode(' ', $slot);
+                            if (!empty($slot)) {
+                                $model = DB::table('available_slot_dates')
+                                ->select('available_slots.*')
+                                ->join('available_slots', 'available_slot_dates.id', '=', 'available_slots.available_slot_date_id')
+                                ->where('available_slot_dates.interviewer_id', Auth::user()->id)
+                                ->where('available_slots.slot', date('Y-m-d H', strtotime($slot)))
+                                ->first();
 
-                            if(empty($model)){
-                                AvailableSlot::create([
-                                    'available_slot_date_id' => $model->id,
-                                    'date' => $date,
-                                    'slot' => $slot,
-                                ]);
+                                if (empty($model)) {
+                                    AvailableSlot::create([
+                                        'available_slot_date_id' => $available_date->id,
+                                        'date' => $date_time[0],
+                                        'time' => $date_time[1],
+                                        'slot' => $slot,
+                                    ]);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            return 'success';
+                return 'success';
+            }else{
+                return 'failed';
+            }
         } catch (\Exception $e) {
             return redirect()->back()->with('Something went wrong '.$e->getMessage());
         }
@@ -166,7 +174,7 @@ class AvailableSlotController extends Controller
         $selected_data = [];
 
         for ($i=0; $slot <= $end_time; $i++) {
-            $data[$i] = [ 
+            $data[$i] = [
                 'start' => date('Y-m-d H:i:s', $start_time),
                 'end' => date('Y-m-d H:i:s', $slot),
             ];

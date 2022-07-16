@@ -57,7 +57,7 @@
                 <div id="tab01" class="tab-contents">
                     <form id="personal-details" method="post" action="{{ route('my_profile.personal_details') }}">
                         @csrf
-                        @php $user_details = isset(Auth::user()->hasUserDetails)?Auth::user()->hasUserDetails:null; @endphp 
+                        @php $user_details = isset(Auth::user()->hasUserDetails)?Auth::user()->hasUserDetails:null; @endphp
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group float-label-control">
@@ -83,7 +83,7 @@
                                 <div class="form-check">
                                     @if(!empty($user_details) && $user_details->gender=='male')
                                         <input class="form-check-input" type="radio" value="male" name="gender" id="male" checked>
-                                    @else 
+                                    @else
                                         <input class="form-check-input" type="radio" value="male" name="gender" id="male">
                                     @endif
                                     <label class="form-check-label" for="male">
@@ -93,7 +93,7 @@
                                 <div class="form-check">
                                     @if(!empty($user_details) && $user_details->gender=='female')
                                         <input class="form-check-input" type="radio" value="female" name="gender" id="female" checked>
-                                    @else 
+                                    @else
                                         <input class="form-check-input" type="radio" value="female" name="gender" id="female">
                                     @endif
                                     <label class="form-check-label" for="female">
@@ -110,7 +110,7 @@
                                 <select class="form-select select2" name="language_slug" id="language">
                                     @foreach ($languages as $language)
                                         <option value="{{ $language->slug }}" {{ !empty($user_details)?($user_details->language_slug==$language->slug?'selected':''):'' }}>{{ $language->title }}</option>
-                                    @endforeach    
+                                    @endforeach
                                 </select>
                                 <div class="form-group float-label-control">
                                     <label for="skype_id">Skype ID</label>
@@ -126,10 +126,10 @@
 
                 <!-- Qualification & Qualification Details -->
                 <div id="tab02" class="tab-contents">
-                    @php 
+                    @php
                         $qualifications = isset(Auth::user()->hasUserQualification)?Auth::user()->hasUserQualification:null;
                         $qualification_details = isset(Auth::user()->hasUserQualificationDetails)?Auth::user()->hasUserQualificationDetails:null;
-                    @endphp 
+                    @endphp
                     <form id="qualification-details" method="post" action="{{ route('my_profile.qualifications') }}">
                         @csrf
                         <div class="row institute">
@@ -147,7 +147,7 @@
                                         @foreach ($degrees as $degree)
                                             <option value="{{ $degree->slug }}">{{ $degree->title }}</option>
                                         @endforeach
-                                    </select>   
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -176,9 +176,9 @@
                         </div>
                         @if(!empty($qualifications))
                             @foreach ($qualifications as $key=>$qualification)
-                                @php 
+                                @php
                                     $courses = courses($qualification->degree_slug);
-                                @endphp 
+                                @endphp
                                 <div class="row institute">
                                     <div class="col-md-3">
                                         <div class="form-group">
@@ -192,7 +192,7 @@
                                                 @foreach ($degrees as $degree)
                                                     <option value="{{ $degree->slug }}" {{ $qualification->degree_slug==$degree->slug?'selected':'' }}>{{ $degree->title }}</option>
                                                 @endforeach
-                                            </select>   
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -217,10 +217,10 @@
                                             </button>
                                         </div>
                                     </div>
-                                </div>   
+                                </div>
                             @endforeach
                         @endif
-                        <span id="added-more"></span>    
+                        <span id="added-more"></span>
 
                         <div class="form-group float-label-control">
                             <label for="achievement">Achievemnts</label>
@@ -325,7 +325,7 @@
                                 </div>
                             </div>
                         @endforeach
-                        
+
                         <span id="added-more-experience"></span>
 
                         <div class="clearfix mb-3"></div>
@@ -440,16 +440,16 @@
                                             </select>
                                             <span style="color: red" id="error-parent_ids">{{ $errors->first('parent_ids') }}</span>
                                         </div>
-                                        
+
                                         <div class="col-md-5">
                                             <div class="form-group float-label-control">
                                                 <label for="start-date">Child Interview Type</label>
-                                                @php 
+                                                @php
                                                     $child_interviewer_types = [];
                                                     foreach (getInterviewerChildInterviewTypes($interview_type->parent_interview_type_id) as $key => $child) {
                                                         $child_interviewer_types[] = $child->child__interview_type_id;
                                                     }
-                                                @endphp 
+                                                @endphp
                                                 <span id="child-types">
                                                     <select name="child_interview_types[{{ $interview_type->parent_interview_type_id }}][]" multiple id="child_interview_type_id" class="form-control">
                                                         @foreach (getChildInterviewTypes($interview_type->parent_interview_type_id) as $child_type)
@@ -478,7 +478,7 @@
                                     </select>
                                     <span style="color: red" id="error-parent_ids">{{ $errors->first('parent_ids') }}</span>
                                 </div>
-                                
+
                                 <div class="col-md-5">
                                     <div class="form-group float-label-control">
                                         <label for="start-date">Child Interview Type</label>
@@ -510,14 +510,14 @@
                         <form id="available-slot-form">
                             <div class="row mx-auto" style="border: 2px solid #eee;">
                                 <div class="row">
-                                    <div class="col-sm-6"> 
+                                    <div class="col-sm-6">
                                         <div class="form-group pmd-textfield pmd-textfield-floating-label">
                                             <label class="control-label" for="datepicker-start">Start Date</label>
                                             <input type="datetime-local" class="form-control" name="start_date" id="datepicker-start">
                                             <span style="color: red" id="error-datepicker-start">{{ $errors->first('start_date') }}</span>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6"> 
+                                    <div class="col-sm-6">
                                         <div class="form-group pmd-textfield pmd-textfield-floating-label">
                                             <label class="control-label" for="datepicker-end">End Date</label>
                                             <input type="datetime-local" class="form-control" name="end_date" id="datepicker-end">
@@ -526,7 +526,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="row mx-auto" style="border: 2px solid #eee;">
                                 <span style="color: red" id="error-slots"></span>
                                 <span class="slot-days">
@@ -541,7 +541,7 @@
                                     </div> --}}
                                 </span>
                             </div>
-            
+
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="tool-tip">
@@ -629,7 +629,7 @@
             e.preventDefault();
             var pageurl = $('#page_url').val();
             var page = 1;
-            
+
             let start_date = $("#datepicker-start").val();
             let end_date = $('#datepicker-end').val();
 
@@ -648,10 +648,11 @@
                     end_date : end_date,
                     selected_dates : selected_dates,
                 },
-                
+
                 success:function(response){
                     fetchAll(pageurl, page);
-                    
+                    // console.log(response);
+
                     if(response=='success'){
                         $('#datepicker-start').val('');
                         $('#datepicker-end').val('');
@@ -736,7 +737,7 @@
                     });
                 }
             })
-        });        
+        });
 
         $(document).on('change', '#datepicker-start', function(){
             var start_date_time = $(this).val();
@@ -746,33 +747,8 @@
                 return false;
             }else{
                 $('#error-end-date').html('');
-            } 
-            
-            if(start_date_time == '' || start_date_time >= end_date_time){
-                $('#error-start-date').html('Please add start date less than end date.');
-                return false;
-            }else{
-                $('#error-start-date').html('');
-                $.ajax({
-                    url : "{{ route('create-slots') }}",
-                    data : {'start_date_time' : start_date_time, 'end_date_time' : end_date_time},
-                    success : function(response){
-                        $('.slot-days').html(response);
-                    }
-                });
-            } 
-        });
+            }
 
-        $(document).on('change', '#datepicker-end', function(){
-            var end_date_time = $(this).val();
-            var start_date_time = $('#datepicker-start').val();
-            if(end_date_time == '' || end_date_time <= start_date_time){
-                $('#error-end-date').html('Please add end date greater than start date.');
-                return false;
-            }else{
-                $('#error-end-date').html('');
-            } 
-            
             if(start_date_time == '' || start_date_time >= end_date_time){
                 $('#error-start-date').html('Please add start date less than end date.');
                 return false;
@@ -787,14 +763,39 @@
                 });
             }
         });
-        
+
+        $(document).on('change', '#datepicker-end', function(){
+            var end_date_time = $(this).val();
+            var start_date_time = $('#datepicker-start').val();
+            if(end_date_time == '' || end_date_time <= start_date_time){
+                $('#error-end-date').html('Please add end date greater than start date.');
+                return false;
+            }else{
+                $('#error-end-date').html('');
+            }
+
+            if(start_date_time == '' || start_date_time >= end_date_time){
+                $('#error-start-date').html('Please add start date less than end date.');
+                return false;
+            }else{
+                $('#error-start-date').html('');
+                $.ajax({
+                    url : "{{ route('create-slots') }}",
+                    data : {'start_date_time' : start_date_time, 'end_date_time' : end_date_time},
+                    success : function(response){
+                        $('.slot-days').html(response);
+                    }
+                });
+            }
+        });
+
         $(document).on('click', '.add-more-types-btn', function(){
             var selected=[];
             $('.parent-type :selected').each(function(){
                 if($(this).val() != 'empty'){
                     selected[$(this).val()]=$(this).text();
                 }
-            }); 
+            });
 
             var parent_interview_types = $('#parent-types').data('parent-types');
             var html = '';
@@ -811,7 +812,7 @@
                                 html += '</select>'+
                                 '<span style="color: red">{{ $errors->first("parent_id") }}</span>'+
                             '</div>'+
-                            
+
                             '<div class="col-md-5">'+
                                 '<div class="form-group float-label-control">'+
                                     '<span id="child-types"><select name="child_interview_types" multiple id="child_interview_type_id" class="form-control"></select></span>'+
@@ -827,7 +828,7 @@
         $(document).on('click', '.remove-custome-btn', function(){
             $(this).parents('.custome-interview-types').remove();
         });
-        
+
         $(document).on('change', '.parent-type', function(){
             var parent_id = $(this).val();
             var current = $(this);
@@ -838,7 +839,7 @@
                     var html = '<select name="child_interview_types['+response.parent_id+'][]" multiple id="child_interview_type_id" class="form-control" @if(empty($interviewer_interview_types)) required @endif>'+
                                 '<label for="start-date">Child Interview Type</label>'+
                                 '<option value="" selected>Select child interview type</option>';
-                    $.each(response.child_interview_types , function(index, val) { 
+                    $.each(response.child_interview_types , function(index, val) {
                        html += '<option value="'+val.id+'">'+val.name+'</option>';
                     });
                     html += '</select>';
@@ -876,7 +877,7 @@
             var current = $(this);
             var joining_date = $(this).val();
             var leaving_date = $(this).parents('.experience').find('.leaving-date').val();
-            
+
             if(new Date(joining_date) > new Date(leaving_date) || leaving_date==''){
                 $(this).parents('.experience').find('.error-joining-date').html('Joining date should be less than leaving date.');
                 return false;
@@ -897,11 +898,11 @@
             var current = $(this);
             var leaving_date = $(this).val();
             var joining_date = $(this).parents('.experience').find('.joining-date').val();
-            
+
             if(new Date(leaving_date) < new Date(joining_date) || joining_date==''){
                 $(this).parents('.experience').find('.error-leaving-date').html('Leaving date should be greater than joining date.');
                 $(this).val('');
-                return false; 
+                return false;
             }else{
                 $(this).parents('.experience').find('.error-joining-date').html('');
                 $(this).parents('.experience').find('.error-leaving-date').html('');
@@ -1021,7 +1022,7 @@
                 }
             });
         })
-        
+
         $(document).ready(function() {
             $('.button-left').click(function() {
                 $('.sidebar').toggleClass('fliph');

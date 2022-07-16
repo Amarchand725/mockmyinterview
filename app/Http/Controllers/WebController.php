@@ -34,6 +34,7 @@ use App\Models\BookInterview;
 use App\Models\InterviewerInterviewType;
 use App\Models\AvailableSlot;
 use Auth;
+use Carbon\Carbon;
 use Hash;
 use DB;
 
@@ -207,7 +208,7 @@ class WebController extends Controller
                     'user_id' => Auth::user()->id,
                     'projects' => $request->projects,
                 ]);
-            
+
                 Skill::create([
                     'user_id' => Auth::user()->id,
                     'skills' => $request->skills,
@@ -248,7 +249,7 @@ class WebController extends Controller
                         'leaving_date' => date('Y-m-d', strtotime($request->leaving_date[$key])),
                         'experiences' => $request->experiences[$key],
                     ]);
-                }     
+                }
 
                 $total_experiences += (float)$request->experiences[$key];
             }
@@ -270,10 +271,10 @@ class WebController extends Controller
                         'leaving_date' => date('Y-m-d', strtotime($request->leaving_date[$key])),
                         'experiences' => $request->experiences[$key],
                     ]);
-                }     
+                }
 
                 $total_experiences += (float)$request->experiences[$key];
-            }    
+            }
             ExperienceDetail::create([
                 'user_id' => Auth::user()->id,
                 'total_experience' => $total_experiences,
@@ -302,7 +303,7 @@ class WebController extends Controller
             $resume->linkedin_url = $request->linkedin_url;
             $resume->update();
 
-            return redirect()->back()->with('message', 'Resume updated Successfully.');        
+            return redirect()->back()->with('message', 'Resume updated Successfully.');
         }else{
             $resume = new Resume();
             if (isset($request->resume)) {
@@ -320,7 +321,7 @@ class WebController extends Controller
             $resume->linkedin_url = $request->linkedin_url;
             $resume->save();
 
-            return redirect()->back()->with('message', 'Resume added Successfully.');            
+            return redirect()->back()->with('message', 'Resume added Successfully.');
         }
     }
     public function interview(Request $request)
@@ -331,7 +332,7 @@ class WebController extends Controller
             $resume->hr = $request->hr;
             $resume->update();
 
-            return redirect()->back()->with('message', 'Interview Type Updated Successfully.'); 
+            return redirect()->back()->with('message', 'Interview Type Updated Successfully.');
         }else{
             $model = Resume::create([
                 'user_id' => Auth::user()->id,
@@ -352,14 +353,14 @@ class WebController extends Controller
         ]);
 
         $user = User::where('email', Auth::user()->email)->first();
-        
-        if (Hash::check($request->password, $user->password)) { 
+
+        if (Hash::check($request->password, $user->password)) {
            $user->fill([
             'password' => Hash::make($request->new_password)
             ])->save();
-        
+
             return redirect()->back()->with('message', 'You have updated your password successfully!');
-        
+
         } else {
             return redirect()->back()->with('error', 'Did not match current password!');
         }
@@ -371,9 +372,9 @@ class WebController extends Controller
     {
         $joining_date = $request->joining_date;
         $leaving_date = $request->leaving_date;
-        $joining=new DateTime($leaving_date); 
-        $leaving=new DateTime($joining_date);                                  
-        $Months = $leaving->diff($joining); 
+        $joining=new DateTime($leaving_date);
+        $leaving=new DateTime($joining_date);
+        $Months = $leaving->diff($joining);
         return $experience = $Months->y.'.'.$Months->m;
     }
 
@@ -416,7 +417,7 @@ class WebController extends Controller
         if($invited_user_token != 1){
             $invited_user_email = InvitedUser::where('invited_user_token', $invited_user_token)->first()->email;
         }
-        
+
         return view('web-views.login.signup', compact('page_title', 'referral_id', 'roles', 'invited_user_email'));
     }
     public function store(Request $request)
@@ -438,7 +439,7 @@ class WebController extends Controller
         do{
             $referral_code = $random = \Str::random(8);
         }while(User::where('referral_code', $referral_code)->first());
-        
+
         $input = $request->all();
         unset($input['role']);
         unset($input['confirm-password']);
@@ -447,7 +448,7 @@ class WebController extends Controller
         $input['referral_code'] = $referral_code;
         $input['verify_token'] = $verify_token;
         $input['password'] = Hash::make($input['password']);
-        
+
         $user = User::create($input);
         $user->assignRole($request->input('role'));
 
@@ -596,7 +597,7 @@ class WebController extends Controller
                 'email' => 'required|email|unique:users,email',
             ]);
         }
-        
+
         $user = User::where('email', Auth::user()->email)->first();
 
         do{
@@ -631,8 +632,6 @@ class WebController extends Controller
         ->selectRaw('users.*')
         ->join('users', 'users.id', '=', 'available_slot_dates.interviewer_id')
         ->join('interviewer_interview_types', 'available_slot_dates.interviewer_id', '=', 'interviewer_interview_types.interviewer_id')
-        /* ->where('available_slot_dates.start_date', '<=', $request->date)
-        ->where('available_slot_dates.end_date', '>=', $request->date) */
         ->where('interviewer_interview_types.parent_interview_type_id', $request->parent_interview_type)
         ->where('interviewer_interview_types.child__interview_type_id', $request->child_interview_type)
         ->groupby('users.id')
@@ -647,16 +646,6 @@ class WebController extends Controller
         $parent_interview_type_id = $request->parent_interview_type;
         $child_interview_type_id = $request->child_interview_type;
         $model = User::where('id', $request->user_id)->first();
-        /* $slots = DB::table('available_slot_dates')
-        ->selectRaw('users.id as user_id, available_slots.id, available_slots.shift, available_slots.slot')
-        ->join('users', 'users.id', '=', 'available_slot_dates.interviewer_id')
-        ->join('interviewer_interview_types', 'available_slot_dates.interviewer_id', '=', 'interviewer_interview_types.interviewer_id')
-        ->join('available_slots', 'available_slot_dates.id', '=', 'available_slots.available_date_id')
-        ->where('available_slot_dates.start_date', '<=', $request->date)
-        ->where('available_slot_dates.end_date', '>=', $request->date)
-        ->where('interviewer_interview_types.parent_interview_type_id', $request->parent_interview_type)
-        ->where('interviewer_interview_types.child__interview_type_id', $request->child_interview_type)
-        ->get(); */
 
         return (string) view('web-views.candidate.interviewer-details', compact('model', 'date', 'parent_interview_type_id', 'child_interview_type_id'));
     }
@@ -667,30 +656,13 @@ class WebController extends Controller
         $parent_interview_type_id = $request->parent_id;
         $child_interview_type_id = $request->child_id;
 
-        /* $interviewers = InterviewerInterviewType::where('parent_interview_type_id', $parent_interview_type_id)->where('child__interview_type_id', $child_interview_type_id)->get(['interviewer_id']);
-        $interview_types_interviewers = [];
-        foreach($interviewers as $interviewer){
-            $interview_types_interviewers[] = $interviewer->interviewer_id;
-        } */
-
-        // return $interview_types_interviewers;
-
         $slots = DB::table('available_slot_dates')
         ->select('available_slots.*')
         ->join('available_slots', 'available_slot_dates.id', '=', 'available_slots.available_slot_date_id')
         ->where('available_slot_dates.interviewer_id', $request->interviewer_id)
+        ->where('available_slots.date','>=', $date)
+        ->where('available_slots.slot','>', Carbon::now()->format('Y-m-d H:i:s'))
         ->get();
-
-        /* $slots = DB::table('available_slot_dates')
-        ->selectRaw('users.id as user_id, available_slots.id, available_slots.shift, available_slots.slot')
-        ->join('users', 'users.id', '=', 'available_slot_dates.interviewer_id')
-        ->join('interviewer_interview_types', 'available_slot_dates.interviewer_id', '=', 'interviewer_interview_types.interviewer_id')
-        ->join('available_slots', 'available_slot_dates.id', '=', 'available_slots.available_date_id')
-        ->where('available_slot_dates.start_date', '<=', $request->date)
-        ->where('available_slot_dates.end_date', '>=', $request->date)
-        ->where('interviewer_interview_types.parent_interview_type_id', $request->parent_interview_type)
-        ->where('interviewer_interview_types.child_interview_type_id', $request->child_interview_type)
-        ->get(); */
 
         $booked_slots = BookInterview::where('candidate_id', Auth::user()->id)->where('interviewer_id', $request->interviewer_id)->where('date', $request->date)->get();
 

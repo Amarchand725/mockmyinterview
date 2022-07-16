@@ -17,6 +17,7 @@ class CreateAvailableSlotsTable extends Migration
             $table->id();
             $table->bigInteger('available_slot_date_id');
             $table->date('date');
+            $table->time('time');
             $table->dateTime('slot');
             $table->time('duration')->default('00:30:00');
             $table->integer('status')->default(0)->comment('0=pending, 2=confirmed, 3=rejected, 1=completed');

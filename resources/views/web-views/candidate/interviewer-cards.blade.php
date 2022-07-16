@@ -7,8 +7,8 @@
             <div class="card">
                 @if($model->image)
                     <img src="{{ asset('public/web/assets/images/user') }}/{{ $model->image }}" class="card-img-top" alt="..." style="height: 150px">
-                @else 
-                    <img src="https://picsum.photos/200/300" class="card-img-top" alt="..." style="height: 150px">
+                @else
+                    <img src="{{ asset('public/web/assets/images/user/no-image.png') }}" class="card-img-top" alt="..." style="height: 150px">
                 @endif
                 <div class="card-body" style="text-align: center">
                     <h5 class="card-title">{{ $model->name }}</h5>

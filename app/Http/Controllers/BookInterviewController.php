@@ -75,58 +75,20 @@ class BookInterviewController extends Controller
         $interviewers = Qualification::whereIn('degree_slug', $degrees)->get(['user_id']);
 
         $slots = [];
-        
-        /* $b_slots = AvailableSlotDate::whereIn('interviewer_id', $interviewers)->where('start_date', date('Y-m-d'))->get();
-        if(!empty($b_slots)){
-            foreach ($b_slots as $available_slot){
-                if(!empty($available_slot->hasBookedSlots)){
-                    foreach($available_slot->hasBookedSlots as $slot){
-                        if($available_slot->slot_type=='weekdays'){
-                            $slots['weekdays_slots'][] = array('interviewer_id' => $available_slot->interviewer_id,'slot' => $slot->slot); 
-                        }elseif($available_slot->slot_type=='weekands'){
-                            $slots['weekends_slots'][] = array('interviewer_id' => $available_slot->interviewer_id,'slot' => $slot->slot); 
-                        } 
-                    }     
-                }
-            }
-        }
-        $next_slots = [];
-        $next_date = date('Y-m-d', strtotime("+1 day"));
-        $b_slots = AvailableSlotDate::whereIn('interviewer_id', $interviewers)->where('start_date', $next_date)->get();
-        if(!empty($b_slots)){
-            foreach ($b_slots as $available_slot){
-                if(!empty($available_slot->hasBookedSlots)){
-                    foreach($available_slot->hasBookedSlots as $slot){
-                        if($available_slot->slot_type=='weekdays'){
-                            $next_slots['weekdays_slots'][] = array('interviewer_id' => $available_slot->interviewer_id,'slot' => $slot->slot); 
-                        }elseif($available_slot->slot_type=='weekands'){
-                            $next_slots['weekends_slots'][] = array('interviewer_id' => $available_slot->interviewer_id,'slot' => $slot->slot); 
-                        } 
-                    }     
-                }
-            }
-        } */
-
-        // return $next_slots;
 
         return view('web-views.interviews.create', compact('page_title', 'parent_interview_types', 'booking_types'));
     }
 
     public function store(Request $request)
     {
-        // return $request;
         $validator = $request->validate([
             'booked_slot' => 'required',
-        ]); 
+        ]);
 
-        /* if(empty($request->booked_slots)){
-            return redirect()->back()->with('error', 'Select slot at least one.');
-        } */
         $wallet = Wallet::orderby('id', 'desc')->where('candidate_id', Auth::user()->id)->first();
         $priority = BookingPriority::where('slug', 'standard-booking')->first();
         if(isset($wallet) && $wallet->balance_credits < $priority->credits){
             return 'credits';
-            // return redirect()->route('wallet.create')->with('error', 'You have not credits in your wallet purchase from here.');
         }
         try {
             $meeting = $this->createMeeting($request);
@@ -153,12 +115,12 @@ class BookInterviewController extends Controller
                     'booked_interview_id' => $booked_interview->id,
                     'interviewer_id' => $request->interviewer_id,
                     'candidate_id' => Auth::user()->id,
-                    'credits' => $priority->credits, 
-                    'type' => 'charged', 
-                    'description' => 'Charged credits from candidate wallet.', 
+                    'credits' => $priority->credits,
+                    'type' => 'charged',
+                    'description' => 'Charged credits from candidate wallet.',
                 ]);
             }
-            
+
             return 'success';
         }catch(\Exception $e){
             return $e->getMessage();
@@ -167,7 +129,6 @@ class BookInterviewController extends Controller
 
     public function show($meeting_id)
     {
-        // return $meeting_id;
         $response = Http::get('https://api.zoom.us/v2/meetings/'.$meeting_id.'/recordings');
         $data = json_decode($response->body(), true);
         dd($data);
@@ -179,37 +140,6 @@ class BookInterviewController extends Controller
         $current_date = $request->current_date;
         $type = $request->type;
 
-        /* //weekdays morning
-        $weekdays_morning_from_time = PageSetting::where('key', 'weekdays_morning_from_time')->first()->value;
-        $weekdays_morning_to_time = PageSetting::where('key', 'weekdays_morning_to_time')->first()->value;
-
-        //weekdays evening
-        $weekdays_evening_from_time = PageSetting::where('key', 'weekdays_evening_from_time')->first()->value;
-        $weekdays_evening_to_time = PageSetting::where('key', 'weekdays_evening_to_time')->first()->value;
-
-        //weekends morning
-        $weekends_morning_from_time = PageSetting::where('key', 'weekends_morning_from_time')->first()->value;
-        $weekends_morning_to_time = PageSetting::where('key', 'weekends_morning_to_time')->first()->value;
-
-        //weekends evening
-        $weekends_evening_from_time = PageSetting::where('key', 'weekends_evening_from_time')->first()->value;
-        $weekends_evening_to_time = PageSetting::where('key', 'weekends_evening_to_time')->first()->value;
-
-        // Weekdays Morning & Evening Slots
-        $week_days_morning_slots = $this->getTimeSlot(30, $weekdays_morning_from_time, $weekdays_morning_to_time);
-        $week_days_evening_slots = $this->getTimeSlot(30, $weekdays_evening_from_time, $weekdays_evening_to_time);
-
-        //Weekends Morning & Evening Slots
-        $weekends_morning_slots = $this->getTimeSlot(30, $weekends_morning_from_time, $weekends_morning_to_time);
-        $weekends_evening_slots = $this->getTimeSlot(30, $weekends_evening_from_time, $weekends_evening_to_time);
-
-        $slots = [];
-        //Weekdays merged morning & evening slots
-        $slots['weekdays_slots'] = array_merge($week_days_morning_slots, $week_days_evening_slots);
-
-        //Weekends merged morning & evening slots
-        $slots['weekends_slots'] = array_merge($weekends_morning_slots, $weekends_evening_slots); */
-
         $degrees = [];
         foreach(Auth::user()->hasUserQualification as $qualification){
             $degrees[] = $qualification->degree_slug;
@@ -218,18 +148,18 @@ class BookInterviewController extends Controller
         $interviewers = Qualification::whereIn('degree_slug', $degrees)->get(['user_id']);
 
         $slots = [];
-        
+
         $b_slots = AvailableSlotDate::whereIn('interviewer_id', $interviewers)->where('start_date', date('Y-m-d', strtotime($current_date)))->where('end_date', '<=', date('Y-m-d'))->get();
         if(!empty($b_slots)){
             foreach ($b_slots as $available_slot){
                 if(!empty($available_slot->hasBookedSlots)){
                     foreach($available_slot->hasBookedSlots as $slot){
                         if($available_slot->slot_type=='weekdays'){
-                            $slots['weekdays_slots'][] = array('interviewer_id' => $available_slot->interviewer_id,'slot' => $slot->slot); 
+                            $slots['weekdays_slots'][] = array('interviewer_id' => $available_slot->interviewer_id,'slot' => $slot->slot);
                         }elseif($available_slot->slot_type=='weekands'){
-                            $slots['weekends_slots'][] = array('interviewer_id' => $available_slot->interviewer_id,'slot' => $slot->slot); 
-                        } 
-                    }     
+                            $slots['weekends_slots'][] = array('interviewer_id' => $available_slot->interviewer_id,'slot' => $slot->slot);
+                        }
+                    }
                 }
             }
         }
@@ -242,11 +172,11 @@ class BookInterviewController extends Controller
                 if(!empty($available_slot->hasBookedSlots)){
                     foreach($available_slot->hasBookedSlots as $slot){
                         if($available_slot->slot_type=='weekdays'){
-                            $next_slots['weekdays_slots'][] = array('interviewer_id' => $available_slot->interviewer_id,'slot' => $slot->slot); 
+                            $next_slots['weekdays_slots'][] = array('interviewer_id' => $available_slot->interviewer_id,'slot' => $slot->slot);
                         }elseif($available_slot->slot_type=='weekands'){
-                            $next_slots['weekends_slots'][] = array('interviewer_id' => $available_slot->interviewer_id,'slot' => $slot->slot); 
-                        } 
-                    }     
+                            $next_slots['weekends_slots'][] = array('interviewer_id' => $available_slot->interviewer_id,'slot' => $slot->slot);
+                        }
+                    }
                 }
             }
         }
@@ -290,42 +220,20 @@ class BookInterviewController extends Controller
     public function status(Request $request)
     {
         $interview = BookInterview::where('id', $request->interview_id)->first();
-        
-
         if($request->status==1){ //confirm
-            // $message = 'Scheduled interview is confirmed';
-            // notification(Auth::user()->id, $booked_interview->id, 'book_interview', $message);
+            $interview->status = $request->status;
+            $interview->save();
+
             return 1;
         }elseif($request->status==3){ //reject
-            //candidate wallet
-            $candidate_wallet = Wallet::where('candidate_id', $interview->candidate_id)->first();
-
-            //booking priority credits
-            $credits = BookingPriority::where('slug', $interview->booking_type_slug)->first();
-
-            //deduct credits from candidate wallet & update candidate wallet
-            $candidate_wallet->last_added_credits = $candidate_wallet->balance_credits??0;
-            $candidate_wallet->balance_credits = $candidate_wallet->balance_credits+$credits->credits;
-            $candidate_wallet->save();
-
-            if($candidate_wallet){
-                Log::create([
-                    'booked_interview_id' => $interview->id,
-                    'interviewer_id' => $interview->interviewer_id,
-                    'candidate_id' => Auth::user()->id,
-                    'credits' => $priority->credits, 
-                    'type' => 'returned', 
-                    'description' => 'Return credits due to rejection.', 
-                ]);
-
-                // $message = 'Scheduled interview is rejected';
-                // notification(Auth::user()->id, $booked_interview->id, 'book_interview', $message);
-            }
+            $interview->status = $request->status;
+            $interview->save();
 
             return 1;
         }elseif($request->status==4){ //complete
             $interview->status = $request->status;
             $interview->save();
+
             return 1; //completed
         }
     }

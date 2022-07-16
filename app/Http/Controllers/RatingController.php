@@ -43,7 +43,7 @@ class RatingController extends Controller
         $validator = $request->validate([
             'title' => 'required',
             'review' => 'required',
-        ]); 
+        ]);
 
         try{
             $model = Rating::create([
@@ -79,9 +79,9 @@ class RatingController extends Controller
                         'booked_interview_id' => $interview->id,
                         'interviewer_id' => $interview->interviewer_id,
                         'candidate_id' => Auth::user()->id,
-                        'credits' => $credits->credits, 
-                        'type' => 'returned', 
-                        'description' => 'Return credits due to rejection.', 
+                        'credits' => $credits->credits,
+                        'type' => 'returned',
+                        'description' => 'Return credits due to rejection.',
                     ]);
 
                     // $message = 'Scheduled interview has been completed & closed.';

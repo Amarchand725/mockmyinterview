@@ -34,7 +34,7 @@
                                         <th>Condidate</th>
                                     @elseif(Auth::user()->hasRole('Candidate'))
                                         <th>Interviewer</th>
-                                    @else 
+                                    @else
                                         <th>Condidate</th>
                                         <th>Interviewer</th>
                                     @endif
@@ -57,15 +57,15 @@
                                             <td>{{ $interview->hasCandidate->name }}</td>
                                         @elseif(Auth::user()->hasRole('Candidate'))
                                             <td>{{ $interview->hasInterviewer->name }}</td>
-                                        @else 
+                                        @else
                                             <td>{{ $interview->hasCandidate->name }}</td>
                                             <td>{{ $interview->hasInterviewer->name }}</td>
                                         @endif
-                                        
+
                                         <td>{{ $interview->meeting_id }}</td>
                                         <td>{{ isset($interview->hasParentInterviewType)?$interview->hasParentInterviewType->name:'' }}</td>
                                         <td>{{ isset($interview->hasChildInterviewType)?$interview->hasChildInterviewType->name:'' }}</td>
-                                        <td>{{ $interview->slot }}</td>
+                                        <td>{{ date('d, F-y H:i A', strtotime($interview->slot)) }}</td>
                                         <td>{{ $interview->duration }} Mins</td>
                                         <td>
                                             @if($interview->status==1)
@@ -85,7 +85,7 @@
                                         <td>
                                             @if($interview->date < date('Y-m-d'))
                                                 <span class="badge badge-warning">Expired</span>
-                                            @else 
+                                            @else
                                                 @if($interview->status==1)
                                                     @if($interview->date > date('Y-m-d'))
                                                         <div class="time-slot">
@@ -94,8 +94,17 @@
                                                             </div>
                                                         </div>
                                                     @elseif($interview->date == date('Y-m-d'))
-                                                        <a href="{{ $interview->join_url }}">JOIN MEETING</a>
-                                                    @else 
+                                                        <?php
+                                                            $start_date_time = strtotime($interview->slot);
+                                                            $meeting_time = strtotime(date('H:i:s', $start_date_time) . ' +15 minutes');
+                                                            $current_time = strtotime(date('H:i:s'). ' +15 minutes');
+                                                        ?>
+                                                        @if($meeting_time==$current_time)
+                                                            <a href="{{ $interview->join_url }}">JOIN MEETING</a>
+                                                        @else
+                                                            Yet Meeting...
+                                                        @endif
+                                                    @else
                                                         <span class="badge badge-warning">Expired</span>
                                                     @endif
                                                 @elseif($interview->status==0)
@@ -123,32 +132,45 @@
                                                     @endif
                                                 </select>
                                                 @if($interview->status==4)
-                                                    <button class="btn btn-info mt-2 suggetion-btn" data-url="{{ route('rating.show', $interview->id) }}" id="suggetion-btn"><i class="fa fa-check"></i> Suggestion</button>
+                                                    @if($interview->hasRated)
+                                                        <button class="btn btn-info mt-2 suggetion-btn" data-url="{{ route('rating.show', $interview->id) }}" id="suggetion-btn"><i class="fa fa-check"></i> Suggestion</button>
+                                                    @endif
                                                     <button class="btn btn-primary mt-2 review-btn" data-interview-id="{{ $interview->id }}" data-toggle="tooltip" data-placement="top" title="Review"><i class="fa fa-star"></i> Review</button>
                                                 @endif
-                                            @else 
-                                                <select name="" id="booking-status" data-interview-id="{{ $interview->id }}" class="form-control" id="">
+                                            @else
+                                                @if($interview->status==4)
+                                                    @if($interview->hasRated)
+                                                        <label class="badge badge-primary"><i class="fa fa-check"></i> Rated</label>
+                                                    @else
+                                                        <button class="btn btn-info mt-2" data-course-title='{{ $interview->hasChildInterviewType->name??'' }}' data-course-id='{{ $interview->hasChildInterviewType->id??'' }}' data-interview-id="{{ $interview->id }}" id="rating-btn"><i class="fa fa-star"></i> Ratings</button>
+                                                    @endif
+                                                    <a href="{{ route('book_interview.show', $interview->meeting_id) }}" class="btn btn-success mt-2" data-toggle="tooltip" data-placement="top" title="Meeting Recordings">Meeting Recordings</a>
+                                                @endif
+
+                                                <select name="" id="booking-status" data-interview-id="{{ $interview->id }}" class="form-control mt-2" id="">
                                                     <option value="" selected>Status</option>
                                                     @if($interview->status==0)
                                                         <option value="0" disabled {{ $interview->status==0?'selected':'' }}>Pending</option>
                                                         <option value="1" {{ $interview->status==1?'selected':'' }}>Confirm</option>
                                                         <option value="3" {{ $interview->status==3?'selected':'' }}>Reject</option>
                                                     @elseif($interview->status==1)
-                                                        <option value="4" {{ $interview->status==4?'selected':'' }}>Complete</option>
+                                                        <?php
+                                                            $start_date_time = strtotime($interview->slot);
+                                                            $meeting_date_time = strtotime(date('Y-d-m H:i:s', $start_date_time));
+                                                            $current_date_time = strtotime(date('Y-d-m H:i:s'));
+                                                        ?>
+                                                        @if($meeting_date_time>$current_date_time)
+                                                            <option value="4" {{ $interview->status==4?'selected':'' }}>Complete</option>
+                                                        @else
+                                                            <option disabled selected>Yet Meeting...</option>
+                                                        @endif
+
                                                     @elseif($interview->status==3)
                                                         <option value="3" disabled {{ $interview->status==3?'selected':'' }}>Reject</option>
                                                     @elseif($interview->status==4)
                                                         <option value="4" disabled {{ $interview->status==4?'selected':'' }}>Complete</option>
                                                     @endif
                                                 </select>
-                                                @if($interview->status==4)
-                                                    <a href="{{ route('book_interview.show', $interview->meeting_id) }}" class="btn btn-success mt-2" data-toggle="tooltip" data-placement="top" title="Meeting Recordings">Meeting Recordings</a>
-                                                    @if($interview->hasRated)
-                                                        <label class="badge badge-primary"><i class="fa fa-check"></i> Rated</label>
-                                                    @else 
-                                                        <button class="btn btn-info mt-2" data-course-title='{{ $interview->hasChildInterviewType->name??'' }}' data-course-id='{{ $interview->hasChildInterviewType->id??'' }}' data-interview-id="{{ $interview->id }}" id="rating-btn"><i class="fa fa-star"></i> Ratings</button>                                                        
-                                                    @endif 
-                                                @endif
                                             @endif
                                         </td>
                                     </tr>
@@ -248,7 +270,7 @@
                 </button>
             </div>
             <div class="modal-body" id="modal-body">
-                
+
             </div>
         </div>
         </div>
@@ -283,7 +305,7 @@
 
         $('#rating-form').on('submit',function(e){
             e.preventDefault();
-            
+
             let interview_id = $("#interview_id").val();
             let title = $("#title").val();
             let review = $('#review').val();
@@ -301,9 +323,8 @@
                     review : review,
                     course_id : course_id,
                 },
-                
+
                 success:function(response){
-                    // console.log(response);
                     if(response=='success'){
                         $('#rating-modal').modal('hide');
 
@@ -317,6 +338,7 @@
                             showConfirmButton: false,
                             timer: 1500
                         })
+                        window.location.reload();
                     }else{
                         Swal.fire({
                             icon: 'error',
@@ -356,6 +378,7 @@
                             data : {'status' : status, 'interview_id' : interview_id},
                             type : 'GET',
                             success : function(response){
+                                // console.log(response);
                                 if(response){
                                     Swal.fire(
                                         'Saved!',
@@ -397,7 +420,7 @@
                 var now = new Date().getTime();
                 // Find the distance between now and the count down date
                 var distance = countDownDate - now;
-                
+
                 // Time calculations for days, hours, minutes and seconds
                 var days = Math.floor(distance / (1000 * 60 * 60 * 24));
                 var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
